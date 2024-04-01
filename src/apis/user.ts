@@ -1,4 +1,4 @@
-import { type Service } from '../type/user'
+import { type Service } from '@/type/user'
 import instance from './axios'
 
 type Login = (code: string, service: Service) => any

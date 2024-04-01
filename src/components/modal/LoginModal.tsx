@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { KAKAO_OAUTH, NAVER_OAUTH } from '../../constants/auth'
+import { KAKAO_OAUTH, NAVER_OAUTH } from '@/constants/auth'
 
 export default function LoginModal(): JSX.Element {
   const kakaoLoginURL = `${KAKAO_OAUTH.url}?client_id=${KAKAO_OAUTH.client_id}&redirect_uri=${KAKAO_OAUTH.redirect_uri}&response_type=${KAKAO_OAUTH.response_type}`

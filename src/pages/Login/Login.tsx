@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { login } from '../../apis/user'
-import { type Service } from '../../type/user'
+import { type Service } from '@/type/user'
+import { login } from '@/apis/user'
 
 export default function Login(): JSX.Element {
   const { service } = useParams()

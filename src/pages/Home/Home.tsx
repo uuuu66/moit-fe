@@ -1,4 +1,4 @@
-// import LoginModal from '../../components/modal/LoginModal'
+// import LoginModal from '@/components/modal/LoginModal'
 
 function Home(): JSX.Element {
   return <div>{/* <LoginModal /> */}</div>
