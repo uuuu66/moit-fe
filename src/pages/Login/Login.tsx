@@ -5,18 +5,19 @@ import { useNavigate } from 'react-router-dom'
 const login = async (code: string): Promise<AxiosResponse<any, any>> => {
   const apiUrl = ''
   try {
-    const data = await axios.post(apiUrl, { code })
+    const data = await axios.get(`${apiUrl}/?code=${code}`)
     console.log(data)
     return data
   } catch (error) {
     console.log(error)
-
     throw error
   }
 }
 
 export default function Login(): JSX.Element {
-  const authCode = window.location.search.split('=')[1]
+  const authCode = window.location.search.split('code=')[1]
+  console.log(authCode)
+  //  네이버로그인 : state 같이 보내야 하는지 확인
   const navigate = useNavigate()
 
   useEffect(() => {
