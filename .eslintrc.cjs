@@ -11,6 +11,7 @@ module.exports = {
     'standard-with-typescript',
     'plugin:prettier/recommended',
   ],
+
   overrides: [
     {
       env: {
@@ -31,5 +32,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off', // import React 생략
     'import/no-extraneous-dependencies': 'off', // 테스트 및 개발환경 구성 파일에서는 devDependency 사용 허용
+    'import/extensions': 'off', // 절대경로 설정 관련
   },
 }
