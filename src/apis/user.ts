@@ -1,9 +1,13 @@
-import { type AxiosResponse } from 'axios'
+import { type Service } from '../type/user'
 import instance from './axios'
 
-const login = async (code: string): Promise<AxiosResponse<any, any>> => {
+type Login = (code: string, service: Service) => any
+
+const login: Login = async (code, service) => {
   try {
-    const data = await instance.get(`/?code=${code}`)
+    const data = await instance.get(
+      `/api/member/signin/${service}?code=${code}`
+    )
     console.log(data)
     return data
   } catch (error) {
