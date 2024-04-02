@@ -1,6 +1,5 @@
 import { Map } from 'react-kakao-maps-sdk'
 import styled from 'styled-components'
-import { useRef } from 'react'
 import useMap from '@/hooks/useMap'
 
 function Home(): JSX.Element {
@@ -27,7 +26,7 @@ function Home(): JSX.Element {
 export default Home
 
 const MainLayout = styled.div`
-  width: 360px;
-  height: 740px;
+  width: 100%;
+  height: 844px;
   position: relative;
 `
