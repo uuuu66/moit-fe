@@ -24,7 +24,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["kakao.maps.d.ts"]
   },
 
   "include": [".eslintrc.cjs", "src", "vite.config.ts"],
