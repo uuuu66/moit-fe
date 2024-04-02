@@ -12,16 +12,17 @@ export default function Login(): JSX.Element {
 
   useEffect(() => {
     login(authCode, service as Service)
-      .then((data: any) => {
-        console.log(data)
+      .then((data) => {
         // 로그인 정보 저장
+        const accessToken = data.split(' ')[1]
+        localStorage.setItem('accessToken', accessToken)
       })
-      .catch((error: any) => {
+      .catch((error) => {
         console.log(error)
         // 에러일 경우 모달 ?
       })
       .finally(() => {
-        // navigate('/')
+        navigate('/')
       })
   }, [authCode, service, navigate])
 
