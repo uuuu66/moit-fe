@@ -1,7 +1,7 @@
 import { Map } from 'react-kakao-maps-sdk'
-import styled from 'styled-components'
 import useMap from '@/hooks/useMap'
 import Meetings from '@/components/meeting/Meetings/Meetings'
+import MainLayout from './styles'
 
 export default function Home(): JSX.Element {
   useMap()
@@ -68,9 +68,3 @@ export default function Home(): JSX.Element {
     </MainLayout>
   )
 }
-
-const MainLayout = styled.div`
-  width: 100%;
-  height: 844px;
-  position: relative;
-`
