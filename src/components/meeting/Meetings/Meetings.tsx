@@ -9,18 +9,29 @@ interface MeetingsProps {
 export default function Meetings({ meetings }: MeetingsProps): JSX.Element {
   return (
     <MeetingsLayout>
-      {meetings.map((meeting) => (
-        <MainMeetingCard
-          meeting={meeting}
-          key={`${meeting.meetingId}_${meeting.meetingName}`}
-        />
-      ))}
+      <ScrollBox>
+        {meetings.map((meeting) => (
+          <MainMeetingCard
+            meeting={meeting}
+            key={`${meeting.meetingId}_${meeting.meetingName}`}
+          />
+        ))}
+      </ScrollBox>
     </MeetingsLayout>
   )
 }
 
 const MeetingsLayout = styled.div`
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  overflow: scroll;
+  padding: 0 20px 38px;
+`
+
+const ScrollBox = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 20px;
+  width: fit-content;
 `
