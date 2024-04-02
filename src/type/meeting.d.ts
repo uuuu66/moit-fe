@@ -1,6 +1,7 @@
 interface Meeting {
   meetingId: number
   meetingName: string
+  contents: string
   address: string
   registeredCount: number
   totalCount: number

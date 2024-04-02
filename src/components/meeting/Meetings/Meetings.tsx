@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { type Meeting } from '@/type/meeting'
-import MainMeetingCard from '../MainMeetingCard/MainMeetingCard'
+import MainMeetingCard from '@/components/meeting/MainMeetingCard/MainMeetingCard'
 
 interface MeetingsProps {
   meetings: Meeting[]

@@ -9,11 +9,13 @@ export default function Home(): JSX.Element {
   const meetings = [
     {
       meetingId: 1,
-      meetingName: '미팅이름1',
+
+      meetingName: '코공모 (코딩 공부는 모여서) 모집합니다 오우예 씨몬',
+      contents: 'test',
       address: '서울특별시 마포구 방울내로 123',
       registeredCount: 5,
       totalCount: 10,
-      skills: ['react', 'spring'],
+      skills: ['react', 'spring', 'java', 'javascript', 'typescript'],
       date: '2024.03.30',
       startTime: '14:00',
       endTime: '16:00',
@@ -23,6 +25,7 @@ export default function Home(): JSX.Element {
     {
       meetingId: 2,
       meetingName: '마크업 스터디를 모집합니다.',
+      contents: 'test',
       address: '서울특별시 강남구 방울내로 123',
       registeredCount: 1,
       totalCount: 5,
@@ -36,6 +39,7 @@ export default function Home(): JSX.Element {
     {
       meetingId: 3,
       meetingName: '리액트 모임을 모집합니다.',
+      contents: 'test',
       address: '서울특별시 마포구 방울내로 123',
       registeredCount: 3,
       totalCount: 10,
