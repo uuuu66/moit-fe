@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import CommonButton from '../Button/CommonButton'
 import ModalPortal from '@/components/modals/ModalPortal'
@@ -9,143 +9,162 @@ import {
   FilterContainer,
   FilterTitle,
   ListBox,
-  ModalBtn,
   SelectedStack,
 } from '../FilterFrame/styles'
 import queryKeys from '@/constants/queryKeys'
-import { getWideRegion } from '@/apis/filter'
-import { type FirstRegion } from '@/type/filter'
+import { getFirstRegions, getSecondRegions } from '@/apis/filter'
+import { type SecondRegion, type FirstRegion } from '@/type/filter'
 
-export default function Region(): JSX.Element {
-  const { data: firstRegion } = useQuery({
+interface RegionProps {
+  handleModalClose: () => void
+}
+
+export default function Region({
+  handleModalClose,
+}: RegionProps): JSX.Element | null {
+  const { data: firstRegions } = useQuery({
     queryKey: queryKeys.firstRegion,
-    queryFn: async () => await getWideRegion(),
+    queryFn: async () => await getFirstRegions(),
   })
   //
   const [selectedFirstRegion, setSelectedFirstRegion] = useState(
     localStorage.getItem('firstRegion') ?? '1'
   )
 
-  useEffect(() => {
-    return () => {
-      localStorage.setItem('firstRegion', selectedFirstRegion)
-    }
-  }, [selectedFirstRegion])
-
-  const [isShow, setIsShow] = useState(false)
-  const [selectedStack, setSelectedStack] = useState<string[]>([])
-
-  const handleVisibleClick = (): void => {
-    setIsShow(!isShow)
-  }
-
-  // 선택한 기술이 보임
-  const handleStackClick = (stackItem: string): void => {
-    setSelectedStack((prevStack) => {
-      if (prevStack.includes(stackItem)) {
-        return prevStack.filter((item) => item !== stackItem)
-      }
-      return [...prevStack, stackItem]
-    })
-  }
-
-  // 선택한 기술 취소
-  const handleDeleteStackClick = (stackItem: string): void => {
-    setSelectedStack((prevStack) =>
-      prevStack.filter((item) => item !== stackItem)
+  const localSecondRegion = localStorage.getItem('secondRegion')
+  const [selectedSecondRegion, setSelectedSecondRegion] =
+    useState<SecondRegion>(
+      localSecondRegion !== null
+        ? (JSON.parse(localSecondRegion) as SecondRegion)
+        : {
+            regionSecondId: 1,
+            regionSecondName: '서울 전체',
+          }
     )
-  }
 
-  //   wide region 나열
-  const renderWideRegionItem = ({
+  const { data: secondRegions } = useQuery({
+    queryKey: queryKeys.secondRegion(selectedFirstRegion),
+    queryFn: async () => await getSecondRegions(selectedFirstRegion),
+  })
+
+  const renderFirstRegions = ({
     regionFirstId,
     regionFirstName,
   }: FirstRegion): JSX.Element => (
     <li key={regionFirstId}>
       <button
         type="button"
-        className={selectedStack.includes(regionFirstName) ? 'selected' : ''}
+        style={{
+          background:
+            selectedFirstRegion === String(regionFirstId) ? '#ddd' : '#fff',
+        }}
         onClick={() => {
           setSelectedFirstRegion(String(regionFirstId))
         }}
       >
         <span>{regionFirstName}</span>
-        <span>{selectedStack.includes(regionFirstName) && <span>V</span>}</span>
       </button>
     </li>
   )
-  // narrow region 나열
-  const renderNarrowRegionItem = (item: string): JSX.Element => (
-    <li key={item}>
+
+  const renderSecondRegions = ({
+    regionSecondId,
+    regionSecondName,
+  }: SecondRegion): JSX.Element => (
+    <li key={regionSecondId}>
       <button
         type="button"
-        className={selectedStack.includes(item) ? 'selected' : ''}
+        className={
+          selectedSecondRegion.regionSecondId === regionSecondId
+            ? 'selected'
+            : ''
+        }
         onClick={() => {
-          handleStackClick(item)
+          setSelectedSecondRegion({ regionSecondId, regionSecondName })
         }}
       >
-        <span>{item}</span>
-        <span>{selectedStack.includes(item) && <span>V</span>}</span>
+        <span>{regionSecondName}</span>
+        <span>
+          {String(selectedSecondRegion.regionSecondId) ===
+            String(regionSecondId) && <span>V</span>}
+        </span>
       </button>
     </li>
   )
 
   const handleResetClick = (): void => {
-    setSelectedStack([])
+    setSelectedFirstRegion('1')
+    setSelectedSecondRegion({
+      regionSecondId: 1,
+      regionSecondName: '서울 전체',
+    })
+  }
+
+  const handleSelectClick = (): void => {
+    localStorage.setItem(
+      'firstRegion',
+      selectedSecondRegion.regionSecondId === 0 ? '1' : selectedFirstRegion
+    )
+    localStorage.setItem(
+      'secondRegion',
+      JSON.stringify(
+        selectedSecondRegion.regionSecondId === 0
+          ? {
+              regionSecondId: 1,
+              regionSecondName: '서울 전체',
+            }
+          : selectedSecondRegion
+      )
+    )
   }
 
   return (
-    <>
-      <ModalBtn type="button" onClick={handleVisibleClick}>
-        모임 지역
-      </ModalBtn>
-      <ModalPortal>
-        {isShow ? (
-          // TechStackContainer는 메인, 생성에 따라 보임새만 다르면 될 듯
-          <Background onClick={handleVisibleClick}>
-            <FilterContainer
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-            >
-              <FilterTitle>모임 지역</FilterTitle>
-              <ListBox>
-                {firstRegion != null && (
-                  <ul>
-                    {firstRegion?.map((item) => renderWideRegionItem(item))}
-                  </ul>
-                )}
-                <ul>
-                  {firstRegion?.map((item) => renderWideRegionItem(item))}
-                </ul>
-              </ListBox>
-              <BottomBox>
-                <SelectedStack>
-                  {selectedStack.map((item) => (
-                    <div key={item}>
-                      <span>{item}</span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          handleDeleteStackClick(item)
-                        }}
-                      >
-                        X
-                      </button>
-                    </div>
-                  ))}
-                </SelectedStack>
-                <BottomBoxNav>
-                  <button type="button" onClick={handleResetClick}>
-                    초기화
+    <ModalPortal>
+      <Background onClick={handleModalClose}>
+        <FilterContainer
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+        >
+          <FilterTitle>모임 지역</FilterTitle>
+          <ListBox>
+            {firstRegions != null && (
+              <ul>{firstRegions.map((item) => renderFirstRegions(item))}</ul>
+            )}
+            {secondRegions != null && (
+              <ul>{secondRegions.map((item) => renderSecondRegions(item))}</ul>
+            )}
+          </ListBox>
+          <BottomBox>
+            <SelectedStack>
+              {selectedSecondRegion.regionSecondName !== '' && (
+                <div>
+                  <span>{selectedSecondRegion.regionSecondName}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedSecondRegion({
+                        regionSecondId: 0,
+                        regionSecondName: '',
+                      })
+                    }}
+                  >
+                    X
                   </button>
-                  <CommonButton size="small">선택 완료하기</CommonButton>
-                </BottomBoxNav>
-              </BottomBox>
-            </FilterContainer>
-          </Background>
-        ) : null}
-      </ModalPortal>
-    </>
+                </div>
+              )}
+            </SelectedStack>
+            <BottomBoxNav>
+              <button type="button" onClick={handleResetClick}>
+                초기화
+              </button>
+              <CommonButton size="small" handleClick={handleSelectClick}>
+                선택 완료하기
+              </CommonButton>
+            </BottomBoxNav>
+          </BottomBox>
+        </FilterContainer>
+      </Background>
+    </ModalPortal>
   )
 }

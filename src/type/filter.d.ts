@@ -4,3 +4,10 @@ export interface FirstRegion {
 }
 
 export type FirstRegions = FirstRegion[]
+
+export interface SecondRegion {
+  regionSecondId: number
+  regionSecondName: string
+}
+
+export type SecondRegions = SecondRegion[]
