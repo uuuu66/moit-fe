@@ -94,6 +94,9 @@ export const TechStackInput = styled.input`
   border-radius: 2.5rem;
   background-color: #e9e9e9;
 `
+export const ListBox = styled.div`
+  display: flex;
+`
 
 export const SelectedStack = styled.div`
   width: 24.375rem;

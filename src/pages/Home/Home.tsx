@@ -1,11 +1,15 @@
 import { Map } from 'react-kakao-maps-sdk'
+import { useState } from 'react'
 import useMap from '@/hooks/useMap'
 import Meetings from '@/components/meeting/Meetings/Meetings'
-import MainLayout from './styles'
+import { FilterBox, MainLayout } from './styles'
+import Career from '@/components/common/Career/Career'
+import TechStack from '@/components/common/TechStack/TechStack'
+import Region from '@/components/common/Region/Region'
+import { ModalBtn } from '@/components/common/FilterFrame/styles'
 
 export default function Home(): JSX.Element {
   useMap()
-  console.log(window.innerHeight)
 
   const meetings = [
     {
@@ -53,6 +57,8 @@ export default function Home(): JSX.Element {
     },
   ]
 
+  const [isShow, setIsShow] = useState(false)
+
   return (
     <MainLayout>
       <Map
@@ -66,6 +72,25 @@ export default function Home(): JSX.Element {
         minLevel={11}
       />
       <Meetings meetings={meetings} />
+      <FilterBox>
+        <ModalBtn
+          type="button"
+          onClick={() => {
+            setIsShow(true)
+          }}
+        >
+          모임 지역
+        </ModalBtn>
+        {isShow && (
+          <Region
+            handleModalClose={() => {
+              setIsShow(!isShow)
+            }}
+          />
+        )}
+        <TechStack />
+        <Career />
+      </FilterBox>
     </MainLayout>
   )
 }
