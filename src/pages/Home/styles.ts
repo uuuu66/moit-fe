@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const MainLayout = styled.div`
   width: 100%;
-  height: 52.75rem;
+  height: 100%;
   position: relative;
 `
 export default MainLayout

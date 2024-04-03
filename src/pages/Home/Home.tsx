@@ -5,6 +5,7 @@ import MainLayout from './styles'
 
 export default function Home(): JSX.Element {
   useMap()
+  console.log(window.innerHeight)
 
   const meetings = [
     {
