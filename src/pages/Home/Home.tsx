@@ -1,7 +1,10 @@
 import { Map } from 'react-kakao-maps-sdk'
 import useMap from '@/hooks/useMap'
 import Meetings from '@/components/meeting/Meetings/Meetings'
-import MainLayout from './styles'
+import { FilterBox, MainLayout } from './styles'
+import Career from '@/components/common/Career/Career'
+import TechStack from '@/components/common/TechStack/TechStack'
+import Region from '@/components/common/Region/Region'
 
 export default function Home(): JSX.Element {
   useMap()
@@ -66,6 +69,11 @@ export default function Home(): JSX.Element {
         minLevel={11}
       />
       <Meetings meetings={meetings} />
+      <FilterBox>
+        <Region />
+        <TechStack />
+        <Career />
+      </FilterBox>
     </MainLayout>
   )
 }
