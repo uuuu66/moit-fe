@@ -1,5 +1,5 @@
 import { Map } from 'react-kakao-maps-sdk'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useMap from '@/hooks/useMap'
 import Meetings from '@/components/meeting/Meetings/Meetings'
 import { FilterBox, MainLayout } from './styles'
@@ -8,70 +8,75 @@ import TechStack from '@/components/common/TechStack/TechStack'
 import Region from '@/components/common/Region/Region'
 import { ModalBtn } from '@/components/common/FilterFrame/styles'
 
+interface Center {
+  lat: number
+  lng: number
+}
+
 export default function Home(): JSX.Element {
   useMap()
+  // 중심좌표: 초기값 - 로컬스토리지 > 유저좌표 > 서울시청(유저가 좌표 동의 x, get좌표 되지 않는 브라우저인 경우)
+  const [center, setCenter] = useState<Center>({
+    lat: 37.5667,
+    lng: 126.9784,
+  })
 
-  const meetings = [
-    {
-      meetingId: 1,
+  // 로컬스토리지의 마지막 위치 setCenter
+  const setLastLocation = (locationValue: string): void => {
+    if (locationValue !== null) {
+      const lastLocation = JSON.parse(locationValue)
+      setCenter({
+        lat: Number(lastLocation.lat),
+        lng: Number(lastLocation.lng),
+      })
+    }
+  }
 
-      meetingName: '코공모 (코딩 공부는 모여서) 모집합니다 오우예 씨몬',
-      contents: 'test',
-      address: '서울특별시 마포구 방울내로 123',
-      registeredCount: 5,
-      totalCount: 10,
-      skills: ['react', 'spring', 'java', 'javascript', 'typescript'],
-      date: '2024.03.30',
-      startTime: '14:00',
-      endTime: '16:00',
-      locationLat: 37.123,
-      locationLong: 128.123,
-    },
-    {
-      meetingId: 2,
-      meetingName: '마크업 스터디를 모집합니다.',
-      contents: 'test',
-      address: '서울특별시 강남구 방울내로 123',
-      registeredCount: 1,
-      totalCount: 5,
-      skills: ['react', 'spring'],
-      date: '2024.03.30',
-      startTime: '14:00',
-      endTime: '16:00',
-      locationLat: 37.123,
-      locationLong: 128.123,
-    },
-    {
-      meetingId: 3,
-      meetingName: '리액트 모임을 모집합니다.',
-      contents: 'test',
-      address: '서울특별시 마포구 방울내로 123',
-      registeredCount: 3,
-      totalCount: 10,
-      skills: ['react', 'redux'],
-      date: '2024.03.30',
-      startTime: '14:00',
-      endTime: '16:00',
-      locationLat: 37.123,
-      locationLong: 128.123,
-    },
-  ]
+  // 유저 초기 위치 setCenter
+  const setUserLocation = (): void => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCenter(() => ({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          }))
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+    }
+  }
+
+  useEffect(() => {
+    const locationValue = localStorage.getItem('center')
+
+    if (locationValue !== null) {
+      setLastLocation(locationValue)
+    } else {
+      setUserLocation()
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('center', JSON.stringify(center))
+  }, [center])
 
   const [isShow, setIsShow] = useState(false)
 
   return (
     <MainLayout>
       <Map
-        center={{ lat: 37.5667, lng: 126.9784 }}
+        center={center}
         style={{
           width: '100%',
           height: '100%',
         }}
-        level={10}
         maxLevel={3}
         minLevel={11}
       />
-      <Meetings meetings={meetings} />
+      {/* <Meetings meetings={meetings} /> */}
       <FilterBox>
         <ModalBtn
           type="button"
