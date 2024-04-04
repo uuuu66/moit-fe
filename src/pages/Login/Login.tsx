@@ -6,8 +6,7 @@ import { login } from '@/apis/user'
 export default function Login(): JSX.Element {
   const { service } = useParams()
   const authCode = window.location.search.split('code=')[1]
-  console.log(authCode)
-  //  네이버로그인 : state 같이 보내야 하는지 확인
+
   const navigate = useNavigate()
 
   useEffect(() => {
