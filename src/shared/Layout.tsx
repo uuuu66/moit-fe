@@ -11,6 +11,6 @@ export default function Layout(): JSX.Element {
 
 const LayoutStyles = styled.div`
   width: 390px;
-  min-height: 740px;
+  max-height: 844px;
   height: ${window.innerHeight}px;
 `
