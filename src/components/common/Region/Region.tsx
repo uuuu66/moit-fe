@@ -11,7 +11,7 @@ import {
   ListBox,
   SelectedStack,
 } from '../FilterFrame/styles'
-import queryKeys from '@/constants/queryKeys'
+import { filterKeys } from '@/constants/queryKeys'
 import { getFirstRegions, getSecondRegions } from '@/apis/filter'
 import { type SecondRegion, type FirstRegion } from '@/type/filter'
 
@@ -23,7 +23,7 @@ export default function Region({
   handleModalClose,
 }: RegionProps): JSX.Element | null {
   const { data: firstRegions } = useQuery({
-    queryKey: queryKeys.firstRegion,
+    queryKey: filterKeys.firstRegion,
     queryFn: async () => await getFirstRegions(),
   })
   //
@@ -43,7 +43,7 @@ export default function Region({
     )
 
   const { data: secondRegions } = useQuery({
-    queryKey: queryKeys.secondRegion(selectedFirstRegion),
+    queryKey: filterKeys.secondRegion(selectedFirstRegion),
     queryFn: async () => await getSecondRegions(selectedFirstRegion),
   })
 
