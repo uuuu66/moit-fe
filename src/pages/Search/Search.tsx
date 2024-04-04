@@ -26,7 +26,7 @@ export default function Search(): JSX.Element {
           검색
         </button>
       </div>
-      <CardSection>
+      <SectionBox>
         <h1>내 주변 스터디 모임</h1>
         <CardBox>
           {meetings?.length != null &&
@@ -41,24 +41,25 @@ export default function Search(): JSX.Element {
                 totalCount,
               }) => (
                 <MeetingCard key={meetingId}>
-                  <TitleBox>
+                  <ContentsBox>
                     <h2>{meetingName}</h2>
-                  </TitleBox>
-                  <TagBox>
-                    {skills.map((skill) => (
-                      <p key={skill}>{skill}</p>
-                    ))}
-                  </TagBox>
-                  <SubTextBox>
+                    <TagBox>
+                      {skills.map((skill) => (
+                        <p key={skill}>{skill}</p>
+                      ))}
+                    </TagBox>
+                  </ContentsBox>
+                  <hr />
+                  <SubContentsBox>
                     <p>{address}</p>
                     <p>{date}</p>
                     <p>{`${registeredCount} / ${totalCount}`}</p>
-                  </SubTextBox>
+                  </SubContentsBox>
                 </MeetingCard>
               )
             )}
         </CardBox>
-      </CardSection>
+      </SectionBox>
     </SearchLayout>
   )
 }
@@ -67,8 +68,7 @@ const SearchLayout = styled.div`
   width: 100%;
   height: 100%;
 `
-const CardSection = styled.div`
-  background: #eee;
+const SectionBox = styled.div`
   padding: 0 20px;
 
   h1 {
@@ -76,29 +76,49 @@ const CardSection = styled.div`
     font-weight: 600;
   }
 `
-
 const CardBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* max-height: 300px; */ // Todo: 검색 바 크기에 따라 정해줄 것 (for 스크롤 적용)
+  overflow: auto;
 `
-
 const MeetingCard = styled.div`
   width: 100%;
-  padding: 8px;
+  padding: 20px;
   border-radius: 12px;
   background: #e7e4e4;
-`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
-const TitleBox = styled.div``
+  hr {
+    width: 100%;
+  }
+`
+const ContentsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h2 {
+    font-weight: 700;
+  }
+`
 
 const TagBox = styled.div`
   display: flex;
   gap: 6px;
   font-size: 12px;
+
+  p {
+    padding: 6px 12px;
+    background: #fff;
+    border-radius: 25px;
+  }
 `
 
-const SubTextBox = styled.div`
+const SubContentsBox = styled.div`
   display: flex;
   justify-content: space-between;
   p {
