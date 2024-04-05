@@ -3,7 +3,8 @@
 }
 
 body {
-  overflow: hidden;
+  overflow-y: auto;
+  /* overflow: hidden; */
   /* touch-action: none; */
 }
 

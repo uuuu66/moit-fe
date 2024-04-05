@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import dayjs from 'dayjs'
+import { useMutation } from '@tanstack/react-query'
 import CommonButton from '@/components/common/Button/CommonButton'
 import {
   AccountContainer,
@@ -16,16 +17,34 @@ import {
   WholeContainer,
 } from './styles'
 import TechStack from '@/components/common/TechStack/TechStack'
-import DateChoice from './DateChoice'
-import TimeChoice from './TimeChoice'
-import FindLocation from './FindLocation'
-import { careerData } from '@/constants/careerData'
+import DateChoice from '@/components/meeting/DateChoice/DateChoice'
+import TimeChoice from '@/components/meeting/TimeChoice/TimeChoice'
+import FindLocation from '@/components/meeting/FindLocation/FindLocation'
+import { careerData, type Career } from '@/constants/careerData'
+import { postMeetingData } from '@/apis/meeting'
+
+export interface Info {
+  meetingName: string
+  meetingDate: string | null
+  meetingStartTime: string | null
+  meetingEndTime: string | null
+  budget: number
+  contents: string
+  totalCount: number
+  locationAddress: string
+  locationLat: number
+  locationLng: number
+  regionFirstName: string
+  regionSecondName: string
+  skillIds: number[]
+  careerIds: number[]
+}
 
 function RegisterMeeting(): JSX.Element {
   const navi = useNavigate()
-  const [info, setInfo] = useState({
+  const [info, setInfo] = useState<Info>({
     meetingName: '',
-    meetingDate: '',
+    meetingDate: null,
     meetingStartTime: null,
     meetingEndTime: null,
     budget: 0,
@@ -39,76 +58,68 @@ function RegisterMeeting(): JSX.Element {
     skillIds: [],
     careerIds: [],
   })
-  const datee = dayjs(info.meetingDate).format('YYYY-MM-DD')
-  const starttime = dayjs(info.meetingStartTime).format()
-  console.log('starttime', starttime)
-  console.log('datee', datee)
-  console.log('info', info)
+  const dateFormat = dayjs(info.meetingDate).format('YYYY-MM-DD')
 
-  const handleNameChange = (e) => {
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setInfo((prevState) => ({
       ...prevState,
       meetingName: e.target.value,
     }))
   }
-  const handleContentChange = (e) => {
+  const handleContentChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     setInfo((prevState) => ({
       ...prevState,
       contents: e.target.value,
     }))
   }
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (date: string): void => {
     setInfo((prevState) => ({
       ...prevState,
       meetingDate: date,
     }))
   }
 
-  const handleStartTimeChange = (time) => {
-    console.log('time111111', time)
+  const handleStartTimeChange = (time: string | null): void => {
+    // console.log('time111111', time)
     setInfo((prevState) => ({
       ...prevState,
       meetingStartTime: time,
     }))
   }
 
-  const handleEndTimeChange = (time) => {
+  const handleEndTimeChange = (time: string | null): void => {
     setInfo((prevState) => ({
       ...prevState,
       meetingEndTime: time,
     }))
   }
 
-  const handleBudgetChange = (e) => {
+  const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const budgetValue: number = parseInt(e.target.value, 10)
     setInfo((prevState) => ({
       ...prevState,
-      budget: parseInt(e.target.value),
+      budget: budgetValue,
     }))
   }
 
-  const handleMemCountUpClick = () => {
+  const handleMemCountUpClick = (): void => {
     setInfo((prevState) => ({
       ...prevState,
       totalCount: prevState.totalCount + 1,
     }))
   }
 
-  const handleMemCountDownClick = () => {
+  const handleMemCountDownClick = (): void => {
     setInfo((prevState) => ({
       ...prevState,
       totalCount: prevState.totalCount - 1,
     }))
   }
 
-  const handleSkillIdsChange = (selectedSkills) => {
-    setInfo((prevState) => ({
-      ...prevState,
-      skillIds: selectedSkills,
-    }))
-  }
-
-  const handleCareerClick = (careerId) => {
+  const handleCareerClick = (careerId: number): void => {
     setInfo((prev) => {
       if (prev.careerIds.includes(careerId)) {
         return {
@@ -121,6 +132,40 @@ function RegisterMeeting(): JSX.Element {
         careerIds: [...prev.careerIds, careerId],
       }
     })
+  }
+
+  const postMutation = useMutation<any, unknown, Info>({
+    mutationFn: async (newMeetingData: Info) => {
+      const response = await postMeetingData(newMeetingData)
+      return response
+    },
+    onSuccess: (res) => {
+      console.log('res', res)
+      // navi('/')
+    },
+    onError: (error) => {
+      console.log('error', error)
+    },
+  })
+
+  const handleMeetingSubmit = () => {
+    const newMeetingData = {
+      meetingName: info.meetingName,
+      meetingDate: dateFormat,
+      meetingStartTime: info.meetingStartTime,
+      meetingEndTime: info.meetingEndTime,
+      budget: info.budget,
+      contents: info.contents,
+      totalCount: info.totalCount,
+      locationAddress: info.locationAddress,
+      locationLat: Number(info.locationLat),
+      locationLng: Number(info.locationLng),
+      regionFirstName: info.regionFirstName,
+      regionSecondName: info.regionSecondName,
+      skillIds: info.skillIds,
+      careerIds: info.careerIds,
+    }
+    postMutation.mutate(newMeetingData)
   }
 
   return (
@@ -232,12 +277,12 @@ function RegisterMeeting(): JSX.Element {
         </AccountContainer>
         <InfoContainer>
           <InfoTitle>모임에 필요한 기술 스택을 알려 주세요</InfoTitle>
-          <TechStack />
+          <TechStack info={info} setInfo={setInfo} />
         </InfoContainer>
         <InfoContainer>
           <InfoTitle>경력을 알려 주세요</InfoTitle>
           <CareerContainer>
-            {careerData.map((career) => (
+            {careerData.map((career: Career) => (
               <button
                 type="button"
                 key={career.careerId}
@@ -251,36 +296,9 @@ function RegisterMeeting(): JSX.Element {
           </CareerContainer>
         </InfoContainer>
       </div>
-      {/* 타입에 맞게 잘 가져와지나 확인 */}
-      <div>
-        <div>MeetingName : {info.meetingName}</div>
-        <div>Contents : {info.contents}</div>
-        <div>MeetingDate : {datee || ''}</div>
-        <div>
-          MeetingStartTime :
-          {info.meetingStartTime ? info.meetingStartTime.toISOString() : ''}
-        </div>
-        <div>
-          MeetingEndTime :{' '}
-          {info.meetingEndTime ? info.meetingEndTime.toISOString() : ''}
-        </div>
-        <div>MeetingBudget : {info.budget}</div>
-        <div>TotalCount : {info.totalCount}</div>
-        <div>locationAddress : {info.locationAddress}</div>
-        <div>locationLat : {info.locationLat}</div>
-        <div>locationLng : {info.locationLng}</div>
-        <div>regionFirstName : {info.regionFirstName}</div>
-        <div>regionSecondName : {info.regionSecondName}</div>
-        <div>
-          MeetingSkillIds :{' '}
-          {info.careerIds.map((i) => (
-            <div>
-              <span>{i}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-      <CommonButton size="large">생성하기</CommonButton>
+      <CommonButton size="large" handleClick={handleMeetingSubmit}>
+        생성하기
+      </CommonButton>
     </WholeContainer>
   )
 }
