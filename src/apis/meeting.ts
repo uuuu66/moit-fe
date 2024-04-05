@@ -1,4 +1,25 @@
-const getMeetings = () => {}
+import { type Center, type GetMeetingType } from '@/type/meeting'
+import instance from './axios'
+import { type CommonResponse } from '@/type/response'
+
+interface GetMeetingParams {
+  center: Center
+  region?: number
+}
+
+const getMeetings = async <T = GetMeetingType[]>({
+  center,
+}: GetMeetingParams): Promise<T> => {
+  try {
+    const { data } = await instance.get<CommonResponse<T>>(
+      `/api/meetings?locationLat=${center.lat}&locationLng=${center.lng}&page=1`
+    )
+    return data.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
 const getMeetingsBySearch = async (text: string) => {
   try {

@@ -1,3 +1,5 @@
+import { type Center } from '@/type/meeting'
+
 const filterKeys = {
   firstRegion: ['firstRegion'],
   secondRegion: (regionId: string) => ['secondRegion', regionId],
@@ -5,7 +7,7 @@ const filterKeys = {
 
 const meetingKeys = {
   all: ['meetings'],
-  lists: ['meetings', 'list'], // 전체 조회
+  lists: (center: Center) => ['meetings', 'list', { center }],
   search: (search: string) => ['meetings', 'list', { search }],
   filter: (filter: object) => ['meetings', 'list', { ...filter }],
 }

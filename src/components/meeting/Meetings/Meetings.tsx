@@ -1,9 +1,9 @@
-import { type Meeting } from '@/type/meeting'
+import { type GetMeetingType } from '@/type/meeting'
 import MainMeetingCard from '@/components/meeting/MainMeetingCard/MainMeetingCard'
 import { MeetingsLayout, ScrollBox } from './styles'
 
 interface MeetingsProps {
-  meetings: Meeting[]
+  meetings: GetMeetingType[]
 }
 
 export default function Meetings({ meetings }: MeetingsProps): JSX.Element {
