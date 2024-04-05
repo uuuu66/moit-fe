@@ -11,3 +11,11 @@ export interface SecondRegion {
 }
 
 export type SecondRegions = SecondRegion[]
+
+export interface TechStackList {
+  data?: any
+  skillId: number
+  skillName: string
+}
+
+export type TechStackLists = TechStackList[]

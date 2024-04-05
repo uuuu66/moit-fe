@@ -1,6 +1,7 @@
 import { type Center, type GetMeetingType } from '@/type/meeting'
 import instance from './axios'
 import { type CommonResponse } from '@/type/response'
+import { type Info } from '@/pages/Meeting/RegisterMeeting'
 
 interface GetMeetingParams {
   center: Center
@@ -74,4 +75,16 @@ const getMeetingsBySearch = async (text: string) => {
   }
 }
 
-export { getMeetings, getMeetingsBySearch }
+const postMeetingData = async (newMeetingData: Info) => {
+  try {
+    await instance.post(`/api/meetings`, newMeetingData, {
+      headers: {
+        Authorization: `Bearer `, // TODO : 헤더에 토큰 넣어야함
+      },
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export { getMeetings, getMeetingsBySearch, postMeetingData }

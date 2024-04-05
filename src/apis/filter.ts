@@ -1,4 +1,8 @@
-import { type SecondRegions, type FirstRegions } from '@/type/filter'
+import {
+  type SecondRegions,
+  type FirstRegions,
+  type TechStackLists,
+} from '@/type/filter'
 import instance from './axios'
 import { type CommonResponse } from '@/type/response'
 
@@ -26,4 +30,14 @@ const getSecondRegions = async <T = SecondRegions>(
   }
 }
 
-export { getFirstRegions, getSecondRegions }
+const getTechStackList = async <T = TechStackLists>(): Promise<T | []> => {
+  try {
+    const { data } = await instance.get(`/api/skill`)
+    return data.data
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
+
+export { getFirstRegions, getSecondRegions, getTechStackList }
