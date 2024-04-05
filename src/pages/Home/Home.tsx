@@ -5,7 +5,7 @@ import useMap from '@/hooks/useMap'
 import Meetings from '@/components/meeting/Meetings/Meetings'
 import { FilterBox, MainLayout } from './styles'
 import Career from '@/components/common/Career/Career'
-import TechStack from '@/components/common/TechStack/TechStack'
+// import TechStack from '@/components/common/TechStack/TechStack'
 import Region from '@/components/common/Region/Region'
 import { ModalBtn } from '@/components/common/FilterFrame/styles'
 import { type GetMeetingType, type Center } from '@/type/meeting'
@@ -160,7 +160,7 @@ export default function Home(): JSX.Element {
             }}
           />
         )}
-        <TechStack />
+        {/* <TechStack /> */}
         <Career />
       </FilterBox>
     </MainLayout>
