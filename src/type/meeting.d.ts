@@ -1,16 +1,25 @@
-interface Meeting {
-  meetingId: number
-  meetingName: string
-  contents: string
-  address: string
-  registeredCount: number
-  totalCount: number
-  skills: string[]
-  date: string
-  startTime: string
-  endTime: string
-  locationLat: number
-  locationLong: number
+export interface Center {
+  lat: number
+  lng: number
 }
 
-export type { Meeting }
+export interface GetMeetingType {
+  meetingId: number
+  meetingName: string
+  registeredCount: number
+  totalCount: number
+  locationLat: number
+  locationLng: number
+  skillList: SkillList[]
+  careerList: CareerList[]
+}
+
+export interface SkillList {
+  skillName: string
+  id: number
+}
+
+export interface CareerList {
+  careerName: string
+  id: number
+}

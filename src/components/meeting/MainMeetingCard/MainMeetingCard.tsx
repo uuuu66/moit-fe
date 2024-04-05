@@ -1,4 +1,4 @@
-import { type Meeting } from '@/type/meeting'
+import { type GetMeetingType } from '@/type/meeting'
 import {
   ContentsBox,
   DateBox,
@@ -9,31 +9,31 @@ import {
 } from './styles'
 
 interface MainMeetingCardProps {
-  meeting: Meeting
+  meeting: GetMeetingType
 }
 
 export default function MainMeetingCard({
   meeting,
 }: MainMeetingCardProps): JSX.Element {
-  const { meetingName, address, skills, date, startTime, endTime } = meeting
+  const { meetingName, skillList } = meeting
   return (
     <MainMeetingCardLayout>
       <SubContentsBox>
         <DateBox>
-          <p>{date}</p>
-          <p>{`${startTime} - ${endTime}`}</p>
+          {/* <p>{date}</p>
+          <p>{`${startTime} - ${endTime}`}</p> */}
         </DateBox>
       </SubContentsBox>
       <ContentsBox>
         <TextBox>
           <h2>{meetingName}</h2>
-          <p>{address}</p>
+          {/* <p>{address}</p> */}
         </TextBox>
         <TagBox>
-          {skills.map((skill) => (
-            <p key={skill}>
+          {skillList.map(({ id, skillName }) => (
+            <p key={id}>
               <span>#</span>
-              {skill}
+              {skillName}
             </p>
           ))}
         </TagBox>
