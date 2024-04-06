@@ -4,6 +4,7 @@ import Login from '@/pages/Login/Login'
 import Layout from './Layout'
 import Search from '@/pages/Search/Search'
 import RegisterMeeting from '@/pages/Meeting/RegisterMeeting'
+import MeetingDetail from '@/pages/MeetingDetail/MeetingDetail'
 
 function Router(): JSX.Element {
   return (
@@ -14,6 +15,7 @@ function Router(): JSX.Element {
           <Route path="/search" element={<Search />} />
           <Route path="/login/:service" element={<Login />} />
           <Route path="/meetings" element={<RegisterMeeting />} />
+          <Route path="/meetings/:meetingId" element={<MeetingDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>
