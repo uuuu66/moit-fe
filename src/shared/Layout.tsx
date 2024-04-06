@@ -13,4 +13,7 @@ const LayoutStyles = styled.div`
   width: 390px;
   max-height: 844px;
   height: ${window.innerHeight}px;
+  border: 1px solid #000;
+  margin-top: 20px;
+  margin-left: 20px;
 `

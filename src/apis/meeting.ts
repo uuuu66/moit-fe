@@ -22,7 +22,8 @@ const getMeetings = async <T = GetMeetingType[]>({
   }
 }
 
-const getMeetingsBySearch = async (text: string) => {
+const getMeetingsBySearch = async (text: string): Promise<object[]> => {
+  console.log(text)
   try {
     const data = [
       {
@@ -72,10 +73,11 @@ const getMeetingsBySearch = async (text: string) => {
     return data
   } catch (error) {
     console.log(error)
+    throw error
   }
 }
 
-const postMeetingData = async (newMeetingData: Info) => {
+const postMeetingData = async (newMeetingData: Info): Promise<void> => {
   try {
     await instance.post(`/api/meetings`, newMeetingData, {
       headers: {

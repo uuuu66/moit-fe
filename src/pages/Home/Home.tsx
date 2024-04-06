@@ -2,8 +2,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useMap from '@/hooks/useMap'
-import Meetings from '@/components/meeting/Meetings/Meetings'
-import { FilterBox, MainLayout } from './styles'
+import { FilterBox, HomeLayout, MapBox } from './styles'
 import Career from '@/components/common/Career/Career'
 // import TechStack from '@/components/common/TechStack/TechStack'
 import Region from '@/components/common/Region/Region'
@@ -12,6 +11,7 @@ import { type GetMeetingType, type Center } from '@/type/meeting'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
 import getUserLocation from '@/util/getUserLocation'
+import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -99,40 +99,7 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <MainLayout>
-      <Map
-        center={{
-          lat: 37.5667,
-          lng: 126.9784,
-        }}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-        maxLevel={3}
-        minLevel={11}
-        onCreate={(maps) => {
-          setMapElement(maps)
-        }}
-      >
-        {meetings?.map(
-          ({ meetingName, meetingId, locationLat, locationLng }) => (
-            <MapMarker
-              key={`${meetingId}`}
-              title={meetingName}
-              image={{
-                src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
-                size: {
-                  width: 20,
-                  height: 30,
-                },
-              }}
-              position={{ lat: locationLat, lng: locationLng }}
-            />
-          )
-        )}
-      </Map>
-      <Meetings meetings={meetings ?? []} />
+    <HomeLayout>
       <FilterBox>
         <ModalBtn
           type="button"
@@ -163,6 +130,41 @@ export default function Home(): JSX.Element {
         {/* <TechStack /> */}
         <Career />
       </FilterBox>
-    </MainLayout>
+      <MapBox>
+        <Map
+          center={{
+            lat: 37.5667,
+            lng: 126.9784,
+          }}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+          maxLevel={3}
+          minLevel={11}
+          onCreate={(maps) => {
+            setMapElement(maps)
+          }}
+        >
+          {meetings?.map(
+            ({ meetingName, meetingId, locationLat, locationLng }) => (
+              <MapMarker
+                key={`${meetingId}`}
+                title={meetingName}
+                image={{
+                  src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+                  size: {
+                    width: 20,
+                    height: 30,
+                  },
+                }}
+                position={{ lat: locationLat, lng: locationLng }}
+              />
+            )
+          )}
+        </Map>
+      </MapBox>
+      {meetings != null && <HomeMeetingsPanel meetings={meetings} />}
+    </HomeLayout>
   )
 }
