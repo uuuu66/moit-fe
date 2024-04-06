@@ -2,18 +2,30 @@ import { type Center, type GetMeetingType } from '@/type/meeting'
 import instance from './axios'
 import { type CommonResponse } from '@/type/response'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
+import { type Filters } from '@/type/filter'
 
 interface GetMeetingParams {
   center: Center
-  region?: number
+  filters: Filters
 }
 
 const getMeetings = async <T = GetMeetingType[]>({
   center,
+  filters,
 }: GetMeetingParams): Promise<T> => {
+  const stackQuery =
+    filters.techStacks.length > 0
+      ? filters.techStacks.map((id) => `skillId=${id}&`).join('')
+      : ''
+
+  const filterQuery =
+    filters.careers.length > 0
+      ? filters.careers.map((id) => `careerId=${id}&`).join('')
+      : ''
+
   try {
     const { data } = await instance.get<CommonResponse<T>>(
-      `/api/meetings?locationLat=${center.lat}&locationLng=${center.lng}&page=1`
+      `/api/meetings?locationLat=${center.lat}&locationLng=${center.lng}&${stackQuery}${filterQuery}page=1`
     )
     return data.data
   } catch (error) {

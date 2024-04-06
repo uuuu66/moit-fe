@@ -14,6 +14,7 @@ import getUserLocation from '@/util/getUserLocation'
 import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
 import { type FiltersKey, type Filters } from '@/type/filter'
 import MainFilters from '@/components/filter/MainFilters/MainFilters'
+import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -23,20 +24,25 @@ export default function Home(): JSX.Element {
     lng: 126.9784,
   })
   const [isShow, setIsShow] = useState(false)
+  const [filters, setFilters] = useState<Filters>({
+    techStacks: [],
+    careers: getLocalStorageItem('careers'),
+    region: [],
+  })
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
 
   // 좌표에 따라 데이터 패칭
   const { data: meetings } = useQuery({
-    queryKey: meetingKeys.filter(center),
-    queryFn: async () => await getMeetings({ center }),
+    queryKey: meetingKeys.filter({ ...center, ...filters }),
+    queryFn: async () => await getMeetings({ center, filters }),
   })
 
   useEffect(() => {
-    const locationValue = localStorage.getItem('center')
+    const locationValue = getLocalStorageItem('center')
 
-    if (locationValue !== null) {
+    if (locationValue != null) {
       // 로컬 스토리지 저장된 값을 setCenter
-      setLastLocation(locationValue)
+      setLastLocation(locationValue as Center)
     } else {
       // 유저 위치 조회 후 setCenter
       getUserLocation(handleUserFirstLocation)
@@ -44,7 +50,7 @@ export default function Home(): JSX.Element {
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('center', JSON.stringify(center))
+    setLocalStorageItem('center', center)
   }, [center])
 
   // 조회한 마커가 모두 보이도록 지도 위치 조정
@@ -67,14 +73,11 @@ export default function Home(): JSX.Element {
   }, [meetings, mapElement, map])
 
   // 로컬스토리지의 마지막 위치 setCenter
-  const setLastLocation = (locationValue: string): void => {
-    if (locationValue !== null) {
-      const lastLocation = JSON.parse(locationValue)
-      setCenter({
-        lat: Number(lastLocation.lat),
-        lng: Number(lastLocation.lng),
-      })
-    }
+  const setLastLocation = (lastLocation: Center): void => {
+    setCenter({
+      lat: Number(lastLocation.lat),
+      lng: Number(lastLocation.lng),
+    })
   }
 
   // 유저 위치 조회 결과를 setCenter
@@ -99,14 +102,6 @@ export default function Home(): JSX.Element {
       new map.LatLng(position.coords.latitude, position.coords.longitude)
     )
   }
-
-  const [filters, setFilters] = useState<Filters>({
-    techStacks: [],
-    careers: [],
-    region: [],
-  })
-
-  console.log(filters)
 
   const handleFilterChange = (
     filter: Partial<{ [key in FiltersKey]: number[] }>
