@@ -14,12 +14,18 @@ export const Background = styled.div`
   left: 0;
   top: 0;
   background: rgba(0, 0, 0, 0.3);
+  z-index: 99;
+  width: 390px;
+  max-height: 844px;
+  height: ${window.innerHeight}px;
+  margin-top: 20px;
+  margin-left: 20px;
 `
 
 export const FilterContainer = styled.div`
   width: 24.375rem;
   position: fixed;
-  bottom: 0;
+  bottom: 0px;
   left: 0;
   border: 0.0625rem solid #d9d9d9;
   border-radius: 1.25rem 1.25rem 0 0;
