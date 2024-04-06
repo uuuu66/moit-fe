@@ -12,6 +12,8 @@ import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
 import getUserLocation from '@/util/getUserLocation'
 import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
+import { type FiltersKey, type Filters } from '@/type/filter'
+import MainFilters from '@/components/filter/MainFilters/MainFilters'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -98,9 +100,26 @@ export default function Home(): JSX.Element {
     )
   }
 
+  const [filters, setFilters] = useState<Filters>({
+    techStacks: [],
+    careers: [],
+    region: [],
+  })
+
+  console.log(filters)
+
+  const handleFilterChange = (
+    filter: Partial<{ [key in FiltersKey]: number[] }>
+  ): void => {
+    setFilters((prev) => ({ ...prev, ...filter }))
+  }
+
   return (
     <HomeLayout>
       <FilterBox>
+        <Career handleFilterChange={handleFilterChange} />
+      </FilterBox>
+      {/* <FilterBox>
         <ModalBtn
           type="button"
           onClick={() => {
@@ -127,9 +146,9 @@ export default function Home(): JSX.Element {
             }}
           />
         )}
-        {/* <TechStack /> */}
+        <TechStack />
         <Career />
-      </FilterBox>
+      </FilterBox> */}
       <MapBox>
         <Map
           center={{

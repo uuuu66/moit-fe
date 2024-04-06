@@ -19,3 +19,7 @@ export interface TechStackList {
 }
 
 export type TechStackLists = TechStackList[]
+
+export type FiltersKey = 'techStacks' | 'careers' | 'region'
+
+export type Filters = { [key in FiltersKey]: number[] }
