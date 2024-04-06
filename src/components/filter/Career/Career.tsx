@@ -1,17 +1,16 @@
 import { useState } from 'react'
-import { type FiltersKey } from '@/type/filter'
 import CareerModal from './CareerModal'
 import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 
 interface CareerProps {
-  handleFilterChange: (
-    filter: Partial<{
-      [key in FiltersKey]: number[]
-    }>
-  ) => void
+  selectedFilters: number[]
+  handleSelectedFilters: (selectedNums: number[]) => void
 }
 
-function Career({ handleFilterChange }: CareerProps): JSX.Element {
+function Career({
+  selectedFilters,
+  handleSelectedFilters,
+}: CareerProps): JSX.Element {
   const [isShow, setIsShow] = useState(false)
 
   const handleVisibleClick = (): void => {
@@ -25,7 +24,8 @@ function Career({ handleFilterChange }: CareerProps): JSX.Element {
       </ModalBtn>
       {isShow && (
         <CareerModal
-          handleFilterChange={handleFilterChange}
+          selectedFilters={selectedFilters}
+          handleSelectedFilters={handleSelectedFilters}
           handleModalClose={() => {
             setIsShow(false)
           }}

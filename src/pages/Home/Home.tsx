@@ -21,8 +21,8 @@ export default function Home(): JSX.Element {
     lng: 126.9784,
   })
   const [filters, setFilters] = useState<Filters>({
-    techStacks: getLocalStorageItem('techStacks'),
-    careers: getLocalStorageItem('careers'),
+    techStacks: getLocalStorageItem('techStacks') ?? [],
+    careers: getLocalStorageItem('careers') ?? [],
     region: [],
   })
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
@@ -32,8 +32,6 @@ export default function Home(): JSX.Element {
     queryKey: meetingKeys.filter({ ...center, ...filters }),
     queryFn: async () => await getMeetings({ center, filters }),
   })
-
-  console.log(meetings)
 
   useEffect(() => {
     const locationValue = getLocalStorageItem('center')
@@ -54,8 +52,9 @@ export default function Home(): JSX.Element {
   // 조회한 마커가 모두 보이도록 지도 위치 조정
   useEffect(() => {
     if (map === null || mapElement === null) return
-
     const resetMapwithFilteredMarkers = (list: GetMeetingType[] = []): void => {
+      // Todo: list가 없을 때의 정책 필요
+      if (list.length === 0) return
       const points = list.map(
         ({ locationLat, locationLng }) =>
           new map.LatLng(locationLat, locationLng)
@@ -110,8 +109,20 @@ export default function Home(): JSX.Element {
   return (
     <HomeLayout>
       <FilterBox>
-        <Career handleFilterChange={handleFilterChange} />
-        <TechStack handleFilterChange={handleFilterChange} />
+        <Career
+          selectedFilters={filters.careers}
+          handleSelectedFilters={(num) => {
+            handleFilterChange({ careers: num })
+            setLocalStorageItem('careers', num)
+          }}
+        />
+        <TechStack
+          selectedFilters={filters.techStacks}
+          handleSelectedFilters={(num) => {
+            handleFilterChange({ techStacks: num })
+            setLocalStorageItem('techStacks', num)
+          }}
+        />
       </FilterBox>
       {/* <FilterBox>
         <ModalBtn
@@ -145,7 +156,7 @@ export default function Home(): JSX.Element {
           {meetings?.map(
             ({ meetingName, meetingId, locationLat, locationLng }) => (
               <MapMarker
-                key={`${meetingId}`}
+                key={meetingId}
                 title={meetingName}
                 image={{
                   src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',

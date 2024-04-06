@@ -16,12 +16,13 @@ import {
   RegisterTitle,
   WholeContainer,
 } from './styles'
-import TechStack from '@/components/common/TechStack/TechStack'
+
 import DateChoice from '@/components/meeting/DateChoice/DateChoice'
 import TimeChoice from '@/components/meeting/TimeChoice/TimeChoice'
 import FindLocation from '@/components/meeting/FindLocation/FindLocation'
 import { careerData, type Career } from '@/constants/careerData'
 import { postMeetingData } from '@/apis/meeting'
+import TechStack from '@/components/filter/TechStack/TechStack'
 
 export interface Info {
   meetingName: string
@@ -119,6 +120,13 @@ function RegisterMeeting(): JSX.Element {
     }))
   }
 
+  const handleTechStackClick = (selectedStacks: number[]): void => {
+    setInfo((prevState) => ({
+      ...prevState,
+      skillIds: selectedStacks,
+    }))
+  }
+
   const handleCareerClick = (careerId: number): void => {
     setInfo((prev) => {
       if (prev.careerIds.includes(careerId)) {
@@ -148,7 +156,7 @@ function RegisterMeeting(): JSX.Element {
     },
   })
 
-  const handleMeetingSubmit = () => {
+  const handleMeetingSubmit = (): void => {
     const newMeetingData = {
       meetingName: info.meetingName,
       meetingDate: dateFormat,
@@ -277,7 +285,13 @@ function RegisterMeeting(): JSX.Element {
         </AccountContainer>
         <InfoContainer>
           <InfoTitle>모임에 필요한 기술 스택을 알려 주세요</InfoTitle>
-          <TechStack info={info} setInfo={setInfo} />
+          <TechStack
+            selectedFilters={info.skillIds}
+            handleSelectedFilters={handleTechStackClick}
+          />
+          {info.skillIds.map((id) => (
+            <p key={id}>{id}</p>
+          ))}
         </InfoContainer>
         <InfoContainer>
           <InfoTitle>경력을 알려 주세요</InfoTitle>

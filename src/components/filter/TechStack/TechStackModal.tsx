@@ -11,26 +11,23 @@ import {
   TechStackInput,
 } from '../FilterFrame/styles'
 import { getTechStackList } from '@/apis/filter'
-import { type TechStackList, type FiltersKey } from '@/type/filter'
+import { type TechStackList } from '@/type/filter'
 import CommonButton from '@/components/common/Button/CommonButton'
-import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 
 interface TechStackModalProps {
-  handleFilterChange: (
-    filter: Partial<{
-      [key in FiltersKey]: number[]
-    }>
-  ) => void
+  selectedFilters: number[]
+  handleSelectedFilters: (selectedNums: number[]) => void
   handleModalClose: () => void
 }
 
 export default function TechStackModal({
-  handleFilterChange,
+  selectedFilters,
+  handleSelectedFilters,
   handleModalClose,
 }: TechStackModalProps): JSX.Element {
   const [searchItem, setSearchItem] = useState<string>('')
   const [selectedStackItems, setSelectedStackItems] = useState<number[]>(
-    (getLocalStorageItem('techStacks') as number[]) ?? []
+    selectedFilters ?? []
   )
 
   // 기술스택 데이터 가져오기
@@ -97,70 +94,62 @@ export default function TechStackModal({
   }
 
   const handleCompleteClick = (): void => {
-    handleFilterChange({ techStacks: selectedStackItems })
-    setLocalStorageItem('techStacks', selectedStackItems)
+    handleSelectedFilters(selectedStackItems)
     handleModalClose()
   }
 
   return (
-    <>
-      {selectedStackItems.map((item) => (
-        <div key={item}>
-          {techItems?.find(({ skillId }) => skillId === item)?.skillName}
-        </div>
-      ))}
-      <ModalPortal>
-        <Background onClick={handleModalClose}>
-          <FilterContainer
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            <FilterTitle>기술스택</FilterTitle>
-            <TechStackInput
-              placeholder="기술 스택을 검색해 주세요"
-              value={searchItem}
-              onChange={handleSearchInputChange}
-            />
-            <ul>
-              {filteredTechStackItems.map((item: TechStackList) =>
-                renderTechStackItem(item)
-              )}
-            </ul>
-            <BottomBox>
-              <SelectedStack>
-                {selectedStackItems?.map((selectedId) => (
-                  <div key={selectedId}>
-                    {/* 여기 span을 문자열로 바꿔서 보이게 해야함 */}
-                    <span>
-                      {
-                        techItems?.find(({ skillId }) => skillId === selectedId)
-                          ?.skillName
-                      }
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleDeleteStackClick(selectedId)
-                      }}
-                    >
-                      X
-                    </button>
-                  </div>
-                ))}
-              </SelectedStack>
-              <BottomBoxNav>
-                <button type="button" onClick={handleResetClick}>
-                  초기화
-                </button>
-                <CommonButton size="small" handleClick={handleCompleteClick}>
-                  선택 완료하기
-                </CommonButton>
-              </BottomBoxNav>
-            </BottomBox>
-          </FilterContainer>
-        </Background>
-      </ModalPortal>
-    </>
+    <ModalPortal>
+      <Background onClick={handleModalClose}>
+        <FilterContainer
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+        >
+          <FilterTitle>기술스택</FilterTitle>
+          <TechStackInput
+            placeholder="기술 스택을 검색해 주세요"
+            value={searchItem}
+            onChange={handleSearchInputChange}
+          />
+          <ul>
+            {filteredTechStackItems.map((item: TechStackList) =>
+              renderTechStackItem(item)
+            )}
+          </ul>
+          <BottomBox>
+            <SelectedStack>
+              {selectedStackItems?.map((selectedId) => (
+                <div key={selectedId}>
+                  {/* 여기 span을 문자열로 바꿔서 보이게 해야함 */}
+                  <span>
+                    {
+                      techItems?.find(({ skillId }) => skillId === selectedId)
+                        ?.skillName
+                    }
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleDeleteStackClick(selectedId)
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </SelectedStack>
+            <BottomBoxNav>
+              <button type="button" onClick={handleResetClick}>
+                초기화
+              </button>
+              <CommonButton size="small" handleClick={handleCompleteClick}>
+                선택 완료하기
+              </CommonButton>
+            </BottomBoxNav>
+          </BottomBox>
+        </FilterContainer>
+      </Background>
+    </ModalPortal>
   )
 }

@@ -1,18 +1,17 @@
 import { useState } from 'react'
 
 import TechStackModal from './TechStackModal'
-import { type FiltersKey } from '@/type/filter'
 import { ModalBtn } from '../FilterFrame/styles'
 
 interface TechStackProps {
-  handleFilterChange: (
-    filter: Partial<{
-      [key in FiltersKey]: number[]
-    }>
-  ) => void
+  selectedFilters: number[]
+  handleSelectedFilters: (selectedNums: number[]) => void
 }
 
-function TechStack({ handleFilterChange }: TechStackProps): JSX.Element {
+function TechStack({
+  selectedFilters,
+  handleSelectedFilters,
+}: TechStackProps): JSX.Element {
   const [isShow, setIsShow] = useState<boolean>(false)
 
   const handleVisibleClick = (): void => {
@@ -26,7 +25,8 @@ function TechStack({ handleFilterChange }: TechStackProps): JSX.Element {
       </ModalBtn>
       {isShow && (
         <TechStackModal
-          handleFilterChange={handleFilterChange}
+          selectedFilters={selectedFilters}
+          handleSelectedFilters={handleSelectedFilters}
           handleModalClose={() => {
             setIsShow(false)
           }}

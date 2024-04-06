@@ -8,16 +8,11 @@ import {
   FilterTitle,
   SelectedCareer,
 } from '@/components/filter/FilterFrame/styles'
-import { type FiltersKey } from '@/type/filter'
-import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import CommonButton from '@/components/common/Button/CommonButton'
 
 interface CareerModalProps {
-  handleFilterChange: (
-    filter: Partial<{
-      [key in FiltersKey]: number[]
-    }>
-  ) => void
+  selectedFilters: number[]
+  handleSelectedFilters: (selectedNums: number[]) => void
   handleModalClose: () => void
 }
 
@@ -30,11 +25,12 @@ const careerItems: Array<{ careerName: string; id: number }> = [
 ]
 
 export default function CareerModal({
-  handleFilterChange,
+  selectedFilters,
+  handleSelectedFilters,
   handleModalClose,
 }: CareerModalProps): JSX.Element {
   const [selectedCareer, setSelectedCareer] = useState<number[]>(
-    (getLocalStorageItem('careers') as number[]) ?? []
+    selectedFilters ?? []
   )
 
   // 선택한 경력이 보임
@@ -82,8 +78,7 @@ export default function CareerModal({
   }
 
   const handleSelectClick = (): void => {
-    handleFilterChange({ careers: selectedCareer })
-    setLocalStorageItem('careers', selectedCareer)
+    handleSelectedFilters(selectedCareer)
     handleModalClose()
   }
 
