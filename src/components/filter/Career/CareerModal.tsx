@@ -7,10 +7,10 @@ import {
   FilterContainer,
   FilterTitle,
   SelectedCareer,
-} from '../FilterFrame/styles'
-import CommonButton from '../Button/CommonButton'
+} from '@/components/filter/FilterFrame/styles'
 import { type FiltersKey } from '@/type/filter'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
+import CommonButton from '@/components/common/Button/CommonButton'
 
 interface CareerModalProps {
   handleFilterChange: (

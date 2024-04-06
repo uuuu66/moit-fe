@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { ModalBtn } from '../FilterFrame/styles'
 import { type FiltersKey } from '@/type/filter'
 import CareerModal from './CareerModal'
+import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 
 interface CareerProps {
   handleFilterChange: (

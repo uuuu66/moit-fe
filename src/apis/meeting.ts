@@ -22,7 +22,6 @@ const getMeetings = async <T = GetMeetingType[]>({
     filters.careers.length > 0
       ? filters.careers.map((id) => `careerId=${id}&`).join('')
       : ''
-
   try {
     const { data } = await instance.get<CommonResponse<T>>(
       `/api/meetings?locationLat=${center.lat}&locationLng=${center.lng}&${stackQuery}${filterQuery}page=1`
@@ -34,8 +33,7 @@ const getMeetings = async <T = GetMeetingType[]>({
   }
 }
 
-const getMeetingsBySearch = async (text: string): Promise<object[]> => {
-  console.log(text)
+const getMeetingsBySearch = async (): Promise<object[]> => {
   try {
     const data = [
       {

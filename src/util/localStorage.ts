@@ -6,7 +6,6 @@ const getLocalStorageItem = (key: string): any => {
   const item = localStorage.getItem(key)
 
   if (item != null) {
-    console.log(item)
     return JSON.parse(item)
   }
 

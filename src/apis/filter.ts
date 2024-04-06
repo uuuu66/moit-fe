@@ -30,13 +30,13 @@ const getSecondRegions = async <T = SecondRegions>(
   }
 }
 
-const getTechStackList = async <T = TechStackLists>(): Promise<T | []> => {
+const getTechStackList = async <T = TechStackLists>(): Promise<T> => {
   try {
     const { data } = await instance.get(`/api/skill`)
     return data.data
   } catch (error) {
     console.log(error)
-    return []
+    throw error
   }
 }
 

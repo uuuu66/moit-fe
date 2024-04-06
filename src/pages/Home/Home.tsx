@@ -3,18 +3,15 @@ import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useMap from '@/hooks/useMap'
 import { FilterBox, HomeLayout, MapBox } from './styles'
-import Career from '@/components/common/Career/Career'
-// import TechStack from '@/components/common/TechStack/TechStack'
-import Region from '@/components/common/Region/Region'
-import { ModalBtn } from '@/components/common/FilterFrame/styles'
 import { type GetMeetingType, type Center } from '@/type/meeting'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
 import getUserLocation from '@/util/getUserLocation'
 import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
 import { type FiltersKey, type Filters } from '@/type/filter'
-import MainFilters from '@/components/filter/MainFilters/MainFilters'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
+import Career from '@/components/filter/Career/Career'
+import TechStack from '@/components/filter/TechStack/TechStack'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -23,9 +20,8 @@ export default function Home(): JSX.Element {
     lat: 37.5667,
     lng: 126.9784,
   })
-  const [isShow, setIsShow] = useState(false)
   const [filters, setFilters] = useState<Filters>({
-    techStacks: [],
+    techStacks: getLocalStorageItem('techStacks'),
     careers: getLocalStorageItem('careers'),
     region: [],
   })
@@ -36,6 +32,8 @@ export default function Home(): JSX.Element {
     queryKey: meetingKeys.filter({ ...center, ...filters }),
     queryFn: async () => await getMeetings({ center, filters }),
   })
+
+  console.log(meetings)
 
   useEffect(() => {
     const locationValue = getLocalStorageItem('center')
@@ -113,6 +111,7 @@ export default function Home(): JSX.Element {
     <HomeLayout>
       <FilterBox>
         <Career handleFilterChange={handleFilterChange} />
+        <TechStack handleFilterChange={handleFilterChange} />
       </FilterBox>
       {/* <FilterBox>
         <ModalBtn
@@ -126,23 +125,6 @@ export default function Home(): JSX.Element {
         <ModalBtn type="button" onClick={setCurrentCenter}>
           재조회
         </ModalBtn>
-        <ModalBtn
-          type="button"
-          onClick={() => {
-            setIsShow(true)
-          }}
-        >
-          모임 지역
-        </ModalBtn>
-        {isShow && (
-          <Region
-            handleModalClose={() => {
-              setIsShow(!isShow)
-            }}
-          />
-        )}
-        <TechStack />
-        <Career />
       </FilterBox> */}
       <MapBox>
         <Map
