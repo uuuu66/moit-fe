@@ -24,13 +24,13 @@ interface Pageable {
 
 export interface PaginationData<T> {
   content: T
-  pageable: Pageable
-  size: number
+  pageable: Pageable // 현재 페이지 내의 데이터 갯수
+  size: number // 한 번에 넘기는 데이터 갯수
   number: number
   sort: Sort
-  numberOfElements: number
-  first: boolean
-  last: boolean
+  numberOfElements: number // 실제로 넘어온 갯수
+  first: boolean // 첫 페이지
+  last: boolean // true 일 경우 마지막 페이지
   empty: boolean
 }
 

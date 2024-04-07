@@ -6,19 +6,17 @@ import {
 import instance from './axios'
 import { type CommonResponse } from '@/type/response'
 
-const getFirstRegions = async <T = FirstRegions>(): Promise<T | []> => {
+const getFirstRegions = async <T = FirstRegions>(): Promise<T> => {
   try {
     const { data } = await instance.get<CommonResponse<T>>('/api/region/first')
     return data.data
   } catch (error) {
     console.log(error)
-    return []
+    throw error
   }
 }
 
-const getSecondRegions = async <T = SecondRegions>(
-  id: string
-): Promise<T | []> => {
+const getSecondRegions = async <T = SecondRegions>(id: string): Promise<T> => {
   try {
     const { data } = await instance.get<CommonResponse<T>>(
       `api/region/second?regionFirstId=${id}`
@@ -26,7 +24,7 @@ const getSecondRegions = async <T = SecondRegions>(
     return data.data
   } catch (error) {
     console.log(error)
-    return []
+    throw error
   }
 }
 

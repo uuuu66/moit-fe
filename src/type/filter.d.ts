@@ -8,6 +8,8 @@ export type FirstRegions = FirstRegion[]
 export interface SecondRegion {
   regionSecondId: number
   regionSecondName: string
+  regionLat: number
+  regionLng: number
 }
 
 export type SecondRegions = SecondRegion[]

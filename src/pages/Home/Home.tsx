@@ -13,18 +13,21 @@ import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import Career from '@/components/filter/Career/Career'
 import TechStack from '@/components/filter/TechStack/TechStack'
 import { ModalBtn } from '@/components/filter/FilterFrame/styles'
+import Region from '@/components/filter/Region/Region'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
   // 중심좌표: 초기값 - 로컬스토리지 > 유저좌표 > 서울시청(유저가 좌표 동의 x, get좌표 되지 않는 브라우저인 경우)
-  const [center, setCenter] = useState<Center>({
-    lat: 37.5667,
-    lng: 126.9784,
-  })
+  const [center, setCenter] = useState<Center>(
+    (getLocalStorageItem('center') as Center) ?? {
+      lat: 37.5667,
+      lng: 126.9784,
+    }
+  )
   const [filters, setFilters] = useState<Filters>({
     techStacks: getLocalStorageItem('techStacks') ?? [],
     careers: getLocalStorageItem('careers') ?? [],
-    region: [],
+    region: getLocalStorageItem('region' ?? []),
   })
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
 
@@ -37,17 +40,13 @@ export default function Home(): JSX.Element {
   const meetings = useMemo(() => (data != null ? data.content : []), [data])
 
   useEffect(() => {
+    // 첫 접속 시: 유저 위치 조회 후 setCenter
     const locationValue = getLocalStorageItem('center')
-
-    if (locationValue != null) {
-      // 로컬 스토리지 저장된 값을 setCenter
-      setLastLocation(locationValue as Center)
-    } else {
-      // 유저 위치 조회 후 setCenter
-      getUserLocation(handleUserFirstLocation)
-    }
+    if (locationValue != null) return
+    getUserLocation(handleUserFirstLocation)
   }, [])
 
+  // 센터상태 변경 시 값을 로컬스토리지에 저장
   useEffect(() => {
     setLocalStorageItem('center', center)
   }, [center])
@@ -72,27 +71,25 @@ export default function Home(): JSX.Element {
     resetMapwithFilteredMarkers(meetings)
   }, [meetings, mapElement, map])
 
-  // 로컬스토리지의 마지막 위치 setCenter
-  const setLastLocation = (lastLocation: Center): void => {
-    setCenter({
-      lat: Number(lastLocation.lat),
-      lng: Number(lastLocation.lng),
-    })
-  }
-
   // 유저 위치 조회 결과를 setCenter
   const handleUserFirstLocation = (position: GeolocationPosition): void => {
-    setCenter(() => ({
+    setCenter({
       lat: position.coords.latitude,
       lng: position.coords.longitude,
-    }))
+    })
   }
 
   // 현 위치 setCenter
   const setCurrentCenter = (): void => {
     const currentCenter = mapElement?.getCenter()
     if (currentCenter == null) return
-    setCenter({ lat: currentCenter.getLat(), lng: currentCenter.getLng() })
+
+    resetRegionFilter()
+
+    setCenter({
+      lat: currentCenter.getLat(),
+      lng: currentCenter.getLng(),
+    })
   }
 
   // 유저 위치 조회 결과로 map중심좌표 조정
@@ -103,10 +100,23 @@ export default function Home(): JSX.Element {
     )
   }
 
-  const handleFilterChange = (
-    filter: Partial<{ [key in FiltersKey]: number[] }>
-  ): void => {
-    setFilters((prev) => ({ ...prev, ...filter }))
+  // 필터 선택 완료 시 필터 상태 저장
+  const handleSetFilters = (key: FiltersKey, value: number[]): void => {
+    setFilters((prev) => ({ ...prev, [key]: value }))
+    setLocalStorageItem(key, value)
+  }
+
+  // 재조회 시 지역 필터 초기화
+  const resetRegionFilter = (): void => {
+    if (
+      Boolean(getLocalStorageItem('region')) &&
+      (getLocalStorageItem('region') as number[]).length !== 0
+    ) {
+      window.alert('재조회 시 지역 필터는 초기화됩니다.')
+      setLocalStorageItem('region', [])
+      setLocalStorageItem('firstRegion', '')
+      setFilters({ ...filters, region: [] })
+    }
   }
 
   return (
@@ -115,15 +125,22 @@ export default function Home(): JSX.Element {
         <Career
           selectedFilters={filters.careers}
           handleSelectedFilters={(num) => {
-            handleFilterChange({ careers: num })
-            setLocalStorageItem('careers', num)
+            handleSetFilters('careers', num)
           }}
         />
         <TechStack
           selectedFilters={filters.techStacks}
           handleSelectedFilters={(num) => {
-            handleFilterChange({ techStacks: num })
-            setLocalStorageItem('techStacks', num)
+            handleSetFilters('techStacks', num)
+          }}
+        />
+        <Region
+          selectedFilters={filters.region}
+          handleSelectedFilters={(num) => {
+            handleSetFilters('region', num)
+          }}
+          handleSetCenter={(currentCenter: Center) => {
+            setCenter(currentCenter)
           }}
         />
       </FilterBox>
