@@ -1,9 +1,9 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useMap from '@/hooks/useMap'
 import { FilterBox, HomeLayout, MapBox } from './styles'
-import { type GetMeetingType, type Center } from '@/type/meeting'
+import { type GetMeeting, type Center } from '@/type/meeting'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
 import getUserLocation from '@/util/getUserLocation'
@@ -12,6 +12,7 @@ import { type FiltersKey, type Filters } from '@/type/filter'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import Career from '@/components/filter/Career/Career'
 import TechStack from '@/components/filter/TechStack/TechStack'
+import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -28,10 +29,12 @@ export default function Home(): JSX.Element {
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
 
   // 좌표에 따라 데이터 패칭
-  const { data: meetings } = useQuery({
+  const { data } = useQuery({
     queryKey: meetingKeys.filter({ ...center, ...filters }),
     queryFn: async () => await getMeetings({ center, filters }),
   })
+
+  const meetings = useMemo(() => (data != null ? data.content : []), [data])
 
   useEffect(() => {
     const locationValue = getLocalStorageItem('center')
@@ -52,7 +55,7 @@ export default function Home(): JSX.Element {
   // 조회한 마커가 모두 보이도록 지도 위치 조정
   useEffect(() => {
     if (map === null || mapElement === null) return
-    const resetMapwithFilteredMarkers = (list: GetMeetingType[] = []): void => {
+    const resetMapwithFilteredMarkers = (list: GetMeeting[] = []): void => {
       // Todo: list가 없을 때의 정책 필요
       if (list.length === 0) return
       const points = list.map(
@@ -124,7 +127,7 @@ export default function Home(): JSX.Element {
           }}
         />
       </FilterBox>
-      {/* <FilterBox>
+      <FilterBox style={{ left: '200px' }}>
         <ModalBtn
           type="button"
           onClick={() => {
@@ -136,7 +139,7 @@ export default function Home(): JSX.Element {
         <ModalBtn type="button" onClick={setCurrentCenter}>
           재조회
         </ModalBtn>
-      </FilterBox> */}
+      </FilterBox>
       <MapBox>
         <Map
           center={{

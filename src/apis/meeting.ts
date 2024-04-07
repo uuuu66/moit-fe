@@ -1,6 +1,6 @@
-import { type Center, type GetMeetingType } from '@/type/meeting'
+import { type GetMeeting, type Center } from '@/type/meeting'
 import instance from './axios'
-import { type CommonResponse } from '@/type/response'
+import { type PaginationData, type PaginationResponse } from '@/type/response'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type Filters } from '@/type/filter'
 
@@ -9,10 +9,10 @@ interface GetMeetingParams {
   filters: Filters
 }
 
-const getMeetings = async <T = GetMeetingType[]>({
+const getMeetings = async <T = GetMeeting[]>({
   center,
   filters,
-}: GetMeetingParams): Promise<T> => {
+}: GetMeetingParams): Promise<PaginationData<T>> => {
   const stackQuery =
     filters.techStacks.length > 0
       ? filters.techStacks.map((id) => `skillId=${id}&`).join('')
@@ -23,7 +23,7 @@ const getMeetings = async <T = GetMeetingType[]>({
       ? filters.careers.map((id) => `careerId=${id}&`).join('')
       : ''
   try {
-    const { data } = await instance.get<CommonResponse<T>>(
+    const { data } = await instance.get<PaginationResponse<T>>(
       `/api/meetings?locationLat=${center.lat}&locationLng=${center.lng}&${stackQuery}${filterQuery}page=1`
     )
     return data.data
