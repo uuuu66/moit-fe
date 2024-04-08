@@ -1,6 +1,6 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useEffect, useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import useMap from '@/hooks/useMap'
 import { FilterBox, HomeLayout, MapBox } from './styles'
 import { type GetMeeting, type Center } from '@/type/meeting'
@@ -31,14 +31,6 @@ export default function Home(): JSX.Element {
   })
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
 
-  // 좌표에 따라 데이터 패칭
-  const { data } = useQuery({
-    queryKey: meetingKeys.filter({ ...center, ...filters }),
-    queryFn: async () => await getMeetings({ center, filters }),
-  })
-
-  const meetings = useMemo(() => (data != null ? data.content : []), [data])
-
   useEffect(() => {
     // 첫 접속 시: 유저 위치 조회 후 setCenter
     const locationValue = getLocalStorageItem('center')
@@ -50,6 +42,39 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     setLocalStorageItem('center', center)
   }, [center])
+
+  // 유저 위치 조회 결과를 setCenter
+  const handleUserFirstLocation = (position: GeolocationPosition): void => {
+    setCenter({
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    })
+  }
+
+  // 좌표에 따라 데이터 패칭
+  const { data, fetchNextPage } = useInfiniteQuery({
+    queryKey: meetingKeys.filter({ ...center, ...filters }),
+    queryFn: async ({ pageParam }) => {
+      return await getMeetings({ center, filters, pageParam })
+    },
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.isLast) return lastPage.nextPage
+      return undefined
+      // Todo: undefined 괜찮은지 확인
+    },
+    initialPageParam: 1,
+  })
+
+  const meetings = useMemo(() => {
+    let list: GetMeeting[] = []
+    data != null &&
+      data.pages.forEach(({ result }) => (list = [...list, ...result]))
+    return list
+  }, [data])
+
+  const handleFetchPages = (): void => {
+    void fetchNextPage()
+  }
 
   // 조회한 마커가 모두 보이도록 지도 위치 조정
   useEffect(() => {
@@ -70,14 +95,6 @@ export default function Home(): JSX.Element {
 
     resetMapwithFilteredMarkers(meetings)
   }, [meetings, mapElement, map])
-
-  // 유저 위치 조회 결과를 setCenter
-  const handleUserFirstLocation = (position: GeolocationPosition): void => {
-    setCenter({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    })
-  }
 
   // 현 위치 setCenter
   const setCurrentCenter = (): void => {
@@ -156,6 +173,9 @@ export default function Home(): JSX.Element {
         <ModalBtn type="button" onClick={setCurrentCenter}>
           재조회
         </ModalBtn>
+        <ModalBtn type="button" onClick={handleFetchPages}>
+          다음페이지
+        </ModalBtn>
       </FilterBox>
       <MapBox>
         <Map
@@ -168,7 +188,7 @@ export default function Home(): JSX.Element {
             height: '100%',
           }}
           maxLevel={3}
-          minLevel={11}
+          minLevel={13}
           onCreate={(maps) => {
             setMapElement(maps)
           }}
