@@ -2,7 +2,7 @@ import { type GetMeeting, type Center } from '@/type/meeting'
 import instance from './axios'
 import {
   type MeetingDetailInfo,
-  type PaginationData,
+  type PaginationReturn,
   type PaginationResponse,
 } from '@/type/response'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
@@ -11,12 +11,14 @@ import { type Filters } from '@/type/filter'
 interface GetMeetingParams {
   center: Center
   filters: Filters
+  pageParam: number
 }
 
 const getMeetings = async <T = GetMeeting[]>({
   center,
   filters,
-}: GetMeetingParams): Promise<PaginationData<T>> => {
+  pageParam,
+}: GetMeetingParams): Promise<PaginationReturn<T>> => {
   const stackQuery =
     filters.techStacks.length > 0
       ? filters.techStacks.map((id) => `skillId=${id}&`).join('')
@@ -27,10 +29,15 @@ const getMeetings = async <T = GetMeeting[]>({
       ? filters.careers.map((id) => `careerId=${id}&`).join('')
       : ''
   try {
-    const { data } = await instance.get<PaginationResponse<T>>(
-      `/api/meetings?locationLat=${center.lat}&locationLng=${center.lng}&${stackQuery}${filterQuery}page=1`
+    const res = await instance.get<PaginationResponse<T>>(
+      `/api/meetings?locationLat=${center.lat}&locationLng=${center.lng}&${stackQuery}${filterQuery}page=${pageParam}`
     )
-    return data.data
+    const { data } = res.data
+    return {
+      result: data.content,
+      nextPage: pageParam + 1,
+      isLast: data.last,
+    }
   } catch (error) {
     console.log(error)
     throw error
@@ -100,6 +107,7 @@ const postMeetingData = async (newMeetingData: Info): Promise<void> => {
     })
   } catch (error) {
     console.log(error)
+    throw error
   }
 }
 
