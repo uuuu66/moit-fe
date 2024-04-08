@@ -39,3 +39,21 @@ export interface PaginationResponse<T> {
   data: PaginationData<T>
   message: string
 }
+
+export interface MeetingDetailInfo {
+  budget: number
+  careerNameList: string[]
+  contents: string
+  creatorName: string
+  locationAddress: string
+  locationLat: number
+  locationLng: number
+  meetingDate: string | null
+  meetingEndTime: string | null
+  meetingId: number
+  meetingName: string
+  meetingStartTime: string | null
+  registeredCount: number
+  totalCount: number
+  skillNameList: string[]
+}

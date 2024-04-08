@@ -1,5 +1,7 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
+import { useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { RegisterTitle } from '../Meeting/styles'
 import useMap from '@/hooks/useMap'
@@ -11,9 +13,16 @@ import {
   DetailInfoTitle,
   DetailWholeContainer,
 } from './styles'
+import { getMeetingDetail } from '@/apis/meeting'
 
 function MeetingDetail(): JSX.Element {
   useMap()
+  const { meetingId } = useParams()
+
+  const { data } = useQuery({
+    queryKey: ['meetingListDetail'],
+    queryFn: async () => await getMeetingDetail(Number(meetingId)),
+  })
 
   return (
     <DetailWholeContainer>
@@ -22,20 +31,24 @@ function MeetingDetail(): JSX.Element {
       {/* 1 */}
       <RegisterTitle>
         <h1>
-          <span>코공모(코딩 공부는 모여서) 모집중 오우예 씨몬</span>
+          <span>{data?.meetingName}</span>
         </h1>
       </RegisterTitle>
       {/* 2 */}
       <Box>
         <div className="userInfo">
           <div className="imgIcon" />
-          <div>userName</div>
+          <div>{data?.creatorName}</div>
         </div>
         <div className="tagbox">
-          <CareerTag>#주니어</CareerTag>
+          {data?.careerNameList.map((e: string) => (
+            <CareerTag key={e}>#{e}</CareerTag>
+          ))}
         </div>
         <div className="tagbox">
-          <CareerTag>#Spring</CareerTag>
+          {data?.skillNameList.map((e: string) => (
+            <CareerTag key={e}>#{e}</CareerTag>
+          ))}
         </div>
       </Box>
       {/* 3 */}
@@ -43,35 +56,40 @@ function MeetingDetail(): JSX.Element {
         <BasicInfoBox>
           <div className="imgIcon" />
           <div className="info">
-            <span>날짜</span>
-            <span>시간</span>
+            <span>{data?.meetingDate}</span>
+            <span>
+              {data?.meetingStartTime} - {data?.meetingEndTime}
+            </span>
           </div>
         </BasicInfoBox>
         <BasicInfoBox>
           <div className="imgIcon" />
           <div className="info">
             <span>주소</span>
+            <span>{data?.locationAddress}</span>
           </div>
         </BasicInfoBox>
         <BasicInfoBox>
           <div className="imgIcon" />
           <div className="info">
             <span>참가 중인 인원</span>
-            <span>1/4</span>
+            <span>
+              {data?.registeredCount}/{data?.totalCount}
+            </span>
           </div>
         </BasicInfoBox>
         <BasicInfoBox>
           <div className="imgIcon" />
           <div className="info">
             <span>참가비</span>
-            <span>200원</span>
+            <span>{data?.budget}원</span>
           </div>
         </BasicInfoBox>
       </Box>
       {/* 4 */}
       <Box>
         <DetailInfoTitle>이런 모임이에요</DetailInfoTitle>
-        <p>모임 설명</p>
+        <p>{data?.contents}</p>
       </Box>
       {/* 5 */}
       <Box>
@@ -79,8 +97,8 @@ function MeetingDetail(): JSX.Element {
         <div>
           <Map
             center={{
-              lat: 37.566826,
-              lng: 126.9786567,
+              lat: data?.locationLat ?? 0,
+              lng: data?.locationLng ?? 0,
             }}
             style={{
               width: '350px',
@@ -92,7 +110,7 @@ function MeetingDetail(): JSX.Element {
             minLevel={11}
           >
             <MapMarker
-              // key={`${meetingId}`}
+              key={`${meetingId}`}
               // title={meetingName}
               image={{
                 src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
@@ -101,7 +119,10 @@ function MeetingDetail(): JSX.Element {
                   height: 30,
                 },
               }}
-              position={{ lat: 37.566826, lng: 126.9786567 }}
+              position={{
+                lat: data?.locationLat ?? 0,
+                lng: data?.locationLng ?? 0,
+              }}
             />
           </Map>
         </div>
