@@ -211,7 +211,12 @@ export default function Home(): JSX.Element {
           )}
         </Map>
       </MapBox>
-      {meetings != null && <HomeMeetingsPanel meetings={meetings} />}
+      {meetings != null && (
+        <HomeMeetingsPanel
+          meetings={meetings}
+          handleScrollEnd={handleFetchPages}
+        />
+      )}
     </HomeLayout>
   )
 }
