@@ -60,7 +60,6 @@ export default function Home(): JSX.Element {
     getNextPageParam: (lastPage) => {
       if (!lastPage.isLast) return lastPage.nextPage
       return undefined
-      // Todo: undefined 괜찮은지 확인
     },
     initialPageParam: 1,
   })

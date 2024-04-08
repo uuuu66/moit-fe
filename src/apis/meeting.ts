@@ -107,6 +107,7 @@ const postMeetingData = async (newMeetingData: Info): Promise<void> => {
     })
   } catch (error) {
     console.log(error)
+    throw error
   }
 }
 

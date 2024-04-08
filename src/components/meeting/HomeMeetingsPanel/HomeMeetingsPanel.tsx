@@ -70,6 +70,9 @@ export default function HomeMeetingsPanel({
                   meetingName,
                   registeredCount,
                   totalCount,
+                  locationAddress,
+                  meetingStartTime,
+                  meetingEndTime,
                   skillList,
                   careerList,
                 }) => (
@@ -79,10 +82,10 @@ export default function HomeMeetingsPanel({
                     <ContentsBox>
                       <TextBox>
                         <p>2024.02.26</p>
-                        <p>20:00 - 21:00</p>
+                        <p>{`${meetingStartTime} - ${meetingEndTime}`}</p>
                       </TextBox>
                       <TextBox>
-                        <p>서울 마포구</p>
+                        <p>{`${locationAddress.split(' ')[0]} ${locationAddress.split(' ')[1]}`}</p>
                         <p>{`${registeredCount} / ${totalCount}`}</p>
                       </TextBox>
                       <TagBox>
