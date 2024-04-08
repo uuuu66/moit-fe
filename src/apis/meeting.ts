@@ -1,6 +1,10 @@
 import { type GetMeeting, type Center } from '@/type/meeting'
 import instance from './axios'
-import { type PaginationData, type PaginationResponse } from '@/type/response'
+import {
+  type MeetingDetailInfo,
+  type PaginationData,
+  type PaginationResponse,
+} from '@/type/response'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type Filters } from '@/type/filter'
 
@@ -99,4 +103,16 @@ const postMeetingData = async (newMeetingData: Info): Promise<void> => {
   }
 }
 
-export { getMeetings, getMeetingsBySearch, postMeetingData }
+const getMeetingDetail = async (
+  meetingId: number
+): Promise<MeetingDetailInfo> => {
+  try {
+    const { data } = await instance.get(`/api/meetings/meetings/${meetingId}`)
+    return data.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export { getMeetings, getMeetingsBySearch, postMeetingData, getMeetingDetail }
