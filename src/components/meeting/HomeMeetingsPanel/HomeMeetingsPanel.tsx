@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { throttle } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 import { type GetMeeting } from '@/type/meeting'
 import {
   CardBox,
@@ -24,6 +25,7 @@ export default function HomeMeetingsPanel({
 }: HomeMeetingsPanelProps): JSX.Element {
   const [onListOpen, setOnListOpen] = useState(false)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   const handleScroll: () => void = throttle(() => {
     if (scrollBoxRef?.current === null) return
@@ -76,7 +78,12 @@ export default function HomeMeetingsPanel({
                   skillList,
                   careerList,
                 }) => (
-                  <MeetingCard key={meetingId}>
+                  <MeetingCard
+                    key={meetingId}
+                    onClick={() => {
+                      navigate(`/meetings/${meetingId}`)
+                    }}
+                  >
                     <h3>{meetingName}</h3>
                     <hr />
                     <ContentsBox>
