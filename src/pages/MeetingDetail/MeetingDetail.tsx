@@ -3,7 +3,6 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 // import { jwtDecode } from 'jwt-decode'
-import CommonButton from '@/components/common/Button/CommonButton'
 import { RegisterTitle } from '../Meeting/styles'
 import useMap from '@/hooks/useMap'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
@@ -15,6 +14,7 @@ import {
   DetailWholeContainer,
 } from './styles'
 import { deleteMeeting, getMeetingDetail, postMeetingSub } from '@/apis/meeting'
+import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
 // import { getLocalStorageItem } from '@/util/localStorage'
 
 function MeetingDetail(): JSX.Element {
@@ -177,9 +177,7 @@ function MeetingDetail(): JSX.Element {
       </Box>
       {/* 6 */}
       <div>
-        <CommonButton size="large" handleClick={handleMeetingSubClick}>
-          모임 참여하기
-        </CommonButton>
+        <JoinMeetingButton handleJoinMeeting={handleMeetingSubClick} />
       </div>
     </DetailWholeContainer>
   )
