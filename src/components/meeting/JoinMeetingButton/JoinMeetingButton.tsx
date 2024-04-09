@@ -1,20 +1,20 @@
 import { useState } from 'react'
-import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 import { getLocalStorageItem } from '@/util/localStorage'
 import LoginModal from '@/components/modals/LoginModal'
+import CommonButton from '@/components/common/Button/CommonButton'
 
-interface AddMeetingButtonProps {
-  handleCreateMeeting: () => void
+interface JoinMeetingButtonProps {
+  handleJoinMeeting: () => void
 }
 
-export default function AddMeetingButton({
-  handleCreateMeeting,
-}: AddMeetingButtonProps): JSX.Element {
+export default function JoinMeetingButton({
+  handleJoinMeeting,
+}: JoinMeetingButtonProps): JSX.Element {
   const [onLoginModal, setOnLoginModal] = useState(false)
   const handleClickButton = (): void => {
     const token: string = getLocalStorageItem('accessToken')
     if (token != null && token.length !== 0) {
-      handleCreateMeeting()
+      handleJoinMeeting()
     } else {
       setOnLoginModal(true)
     }
@@ -22,9 +22,9 @@ export default function AddMeetingButton({
 
   return (
     <>
-      <ModalBtn type="button" onClick={handleClickButton}>
-        작성하기
-      </ModalBtn>
+      <CommonButton size="large" handleClick={handleClickButton}>
+        모임 참여하기
+      </CommonButton>
       {onLoginModal && (
         <LoginModal
           handleCloseModal={() => {

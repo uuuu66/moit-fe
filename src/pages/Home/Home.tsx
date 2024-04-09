@@ -180,12 +180,10 @@ export default function Home(): JSX.Element {
           다음페이지
         </ModalBtn>
         <AddMeetingButton
-          handleClickButton={() => {
+          handleCreateMeeting={() => {
             navigate('/meetings')
           }}
-        >
-          작성하기
-        </AddMeetingButton>
+        />
       </FilterBox>
       <MapBox>
         <Map
