@@ -1,6 +1,7 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import useMap from '@/hooks/useMap'
 import { FilterBox, HomeLayout, MapBox } from './styles'
 import { type GetMeeting, type Center } from '@/type/meeting'
@@ -14,6 +15,7 @@ import Career from '@/components/filter/Career/Career'
 import TechStack from '@/components/filter/TechStack/TechStack'
 import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 import Region from '@/components/filter/Region/Region'
+import AddMeetingButton from '@/components/meeting/AddMeetingButton/AddMeetingButton'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -135,6 +137,8 @@ export default function Home(): JSX.Element {
     }
   }
 
+  const navigate = useNavigate()
+
   return (
     <HomeLayout>
       <FilterBox>
@@ -160,7 +164,7 @@ export default function Home(): JSX.Element {
           }}
         />
       </FilterBox>
-      <FilterBox style={{ left: '200px' }}>
+      <FilterBox style={{ top: '50px' }}>
         <ModalBtn
           type="button"
           onClick={() => {
@@ -175,6 +179,13 @@ export default function Home(): JSX.Element {
         <ModalBtn type="button" onClick={handleFetchPages}>
           다음페이지
         </ModalBtn>
+        <AddMeetingButton
+          handleClickButton={() => {
+            navigate('/meetings')
+          }}
+        >
+          작성하기
+        </AddMeetingButton>
       </FilterBox>
       <MapBox>
         <Map
