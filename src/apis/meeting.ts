@@ -123,4 +123,19 @@ const getMeetingDetail = async (
   }
 }
 
-export { getMeetings, getMeetingsBySearch, postMeetingData, getMeetingDetail }
+const deleteMeeting = async (meetingId: number): Promise<void> => {
+  try {
+    await instance.delete(`api/meetings/${meetingId}`)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export {
+  getMeetings,
+  getMeetingsBySearch,
+  postMeetingData,
+  getMeetingDetail,
+  deleteMeeting,
+}
