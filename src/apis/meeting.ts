@@ -123,4 +123,33 @@ const getMeetingDetail = async (
   }
 }
 
-export { getMeetings, getMeetingsBySearch, postMeetingData, getMeetingDetail }
+const postMeetingSub = async (meetingId: number): Promise<void> => {
+  try {
+    await instance.post(`api/meetings/my-meetings/${meetingId}`, null, {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJya2R0amR3bC01QGhhbm1haWwubmV0IiwiYXV0aCI6IlVTRVIiLCJleHAiOjE3MTU5MjU2NTQsImlhdCI6MTcxMjMyNTY1NH0.YL6N05jfWxrIfV07ko4qc6WtiCtTEC6PhNiL0gqRNz0`,
+      },
+    })
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const deleteMeeting = async (meetingId: number): Promise<void> => {
+  try {
+    await instance.delete(`api/meetings/${meetingId}`)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export {
+  getMeetings,
+  getMeetingsBySearch,
+  postMeetingData,
+  getMeetingDetail,
+  postMeetingSub,
+  deleteMeeting,
+}
