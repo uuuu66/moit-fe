@@ -1,9 +1,16 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import mapMarker from '../../../public/assets/mapMarker.svg'
 import useMap from '@/hooks/useMap'
-import { FilterBox, HomeLayout, MapBox } from './styles'
+import {
+  ContentsBox,
+  FilterBox,
+  HomeLayout,
+  MapBox,
+  ResetSearchBox,
+  UserLocationButtonBox,
+} from './styles'
 import { type GetMeeting, type Center } from '@/type/meeting'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
@@ -15,7 +22,8 @@ import Career from '@/components/filter/Career/Career'
 import TechStack from '@/components/filter/TechStack/TechStack'
 import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 import Region from '@/components/filter/Region/Region'
-import AddMeetingButton from '@/components/meeting/AddMeetingButton/AddMeetingButton'
+import Header from '@/components/Header/Header'
+import Footer from '@/components/Footer/Footer'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -137,94 +145,94 @@ export default function Home(): JSX.Element {
     }
   }
 
-  const navigate = useNavigate()
-
   return (
     <HomeLayout>
-      <FilterBox>
-        <Career
-          selectedFilters={filters.careers}
-          handleSelectedFilters={(num) => {
-            handleSetFilters('careers', num)
-          }}
-        />
-        <TechStack
-          selectedFilters={filters.techStacks}
-          handleSelectedFilters={(num) => {
-            handleSetFilters('techStacks', num)
-          }}
-        />
-        <Region
-          selectedFilters={filters.region}
-          handleSelectedFilters={(num) => {
-            handleSetFilters('region', num)
-          }}
-          handleSetCenter={(currentCenter: Center) => {
-            setCenter(currentCenter)
-          }}
-        />
-      </FilterBox>
-      <FilterBox style={{ top: '50px' }}>
-        <ModalBtn
-          type="button"
-          onClick={() => {
-            getUserLocation(resetMaptoUserLocation)
-          }}
-        >
-          내 위치
-        </ModalBtn>
-        <ModalBtn type="button" onClick={setCurrentCenter}>
-          재조회
-        </ModalBtn>
-        <ModalBtn type="button" onClick={handleFetchPages}>
-          다음페이지
-        </ModalBtn>
-        <AddMeetingButton
-          handleCreateMeeting={() => {
-            navigate('/meetings')
-          }}
-        />
-      </FilterBox>
-      <MapBox>
-        <Map
-          center={{
-            lat: 37.5667,
-            lng: 126.9784,
-          }}
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
-          maxLevel={3}
-          minLevel={13}
-          onCreate={(maps) => {
-            setMapElement(maps)
-          }}
-        >
-          {meetings?.map(
-            ({ meetingName, meetingId, locationLat, locationLng }) => (
-              <MapMarker
-                key={meetingId}
-                title={meetingName}
-                image={{
-                  src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
-                  size: {
-                    width: 20,
-                    height: 30,
-                  },
-                }}
-                position={{ lat: locationLat, lng: locationLng }}
-              />
-            )
-          )}
-        </Map>
-      </MapBox>
-      {meetings != null && (
-        <HomeMeetingsPanel
-          meetings={meetings}
-          handleScrollEnd={handleFetchPages}
-        />
-      )}
+      <Header />
+      <ContentsBox>
+        <FilterBox>
+          <Career
+            selectedFilters={filters.careers}
+            handleSelectedFilters={(num) => {
+              handleSetFilters('careers', num)
+            }}
+          />
+          <TechStack
+            selectedFilters={filters.techStacks}
+            handleSelectedFilters={(num) => {
+              handleSetFilters('techStacks', num)
+            }}
+          />
+          <Region
+            selectedFilters={filters.region}
+            handleSelectedFilters={(num) => {
+              handleSetFilters('region', num)
+            }}
+            handleSetCenter={(currentCenter: Center) => {
+              setCenter(currentCenter)
+            }}
+          />
+        </FilterBox>
+        <UserLocationButtonBox>
+          <ModalBtn
+            type="button"
+            onClick={() => {
+              getUserLocation(resetMaptoUserLocation)
+            }}
+          >
+            내 위치
+          </ModalBtn>
+        </UserLocationButtonBox>
+        <ResetSearchBox>
+          <ModalBtn type="button" onClick={setCurrentCenter}>
+            현 지도에서 검색
+          </ModalBtn>
+        </ResetSearchBox>
+        {/* Todo: 현 조회 결과 페이지네이션
+          <ModalBtn type="button" onClick={handleFetchPages}>
+            다음페이지
+          </ModalBtn> */}
+        <MapBox>
+          <Map
+            center={{
+              lat: 37.5667,
+              lng: 126.9784,
+            }}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+            maxLevel={3}
+            minLevel={13}
+            onCreate={(maps) => {
+              setMapElement(maps)
+            }}
+          >
+            {meetings?.map(
+              ({ meetingName, meetingId, locationLat, locationLng }) => (
+                <MapMarker
+                  key={meetingId}
+                  title={meetingName}
+                  image={{
+                    src: mapMarker,
+                    size: {
+                      width: 32,
+                      height: 32,
+                    },
+                  }}
+                  position={{ lat: locationLat, lng: locationLng }}
+                />
+              )
+            )}
+          </Map>
+        </MapBox>
+        {meetings != null && (
+          <HomeMeetingsPanel
+            meetings={meetings}
+            handleScrollEnd={handleFetchPages}
+          />
+        )}
+      </ContentsBox>
+      <Footer />
     </HomeLayout>
   )
 }
