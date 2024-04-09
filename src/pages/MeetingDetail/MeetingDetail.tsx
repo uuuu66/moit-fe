@@ -14,7 +14,7 @@ import {
   DetailInfoTitle,
   DetailWholeContainer,
 } from './styles'
-import { deleteMeeting, getMeetingDetail } from '@/apis/meeting'
+import { deleteMeeting, getMeetingDetail, postMeetingSub } from '@/apis/meeting'
 // import { getLocalStorageItem } from '@/util/localStorage'
 
 function MeetingDetail(): JSX.Element {
@@ -25,6 +25,18 @@ function MeetingDetail(): JSX.Element {
   const { data } = useQuery({
     queryKey: ['meetingListDetail'],
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
+  })
+
+  const postSubMutation = useMutation({
+    mutationFn: async (meetingSubId: number) => {
+      await postMeetingSub(meetingSubId)
+    },
+    onSuccess: () => {
+      navi(`/`)
+    },
+    onError: (error) => {
+      console.log('error', error)
+    },
   })
 
   const deleteMutation = useMutation({
@@ -38,6 +50,10 @@ function MeetingDetail(): JSX.Element {
       console.log('error', error)
     },
   })
+
+  const handleMeetingSubClick = (): void => {
+    postSubMutation.mutate(Number(meetingId))
+  }
 
   const deleteMeetingClick = (id: number): void => {
     deleteMutation.mutate(id)
@@ -161,7 +177,9 @@ function MeetingDetail(): JSX.Element {
       </Box>
       {/* 6 */}
       <div>
-        <CommonButton size="large">모임 참여하기</CommonButton>
+        <CommonButton size="large" handleClick={handleMeetingSubClick}>
+          모임 참여하기
+        </CommonButton>
       </div>
     </DetailWholeContainer>
   )
