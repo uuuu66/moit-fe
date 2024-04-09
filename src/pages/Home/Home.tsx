@@ -1,7 +1,6 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import mapMarker from '../../../public/assets/mapMarker.svg'
 import useMap from '@/hooks/useMap'
 import {
   ContentsBox,
@@ -213,7 +212,7 @@ export default function Home(): JSX.Element {
                   key={meetingId}
                   title={meetingName}
                   image={{
-                    src: mapMarker,
+                    src: '/assets/mapMarker.svg',
                     size: {
                       width: 32,
                       height: 32,
