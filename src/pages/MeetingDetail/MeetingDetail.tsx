@@ -2,7 +2,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-// import { jwtDecode } from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { RegisterTitle } from '../Meeting/styles'
 import useMap from '@/hooks/useMap'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
@@ -15,7 +15,7 @@ import {
 } from './styles'
 import { deleteMeeting, getMeetingDetail, postMeetingSub } from '@/apis/meeting'
 import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
-// import { getLocalStorageItem } from '@/util/localStorage'
+import { getLocalStorageItem } from '@/util/localStorage'
 
 function MeetingDetail(): JSX.Element {
   useMap()
@@ -32,7 +32,7 @@ function MeetingDetail(): JSX.Element {
       await postMeetingSub(meetingSubId)
     },
     onSuccess: () => {
-      navi(`/`)
+      navi(`/meetings/${meetingId}/chats`)
     },
     onError: (error) => {
       console.log('error', error)
@@ -59,29 +59,41 @@ function MeetingDetail(): JSX.Element {
     deleteMutation.mutate(id)
   }
 
-  // TODO: 추후 토큰으로 검증해서 작성자 여부 판별 예정
-  // const token: string = getLocalStorageItem('accessToken')
-  // const decodedToken = jwtDecode(token)
-  // console.log('decodedToken', decodedToken)
+  const token: string = getLocalStorageItem('accessToken')
+  const decodedToken = jwtDecode(token)
 
   return (
     <DetailWholeContainer>
       {/* 헤더 */}
-      <DetailHeader />
+      <DetailHeader meetingId={Number(meetingId)} />
       {/* 1 */}
       <RegisterTitle>
         <h1>
           <span>{data?.meetingName}</span>
         </h1>
       </RegisterTitle>
-      <button
-        type="button"
-        onClick={() => {
-          deleteMeetingClick(Number(meetingId))
-        }}
-      >
-        삭제
-      </button>
+      {decodedToken.sub === data?.creatorEmail ? (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              deleteMeetingClick(Number(meetingId))
+            }}
+          >
+            삭제
+          </button>
+          <button
+            type="button"
+            // onClick={() => {
+            //   deleteMeetingClick(Number(meetingId))
+            // }}
+          >
+            수정
+          </button>
+        </>
+      ) : (
+        ''
+      )}
       {/* 2 */}
       <Box>
         <div className="userInfo">
