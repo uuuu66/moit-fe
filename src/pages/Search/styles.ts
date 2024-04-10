@@ -42,7 +42,11 @@ export const TagBox = styled.div`
   gap: 10px;
   overflow: auto;
 
-  p {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  button {
     padding: 0.375rem 0.75rem;
     border: 1px solid #667ae4;
     border-radius: 20px;
@@ -57,7 +61,7 @@ export const CardBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  max-height: 600px; // Todo: 검색 바 크기에 따라 정해줄 것 (for 스크롤 적용)
+  max-height: 550px; // Todo: 검색 바 크기에 따라 정해줄 것 (for 스크롤 적용)
   overflow: auto;
 `
 export const MeetingCard = styled.div`
