@@ -13,7 +13,12 @@ import {
   DetailInfoTitle,
   DetailWholeContainer,
 } from './styles'
-import { deleteMeeting, getMeetingDetail, postMeetingSub } from '@/apis/meeting'
+import {
+  deleteMeeting,
+  deleteMeetingWithdraw,
+  getMeetingDetail,
+  postMeetingSub,
+} from '@/apis/meeting'
 import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
 import { getLocalStorageItem } from '@/util/localStorage'
 
@@ -23,13 +28,13 @@ function MeetingDetail(): JSX.Element {
   const { meetingId } = useParams()
 
   const { data } = useQuery({
-    queryKey: ['meetingListDetail'],
+    queryKey: ['meetingListDetail', meetingId],
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
 
   const postSubMutation = useMutation({
-    mutationFn: async (meetingSubId: number) => {
-      await postMeetingSub(meetingSubId)
+    mutationFn: async () => {
+      await postMeetingSub(Number(meetingId))
     },
     onSuccess: () => {
       navi(`/meetings/${meetingId}/chats`)
@@ -40,8 +45,8 @@ function MeetingDetail(): JSX.Element {
   })
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await deleteMeeting(id)
+    mutationFn: async () => {
+      await deleteMeeting(Number(meetingId))
     },
     onSuccess: () => {
       navi('/')
@@ -51,12 +56,28 @@ function MeetingDetail(): JSX.Element {
     },
   })
 
+  const withdrawMutation = useMutation({
+    mutationFn: async () => {
+      await deleteMeetingWithdraw(Number(meetingId))
+    },
+    onSuccess: () => {
+      navi(`/meetings/${meetingId}`)
+    },
+    onError: (error) => {
+      console.log('error', error)
+    },
+  })
+
   const handleMeetingSubClick = (): void => {
-    postSubMutation.mutate(Number(meetingId))
+    postSubMutation.mutate()
   }
 
-  const deleteMeetingClick = (id: number): void => {
-    deleteMutation.mutate(id)
+  const deleteMeetingClick = (): void => {
+    deleteMutation.mutate()
+  }
+
+  const withdrawMeetingClick = (): void => {
+    withdrawMutation.mutate()
   }
 
   const token: string = getLocalStorageItem('accessToken')
@@ -72,21 +93,19 @@ function MeetingDetail(): JSX.Element {
           <span>{data?.meetingName}</span>
         </h1>
       </RegisterTitle>
+      <button type="button" onClick={withdrawMeetingClick}>
+        탈퇴
+      </button>
       {decodedToken.sub === data?.creatorEmail ? (
         <>
-          <button
-            type="button"
-            onClick={() => {
-              deleteMeetingClick(Number(meetingId))
-            }}
-          >
+          <button type="button" onClick={deleteMeetingClick}>
             삭제
           </button>
           <button
             type="button"
-            // onClick={() => {
-            //   deleteMeetingClick(Number(meetingId))
-            // }}
+            onClick={() => {
+              navi(`modify`)
+            }}
           >
             수정
           </button>
@@ -173,7 +192,7 @@ function MeetingDetail(): JSX.Element {
               key={`${meetingId}`}
               // title={meetingName}
               image={{
-                src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+                src: '/assets/mapMarker.svg',
                 size: {
                   width: 20,
                   height: 30,
