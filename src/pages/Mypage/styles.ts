@@ -7,7 +7,7 @@ export const MypageLayout = styled.div`
 `
 export const ContentsBox = styled.div`
   display: grid;
-  grid-template-rows: auto auto 418px;
+  grid-template-rows: auto auto 26.125rem;
   gap: 2.75rem;
 
   h2 {
@@ -27,8 +27,8 @@ export const ProfileBox = styled.div`
 `
 
 export const ImageBox = styled.div`
-  width: 120px;
-  height: 120px;
+  width: 7.5rem;
+  height: 7.5rem;
   border: 2px solid #667ae4;
   border-radius: 60px;
   display: flex;
@@ -65,6 +65,7 @@ export const InfoCard = styled.div`
   p {
     height: 1.25rem;
     font-size: 1.5rem;
+    letter-spacing: -0.5px;
     font-weight: 700;
     width: 100%;
     position: relative;

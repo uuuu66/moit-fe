@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import Footer from '@/components/Footer/Footer'
 import {
   ContentsBox,
@@ -10,8 +11,19 @@ import {
   MypageLayout,
   ProfileBox,
 } from './styles'
+import { userKeys } from '@/constants/queryKeys'
+import { getProfile } from '@/apis/user'
 
 export default function Mypage(): JSX.Element {
+  const { data: profileInfo } = useQuery({
+    queryKey: userKeys.profile,
+    queryFn: async () => await getProfile(),
+  })
+
+  if (profileInfo == null) return <div>로딩중</div>
+
+  const { enterMeeting, studyTime, heldMeeting } = profileInfo
+
   return (
     <MypageLayout>
       <ContentsBox>
@@ -24,21 +36,21 @@ export default function Mypage(): JSX.Element {
             <InfoCard>
               <h3>참여한 모임</h3>
               <p>
-                {`${99} `}
+                {`${enterMeeting} `}
                 <span>개</span>
               </p>
             </InfoCard>
             <InfoCard>
               <h3>스터디 시간</h3>
               <p>
-                {`${99} `}
+                {`${Number(studyTime.split(':')[0])} `}
                 <span>시간</span>
               </p>
             </InfoCard>
             <InfoCard>
               <h3>개최한 모임</h3>
               <p>
-                {`${99} `}
+                {`${heldMeeting} `}
                 <span>개</span>
               </p>
             </InfoCard>
@@ -47,42 +59,6 @@ export default function Mypage(): JSX.Element {
         <MeetingsBox>
           <h3>참여 중인 모임</h3>
           <MeetingCardBox>
-            <MeetingCard>
-              <p>모임 제목</p>
-              <div>
-                <img src="assets/enter.svg" alt="enter" />
-              </div>
-            </MeetingCard>
-            <MeetingCard>
-              <p>모임 제목</p>
-              <div>
-                <img src="assets/enter.svg" alt="enter" />
-              </div>
-            </MeetingCard>{' '}
-            <MeetingCard>
-              <p>모임 제목</p>
-              <div>
-                <img src="assets/enter.svg" alt="enter" />
-              </div>
-            </MeetingCard>{' '}
-            <MeetingCard>
-              <p>모임 제목</p>
-              <div>
-                <img src="assets/enter.svg" alt="enter" />
-              </div>
-            </MeetingCard>{' '}
-            <MeetingCard>
-              <p>모임 제목</p>
-              <div>
-                <img src="assets/enter.svg" alt="enter" />
-              </div>
-            </MeetingCard>{' '}
-            <MeetingCard>
-              <p>모임 제목</p>
-              <div>
-                <img src="assets/enter.svg" alt="enter" />
-              </div>
-            </MeetingCard>
             <MeetingCard>
               <p>모임 제목</p>
               <div>

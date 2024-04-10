@@ -1,3 +1,9 @@
-/* eslint-disable import/prefer-default-export */
 type Service = 'naver' | 'kakao'
-export type { Service }
+
+interface Profile {
+  enterMeeting: number
+  studyTime: string
+  heldMeeting: number
+}
+
+export type { Service, Profile }

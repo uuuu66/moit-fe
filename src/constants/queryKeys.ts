@@ -12,4 +12,8 @@ const meetingKeys = {
   filter: (filter: object) => ['meetings', 'list', { ...filter }],
 }
 
-export { filterKeys, meetingKeys }
+const userKeys = {
+  profile: ['profile'],
+}
+
+export { filterKeys, meetingKeys, userKeys }
