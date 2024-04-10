@@ -4,9 +4,11 @@ import {
   type MeetingDetailInfo,
   type PaginationReturn,
   type PaginationResponse,
+  type ChatDataResponse,
 } from '@/type/response'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type Filters } from '@/type/filter'
+import { type ChatDataProps } from '@/type/chat'
 
 interface GetMeetingParams {
   center: Center
@@ -116,6 +118,18 @@ const deleteMeeting = async (meetingId: number): Promise<void> => {
   }
 }
 
+const getChatMsg = async (meetingId: number): Promise<ChatDataProps> => {
+  try {
+    const res = await instance.get<ChatDataResponse>(
+      `api/meetings/${meetingId}/chats`
+    )
+    return res.data?.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
 export {
   getMeetings,
   getMeetingsBySearch,
@@ -123,4 +137,5 @@ export {
   getMeetingDetail,
   postMeetingSub,
   deleteMeeting,
+  getChatMsg,
 }
