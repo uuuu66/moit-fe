@@ -123,6 +123,15 @@ const editMeeting = async (
   }
 }
 
+const deleteMeetingWithdraw = async (meetingId: number): Promise<void> => {
+  try {
+    await instance.delete(`api/meetings/${meetingId}/signout`)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
 const getChatMsg = async (meetingId: number): Promise<ChatDataProps> => {
   try {
     const res = await instance.get<ChatDataResponse>(
@@ -143,5 +152,6 @@ export {
   postMeetingSub,
   deleteMeeting,
   editMeeting,
+  deleteMeetingWithdraw,
   getChatMsg,
 }
