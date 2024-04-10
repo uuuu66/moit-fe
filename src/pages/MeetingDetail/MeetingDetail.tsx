@@ -23,7 +23,7 @@ function MeetingDetail(): JSX.Element {
   const { meetingId } = useParams()
 
   const { data } = useQuery({
-    queryKey: ['meetingListDetail'],
+    queryKey: ['meetingListDetail', meetingId],
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
 
@@ -84,9 +84,9 @@ function MeetingDetail(): JSX.Element {
           </button>
           <button
             type="button"
-            // onClick={() => {
-            //   deleteMeetingClick(Number(meetingId))
-            // }}
+            onClick={() => {
+              navi(`modify`)
+            }}
           >
             수정
           </button>
@@ -173,7 +173,7 @@ function MeetingDetail(): JSX.Element {
               key={`${meetingId}`}
               // title={meetingName}
               image={{
-                src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+                src: '/assets/mapMarker.svg',
                 size: {
                   width: 20,
                   height: 30,

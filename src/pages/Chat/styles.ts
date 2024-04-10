@@ -24,28 +24,28 @@ export const BubbleContainer = styled.div`
   gap: 1rem;
 `
 
-export const BubbleBox = styled.div<{ isMe: boolean }>`
+export const BubbleBox = styled.div<{ $isMe: boolean }>`
   display: flex;
   flex-direction: column;
-  align-items: ${(props) => (props.isMe ? 'flex-end' : 'flex-start')};
+  align-items: ${(props) => (props.$isMe ? 'flex-end' : 'flex-start')};
   gap: 0.5rem;
 
   .msg {
     display: flex;
-    flex-direction: ${(props) => props.isMe && 'row-reverse'};
+    flex-direction: ${(props) => props.$isMe && 'row-reverse'};
     align-items: flex-end;
     gap: 0.5rem;
   }
 `
 
-export const Username = styled.span<{ isMe: boolean }>`
-  display: ${(props) => props.isMe && 'none'};
+export const Username = styled.span<{ $isMe: boolean }>`
+  display: ${(props) => props.$isMe && 'none'};
 `
 
-export const ChatBubble = styled.div<{ isMe: boolean }>`
+export const ChatBubble = styled.div<{ $isMe: boolean }>`
   background-color: #d9d9d9;
   border-radius: ${(props) =>
-    props.isMe ? '1rem 1rem 0 1rem' : '0 1rem 1rem 1rem'};
+    props.$isMe ? '1rem 1rem 0 1rem' : '0 1rem 1rem 1rem'};
   padding: 10px;
 `
 // ========================================================
@@ -63,12 +63,6 @@ export const MsgInputBox = styled.div`
   justify-content: space-around;
   align-items: center;
 
-  /* div {
-    background-color: #e9e9e9;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-  } */
 `
 
 export const SendButton = styled.button`

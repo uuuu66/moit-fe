@@ -37,7 +37,6 @@ function Chat(): JSX.Element {
     queryKey: ['getChatMessage'],
     queryFn: async () => await getChatMsg(Number(meetingId)),
   })
-  //   console.log('data', data)
 
   useEffect(() => {
     stompClient.current = Stomp.over(socket)
@@ -88,13 +87,13 @@ function Chat(): JSX.Element {
           {data?.chats?.map((e: ChatMessage) => (
             <BubbleBox
               key={e.chatId}
-              isMe={e.sender.memberEmail === decodedToken.sub}
+              $isMe={e.sender.memberEmail === decodedToken.sub}
             >
-              <Username isMe={e.sender.memberEmail === decodedToken.sub}>
-                {e.sender.memberEmail}
+              <Username $isMe={e.sender.memberEmail === decodedToken.sub}>
+                {e.sender.memberName}
               </Username>
               <div className="msg">
-                <ChatBubble isMe={e.sender.memberEmail === decodedToken.sub}>
+                <ChatBubble $isMe={e.sender.memberEmail === decodedToken.sub}>
                   {e.content}
                 </ChatBubble>
                 {e.createdAt.slice(11, 16)}
