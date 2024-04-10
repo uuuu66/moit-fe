@@ -44,54 +44,25 @@ const getMeetings = async <T = GetMeeting[]>({
   }
 }
 
-const getMeetingsBySearch = async (): Promise<object[]> => {
-  try {
-    const data = [
-      {
-        meetingId: 1,
+interface GetMeetingBySearchParams {
+  text: string
+  pageParam: number
+}
 
-        meetingName: '코공모 (코딩 공부는 모여서) 모집합니다 오우예 씨몬',
-        contents: 'test',
-        address: '서울특별시 마포구 방울내로 123',
-        registeredCount: 5,
-        totalCount: 10,
-        skills: ['react', 'spring', 'java', 'javascript', 'typescript'],
-        date: '2024.03.30',
-        startTime: '14:00',
-        endTime: '16:00',
-        locationLat: 37.123,
-        locationLong: 128.123,
-      },
-      {
-        meetingId: 2,
-        meetingName: '마크업 스터디를 모집합니다.',
-        contents: 'test',
-        address: '서울특별시 강남구 방울내로 123',
-        registeredCount: 1,
-        totalCount: 5,
-        skills: ['react', 'spring'],
-        date: '2024.03.30',
-        startTime: '14:00',
-        endTime: '16:00',
-        locationLat: 37.123,
-        locationLong: 128.123,
-      },
-      {
-        meetingId: 3,
-        meetingName: '리액트 모임을 모집합니다.',
-        contents: 'test',
-        address: '서울특별시 마포구 방울내로 123',
-        registeredCount: 3,
-        totalCount: 10,
-        skills: ['react', 'redux'],
-        date: '2024.03.30',
-        startTime: '14:00',
-        endTime: '16:00',
-        locationLat: 37.123,
-        locationLong: 128.123,
-      },
-    ]
-    return data
+const getMeetingsBySearch = async <T = GetMeeting[]>({
+  text,
+  pageParam,
+}: GetMeetingBySearchParams): Promise<PaginationReturn<T>> => {
+  try {
+    const res = await instance.get<PaginationResponse<T>>(
+      `api/meetings/search?keyword=${text}&page=${pageParam}`
+    )
+    const { data } = res.data
+    return {
+      result: data.content,
+      nextPage: pageParam + 1,
+      isLast: data.last,
+    }
   } catch (error) {
     console.log(error)
     throw error
