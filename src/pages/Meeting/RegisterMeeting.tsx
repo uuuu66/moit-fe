@@ -32,11 +32,11 @@ export interface Info {
   budget: number
   contents: string
   totalCount: number
-  locationAddress: string
-  locationLat: number
-  locationLng: number
-  regionFirstName: string
-  regionSecondName: string
+  locationAddress: string | undefined
+  locationLat: number | undefined
+  locationLng: number | undefined
+  regionFirstName: string | undefined
+  regionSecondName: string | undefined
   skillIds: number[]
   careerIds: number[]
 }
@@ -153,8 +153,7 @@ function RegisterMeeting(): JSX.Element {
       await postMeetingData(newMeetingData)
     },
     onSuccess: () => {
-      console.log('res')
-      // navi('/')
+      navi('/')
     },
     onError: (error) => {
       console.log('error', error)
@@ -171,8 +170,8 @@ function RegisterMeeting(): JSX.Element {
       contents: info.contents,
       totalCount: info.totalCount,
       locationAddress: info.locationAddress,
-      locationLat: Number(info.locationLat),
-      locationLng: Number(info.locationLng),
+      locationLat: info.locationLat,
+      locationLng: info.locationLng,
       regionFirstName: info.regionFirstName,
       regionSecondName: info.regionSecondName,
       skillIds: info.skillIds,
