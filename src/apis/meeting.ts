@@ -9,6 +9,7 @@ import {
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type Filters } from '@/type/filter'
 import { type ChatDataProps } from '@/type/chat'
+import { type EditMeetingReq } from '@/type/request'
 
 interface GetMeetingParams {
   center: Center
@@ -73,11 +74,7 @@ const getMeetingsBySearch = async <T = GetMeeting[]>({
 
 const postMeetingData = async (newMeetingData: Info): Promise<void> => {
   try {
-    await instance.post(`/api/meetings`, newMeetingData, {
-      headers: {
-        Authorization: `Bearer `, // TODO : 헤더에 토큰 넣어야함
-      },
-    })
+    await instance.post(`/api/meetings`, newMeetingData)
   } catch (error) {
     console.log(error)
     throw error
@@ -98,11 +95,7 @@ const getMeetingDetail = async (
 
 const postMeetingSub = async (meetingId: number): Promise<void> => {
   try {
-    await instance.post(`api/meetings/my-meetings/${meetingId}`, null, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJya2R0amR3bC01QGhhbm1haWwubmV0IiwiYXV0aCI6IlVTRVIiLCJleHAiOjE3MTU5MjU2NTQsImlhdCI6MTcxMjMyNTY1NH0.YL6N05jfWxrIfV07ko4qc6WtiCtTEC6PhNiL0gqRNz0`,
-      },
-    })
+    await instance.post(`api/meetings/my-meetings/${meetingId}`)
   } catch (error) {
     console.log(error)
     throw error
@@ -112,6 +105,18 @@ const postMeetingSub = async (meetingId: number): Promise<void> => {
 const deleteMeeting = async (meetingId: number): Promise<void> => {
   try {
     await instance.delete(`api/meetings/${meetingId}`)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const editMeeting = async (
+  meetingId: number,
+  updatedMeeting: EditMeetingReq
+): Promise<void> => {
+  try {
+    await instance.put(`api/meetings/${meetingId}`, updatedMeeting)
   } catch (error) {
     console.log(error)
     throw error
@@ -137,5 +142,6 @@ export {
   getMeetingDetail,
   postMeetingSub,
   deleteMeeting,
+  editMeeting,
   getChatMsg,
 }
