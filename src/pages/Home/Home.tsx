@@ -37,7 +37,7 @@ export default function Home(): JSX.Element {
   const [filters, setFilters] = useState<Filters>({
     techStacks: getLocalStorageItem('techStacks') ?? [],
     careers: getLocalStorageItem('careers') ?? [],
-    region: getLocalStorageItem('region' ?? []),
+    region: getLocalStorageItem('region') ?? [],
   })
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
 
@@ -228,8 +228,9 @@ export default function Home(): JSX.Element {
                   image={{
                     src: '/assets/mapMarker.svg',
                     size: {
-                      width: 32,
-                      height: 32,
+                      width: meetingId === selectedMeeting?.meetingId ? 44 : 32,
+                      height:
+                        meetingId === selectedMeeting?.meetingId ? 44 : 32,
                     },
                   }}
                   position={{ lat: locationLat, lng: locationLng }}
