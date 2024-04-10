@@ -28,7 +28,7 @@ export default function Footer(): JSX.Element {
         <button
           type="button"
           onClick={() => {
-            navigate('/profile')
+            navigate('/mypage')
           }}
         >
           마이페이지

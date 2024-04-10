@@ -6,18 +6,20 @@ import Search from '@/pages/Search/Search'
 import RegisterMeeting from '@/pages/Meeting/RegisterMeeting'
 import MeetingDetail from '@/pages/MeetingDetail/MeetingDetail'
 import Chat from '@/pages/Chat/Chat'
+import Mypage from '@/pages/Mypage/Mypage'
 
 function Router(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
+          <Route path="/login/:service" element={<Login />} />
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/login/:service" element={<Login />} />
           <Route path="/meetings" element={<RegisterMeeting />} />
           <Route path="/meetings/:meetingId" element={<MeetingDetail />} />
           <Route path="/meetings/:meetingId/chats" element={<Chat />} />
+          <Route path="/mypage" element={<Mypage />} />
         </Route>
       </Routes>
     </BrowserRouter>
