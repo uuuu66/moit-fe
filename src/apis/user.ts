@@ -1,5 +1,10 @@
-import { type User, type Service, type Profile } from '@/type/user'
-import { instance } from './axios'
+import {
+  type User,
+  type Service,
+  type Profile,
+  type MyMeeting,
+} from '@/type/user'
+import { authInstance, instance } from './axios'
 import { type CommonResponse } from '@/type/response'
 
 const login = async (code: string, service: Service): Promise<User> => {
@@ -18,7 +23,8 @@ const logout = (): void => {}
 
 const getProfile = async <T = Profile>(): Promise<T> => {
   try {
-    const { data } = await instance.get<CommonResponse<T>>('/api/member/myinfo')
+    const { data } =
+      await authInstance.get<CommonResponse<T>>('/api/member/myinfo')
     return data.data
   } catch (error) {
     console.log(error)
@@ -26,4 +32,15 @@ const getProfile = async <T = Profile>(): Promise<T> => {
   }
 }
 
-export { login, logout, getProfile }
+const getMyMeetings = async <T = MyMeeting[]>(): Promise<T> => {
+  try {
+    const { data } =
+      await authInstance.get<CommonResponse<T>>('api/member/meeting')
+    return data.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export { login, logout, getProfile, getMyMeetings }

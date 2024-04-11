@@ -103,7 +103,7 @@ export const MeetingCard = styled.div`
   padding: 0 1.25rem;
   display: flex;
   align-items: center;
-  height: 4.5rem;
+  height: 4.25rem;
   border-bottom: 1px solid #dedede;
 
   &:hover {

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import Footer from '@/components/Footer/Footer'
 import {
   ContentsBox,
@@ -12,12 +13,19 @@ import {
   ProfileBox,
 } from './styles'
 import { userKeys } from '@/constants/queryKeys'
-import { getProfile } from '@/apis/user'
+import { getMyMeetings, getProfile } from '@/apis/user'
 
 export default function Mypage(): JSX.Element {
+  const navigate = useNavigate()
+
   const { data: profileInfo } = useQuery({
     queryKey: userKeys.profile,
     queryFn: async () => await getProfile(),
+  })
+
+  const { data: meetings } = useQuery({
+    queryKey: userKeys.myMeetings,
+    queryFn: async () => await getMyMeetings(),
   })
 
   if (profileInfo == null) return <div>로딩중</div>
@@ -59,12 +67,23 @@ export default function Mypage(): JSX.Element {
         <MeetingsBox>
           <h3>참여 중인 모임</h3>
           <MeetingCardBox>
-            <MeetingCard>
-              <p>모임 제목</p>
-              <div>
-                <img src="assets/enter.svg" alt="enter" />
-              </div>
-            </MeetingCard>
+            {meetings?.length !== 0 ? (
+              meetings?.map(({ meetingId, meetingName }) => (
+                <MeetingCard
+                  key={meetingId}
+                  onClick={() => {
+                    navigate(`/meetings/${meetingId}/chats`)
+                  }}
+                >
+                  <p>{meetingName}</p>
+                  <div>
+                    <img src="assets/enter.svg" alt="enter" />
+                  </div>
+                </MeetingCard>
+              ))
+            ) : (
+              <div>참여 중인 모임이 없습니다.</div>
+            )}
           </MeetingCardBox>
         </MeetingsBox>
       </ContentsBox>

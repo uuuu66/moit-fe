@@ -5,9 +5,15 @@ interface Profile {
   studyTime: string
   heldMeeting: number
 }
+
+interface MyMeeting {
+  meetingId: number
+  meetingName: string
+}
+
 interface User {
   username: string
   accessToken: string
   refreshToken: string
 }
-export type { Service, Profile, User }
+export type { Service, Profile, MyMeeting, User }
