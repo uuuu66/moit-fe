@@ -6,7 +6,11 @@ const instance = axios.create({
   baseURL: BASE_URL,
 })
 
-instance.interceptors.request.use((config) => {
+const authInstance = axios.create({
+  baseURL: BASE_URL,
+})
+
+authInstance.interceptors.request.use((config) => {
   const token = getLocalStorageItem('accessToken')
   if (token != null) {
     const authConfig = config
@@ -15,7 +19,7 @@ instance.interceptors.request.use((config) => {
   return config
 })
 
-instance.interceptors.response.use(
+authInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest: AxiosRequestConfig<any> = error.config
@@ -35,7 +39,7 @@ instance.interceptors.response.use(
         )
         const accessToken = data.data.split(' ')[1]
         setLocalStorageItem('accessToken', accessToken)
-        originalRequest.headers.Authorization = accessToken
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`
         return await axios(originalRequest)
       } catch (errors) {
         window.alert('로그인 갱신이 필요합니다. 다시 로그인 해주세요')
@@ -48,4 +52,4 @@ instance.interceptors.response.use(
   }
 )
 
-export default instance
+export { instance, authInstance }

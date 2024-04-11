@@ -1,5 +1,5 @@
 import { type User, type Service } from '@/type/user'
-import instance from './axios'
+import { instance } from './axios'
 import { type CommonResponse } from '@/type/response'
 
 const login = async (code: string, service: Service): Promise<User> => {
