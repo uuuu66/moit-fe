@@ -3,7 +3,7 @@ import {
   type FirstRegions,
   type TechStackLists,
 } from '@/type/filter'
-import instance from './axios'
+import { instance } from './axios'
 import { type CommonResponse } from '@/type/response'
 
 const getFirstRegions = async <T = FirstRegions>(): Promise<T> => {
