@@ -26,9 +26,9 @@ import TechStack from '@/components/filter/TechStack/TechStack'
 
 export interface Info {
   meetingName: string
-  meetingDate: string | null
-  meetingStartTime: string | null
-  meetingEndTime: string | null
+  meetingDate: Date | null | undefined
+  meetingStartTime: Date | null | undefined
+  meetingEndTime: Date | null | undefined
   budget: number
   contents: string
   totalCount: number
@@ -59,7 +59,6 @@ function RegisterMeeting(): JSX.Element {
     skillIds: [],
     careerIds: [],
   })
-  const [stackName, setStackName] = useState<string[]>([])
   const dateFormat = dayjs(info.meetingDate).format('YYYY-MM-DD')
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -77,14 +76,14 @@ function RegisterMeeting(): JSX.Element {
     }))
   }
 
-  const handleDateChange = (date: string): void => {
+  const handleDateChange = (date: Date): void => {
     setInfo((prevState) => ({
       ...prevState,
       meetingDate: date,
     }))
   }
 
-  const handleStartTimeChange = (time: string | null): void => {
+  const handleStartTimeChange = (time: Date | null): void => {
     // console.log('time111111', time)
     setInfo((prevState) => ({
       ...prevState,
@@ -92,7 +91,7 @@ function RegisterMeeting(): JSX.Element {
     }))
   }
 
-  const handleEndTimeChange = (time: string | null): void => {
+  const handleEndTimeChange = (time: Date | null): void => {
     setInfo((prevState) => ({
       ...prevState,
       meetingEndTime: time,
@@ -121,16 +120,11 @@ function RegisterMeeting(): JSX.Element {
     }))
   }
 
-  const handleTechStackClick = (
-    selectedStacks: number[],
-    selectedStacksName?: string[]
-  ): void => {
+  const handleTechStackClick = (selectedStacks: number[]): void => {
     setInfo((prevState) => ({
       ...prevState,
       skillIds: selectedStacks,
     }))
-
-    selectedStacksName != null && setStackName(selectedStacksName)
   }
 
   const handleCareerClick = (careerId: number): void => {
@@ -163,7 +157,7 @@ function RegisterMeeting(): JSX.Element {
   const handleMeetingSubmit = (): void => {
     const newMeetingData = {
       meetingName: info.meetingName,
-      meetingDate: dateFormat,
+      meetingDate: dateFormat as unknown as Date,
       meetingStartTime: info.meetingStartTime,
       meetingEndTime: info.meetingEndTime,
       budget: info.budget,
@@ -293,9 +287,6 @@ function RegisterMeeting(): JSX.Element {
             selectedFilters={info.skillIds}
             handleSelectedFilters={handleTechStackClick}
           />
-          {stackName.map((name) => (
-            <p key={name}>{name}</p>
-          ))}
         </InfoContainer>
         <InfoContainer>
           <InfoTitle>경력을 알려 주세요</InfoTitle>

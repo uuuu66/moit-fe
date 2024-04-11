@@ -1,5 +1,5 @@
 import { type GetMeeting, type Center } from '@/type/meeting'
-import instance from './axios'
+import { instance, authInstance } from './axios'
 import {
   type MeetingDetailInfo,
   type PaginationReturn,
@@ -74,7 +74,7 @@ const getMeetingsBySearch = async <T = GetMeeting[]>({
 
 const postMeetingData = async (newMeetingData: Info): Promise<void> => {
   try {
-    await instance.post(`/api/meetings`, newMeetingData)
+    await authInstance.post(`/api/meetings`, newMeetingData)
   } catch (error) {
     console.log(error)
     throw error
@@ -95,7 +95,7 @@ const getMeetingDetail = async (
 
 const postMeetingSub = async (meetingId: number): Promise<void> => {
   try {
-    await instance.post(`api/meetings/my-meetings/${meetingId}`)
+    await authInstance.post(`api/meetings/my-meetings/${meetingId}`)
   } catch (error) {
     console.log(error)
     throw error
@@ -104,7 +104,7 @@ const postMeetingSub = async (meetingId: number): Promise<void> => {
 
 const deleteMeeting = async (meetingId: number): Promise<void> => {
   try {
-    await instance.delete(`api/meetings/${meetingId}`)
+    await authInstance.delete(`api/meetings/${meetingId}`)
   } catch (error) {
     console.log(error)
     throw error
@@ -116,7 +116,7 @@ const editMeeting = async (
   updatedMeeting: EditMeetingReq
 ): Promise<void> => {
   try {
-    await instance.put(`api/meetings/${meetingId}`, updatedMeeting)
+    await authInstance.put(`api/meetings/${meetingId}`, updatedMeeting)
   } catch (error) {
     console.log(error)
     throw error
@@ -125,7 +125,7 @@ const editMeeting = async (
 
 const deleteMeetingWithdraw = async (meetingId: number): Promise<void> => {
   try {
-    await instance.delete(`api/meetings/${meetingId}/signout`)
+    await authInstance.delete(`api/meetings/${meetingId}/signout`)
   } catch (error) {
     console.log(error)
     throw error
@@ -134,7 +134,7 @@ const deleteMeetingWithdraw = async (meetingId: number): Promise<void> => {
 
 const getChatMsg = async (meetingId: number): Promise<ChatDataProps> => {
   try {
-    const res = await instance.get<ChatDataResponse>(
+    const res = await authInstance.get<ChatDataResponse>(
       `api/meetings/${meetingId}/chats`
     )
     return res.data?.data

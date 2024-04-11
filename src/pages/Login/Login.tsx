@@ -13,13 +13,13 @@ export default function Login(): JSX.Element {
   useEffect(() => {
     login(authCode, service as Service)
       .then((data) => {
-        // 로그인 정보 저장
-        const accessToken = data.split(' ')[1]
+        const accessToken = data.accessToken.split(' ')[1]
         setLocalStorageItem('accessToken', accessToken)
+        setLocalStorageItem('refreshToken', data.refreshToken)
       })
       .catch((error) => {
         console.log(error)
-        // 에러일 경우 모달 ?
+        // Todo:에러일 경우 모달 ?
       })
       .finally(() => {
         navigate('/')
