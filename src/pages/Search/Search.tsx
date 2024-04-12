@@ -100,22 +100,26 @@ export default function Search(): JSX.Element {
       </SearchBox>
       <SectionBox>
         <h1>최근 검색어</h1>
-        <TagBox>
-          {recents.map((word, index) => (
-            <button
-              type="button"
-              // eslint-disable-next-line react/no-array-index-key
-              key={`${word}_${index}`}
-              value={word}
-              onClick={(e) => {
-                setInputText(e.currentTarget.value)
-                setKeyword(e.currentTarget.value)
-              }}
-            >
-              {word}
-            </button>
-          ))}
-        </TagBox>
+        {recents.length !== 0 ? (
+          <TagBox>
+            {recents.map((word, index) => (
+              <button
+                type="button"
+                // eslint-disable-next-line react/no-array-index-key
+                key={`${word}_${index}`}
+                value={word}
+                onClick={(e) => {
+                  setInputText(e.currentTarget.value)
+                  setKeyword(e.currentTarget.value)
+                }}
+              >
+                {word}
+              </button>
+            ))}
+          </TagBox>
+        ) : (
+          <p>저장된 검색어가 없습니다!</p>
+        )}
       </SectionBox>
       <SectionBox>
         <h1>내 주변 스터디 모임</h1>
