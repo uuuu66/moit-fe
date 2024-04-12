@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { type Service } from '@/type/user'
 import { login } from '@/apis/user'
 import { setLocalStorageItem } from '@/util/localStorage'
+import setRequestTokenSchedule from '@/util/setRequestTokenSchedule'
 
 export default function Login(): JSX.Element {
   const { service } = useParams()
@@ -14,6 +15,7 @@ export default function Login(): JSX.Element {
     login(authCode, service as Service)
       .then((data) => {
         const accessToken = data.accessToken.split(' ')[1]
+        setRequestTokenSchedule(accessToken)
         setLocalStorageItem('accessToken', accessToken)
         setLocalStorageItem('refreshToken', data.refreshToken)
       })
