@@ -1,6 +1,7 @@
+/* eslint-disable no-nested-ternary */
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import { RegisterTitle } from '../Meeting/styles'
@@ -21,9 +22,11 @@ import {
 } from '@/apis/meeting'
 import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
 import { getLocalStorageItem } from '@/util/localStorage'
+import CommonButton from '@/components/common/Button/CommonButton'
 
 function MeetingDetail(): JSX.Element {
   useMap()
+  const queryClient = useQueryClient()
   const navi = useNavigate()
   const { meetingId } = useParams()
 
@@ -38,6 +41,7 @@ function MeetingDetail(): JSX.Element {
     },
     onSuccess: () => {
       navi(`/meetings/${meetingId}/chats`)
+      void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
     },
     onError: (error) => {
       console.log('error', error)
@@ -62,6 +66,7 @@ function MeetingDetail(): JSX.Element {
     },
     onSuccess: () => {
       navi(`/meetings/${meetingId}`)
+      void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
     },
     onError: (error) => {
       console.log('error', error)
@@ -83,6 +88,8 @@ function MeetingDetail(): JSX.Element {
   const token: string = getLocalStorageItem('accessToken')
   const decodedToken = jwtDecode(token)
 
+  const isFull = data?.totalCount === data?.registeredCount
+
   return (
     <DetailWholeContainer>
       {/* 헤더 */}
@@ -93,9 +100,6 @@ function MeetingDetail(): JSX.Element {
           <span>{data?.meetingName}</span>
         </h1>
       </RegisterTitle>
-      <button type="button" onClick={withdrawMeetingClick}>
-        탈퇴
-      </button>
       {decodedToken.sub === data?.creatorEmail ? (
         <>
           <button type="button" onClick={deleteMeetingClick}>
@@ -208,7 +212,15 @@ function MeetingDetail(): JSX.Element {
       </Box>
       {/* 6 */}
       <div>
-        <JoinMeetingButton handleJoinMeeting={handleMeetingSubClick} />
+        {isFull ? (
+          <CommonButton size="large">모집이 마감되었습니다</CommonButton>
+        ) : data?.join === true ? (
+          <CommonButton size="large" handleClick={withdrawMeetingClick}>
+            모임 탈퇴하기
+          </CommonButton>
+        ) : (
+          <JoinMeetingButton handleJoinMeeting={handleMeetingSubClick} />
+        )}
       </div>
     </DetailWholeContainer>
   )

@@ -10,6 +10,7 @@ import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type Filters } from '@/type/filter'
 import { type ChatDataProps } from '@/type/chat'
 import { type EditMeetingReq } from '@/type/request'
+import { getLocalStorageItem } from '@/util/localStorage'
 
 interface GetMeetingParams {
   center: Center
@@ -81,11 +82,16 @@ const postMeetingData = async (newMeetingData: Info): Promise<void> => {
   }
 }
 
+const token: boolean = getLocalStorageItem('accessToken')
+// 상세조회
 const getMeetingDetail = async (
   meetingId: number
 ): Promise<MeetingDetailInfo> => {
   try {
-    const { data } = await instance.get(`/api/meetings/meetings/${meetingId}`)
+    // 토큰 유무 분리
+    const { data } = token
+      ? await authInstance.get(`/api/meetings/meetings/${meetingId}`)
+      : await instance.get(`/api/meetings/meetings/${meetingId}`)
     return data.data
   } catch (error) {
     console.log(error)
