@@ -1,5 +1,10 @@
-import { type User, type Service } from '@/type/user'
-import { instance } from './axios'
+import {
+  type User,
+  type Service,
+  type Profile,
+  type MyMeeting,
+} from '@/type/user'
+import { authInstance, instance } from './axios'
 import { type CommonResponse } from '@/type/response'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import setRequestTokenSchedule from '@/util/setRequestTokenSchedule'
@@ -37,4 +42,26 @@ const resetAccessToken = async (): Promise<void> => {
 
 const logout = (): void => {}
 
-export { login, resetAccessToken, logout }
+const getProfile = async <T = Profile>(): Promise<T> => {
+  try {
+    const { data } =
+      await authInstance.get<CommonResponse<T>>('/api/member/myinfo')
+    return data.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const getMyMeetings = async <T = MyMeeting[]>(): Promise<T> => {
+  try {
+    const { data } =
+      await authInstance.get<CommonResponse<T>>('api/member/meeting')
+    return data.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export { login, resetAccessToken, logout, getProfile, getMyMeetings }

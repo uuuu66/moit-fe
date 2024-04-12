@@ -12,4 +12,9 @@ const meetingKeys = {
   filter: (filter: object) => ['meetings', 'list', { ...filter }],
 }
 
-export { filterKeys, meetingKeys }
+const userKeys = {
+  profile: ['profile'],
+  myMeetings: ['myMeetings'],
+}
+
+export { filterKeys, meetingKeys, userKeys }
