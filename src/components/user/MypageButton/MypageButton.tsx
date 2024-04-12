@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getLocalStorageItem } from '@/util/localStorage'
-import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 import LoginModal from '@/components/modals/LoginModal'
 
 export default function MypageButton(): JSX.Element {
@@ -18,9 +17,9 @@ export default function MypageButton(): JSX.Element {
 
   return (
     <>
-      <ModalBtn type="button" onClick={handleClickButton}>
+      <button type="button" onClick={handleClickButton}>
         마이페이지
-      </ModalBtn>
+      </button>
       {onLoginModal && (
         <LoginModal
           handleCloseModal={() => {
