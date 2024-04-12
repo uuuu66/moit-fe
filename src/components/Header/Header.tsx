@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { HeaderContainer } from './styles'
+import LoginButton from '../user/LoginButton/LoginButton'
 
 function Header(): JSX.Element {
   const navi = useNavigate()
@@ -21,6 +22,7 @@ function Header(): JSX.Element {
       >
         검색
       </button>
+      <LoginButton />
     </HeaderContainer>
   )
 }
