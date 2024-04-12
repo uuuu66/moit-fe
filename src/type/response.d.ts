@@ -53,6 +53,7 @@ export interface MeetingDetailInfo {
   contents: string
   creatorEmail: string
   creatorName: string
+  join: boolean
   locationAddress: string
   locationLat: number
   locationLng: number
