@@ -6,6 +6,8 @@ import {
 } from '@/type/user'
 import { authInstance, instance } from './axios'
 import { type CommonResponse } from '@/type/response'
+import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
+import setRequestTokenSchedule from '@/util/setRequestTokenSchedule'
 
 const login = async (code: string, service: Service): Promise<User> => {
   try {
@@ -14,6 +16,25 @@ const login = async (code: string, service: Service): Promise<User> => {
     )
     return data.data
   } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const resetAccessToken = async (): Promise<void> => {
+  try {
+    const refreshToken = getLocalStorageItem('refreshToken')
+    const { data } = await instance.post<{ data: string }>(
+      `/api/auth/refresh`,
+      {
+        refreshToken,
+      }
+    )
+    const accessToken = data.data.split(' ')[1]
+    setRequestTokenSchedule(accessToken)
+    setLocalStorageItem('accessToken', accessToken)
+  } catch (error) {
+    window.alert('로그인 갱신이 필요합니다. 다시 로그인 해주세요')
     console.log(error)
     throw error
   }
@@ -43,4 +64,4 @@ const getMyMeetings = async <T = MyMeeting[]>(): Promise<T> => {
   }
 }
 
-export { login, logout, getProfile, getMyMeetings }
+export { login, resetAccessToken, logout, getProfile, getMyMeetings }
