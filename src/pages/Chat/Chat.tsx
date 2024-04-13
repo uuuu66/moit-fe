@@ -60,8 +60,10 @@ function Chat(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meetingId])
 
+  // TODO: send 개선
   const sendChatMessage = (): void => {
     const chatRequest = { content: chatMessage }
+    if (chatMessage === '') return
     stompClient.current?.send(
       `/app/api/meetings/${meetingId}/chat`,
       headers,
@@ -71,12 +73,22 @@ function Chat(): JSX.Element {
     void queryClient.invalidateQueries({ queryKey: ['getChatMessage'] })
   }
 
+  // Enter 눌렀을 때, 메시지 입력
+  const handleKeyEnter = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      sendChatMessage()
+    }
+  }
+
   useEffect(() => {
     // 채팅 내역이 변경될 때마다 스크롤을 맨 아래로 이동
     const messageContainer = document.getElementById('messageContainer')
     if (messageContainer !== null) {
       messageContainer.scrollTop = messageContainer.scrollHeight
     }
+    void queryClient.invalidateQueries({ queryKey: ['getChatMessage'] })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats, data])
 
   return (
@@ -108,6 +120,9 @@ function Chat(): JSX.Element {
           value={chatMessage}
           onChange={(e) => {
             setChatMessage(e.target.value)
+          }}
+          onKeyUp={(e) => {
+            handleKeyEnter(e)
           }}
           placeholder="Type your message..."
         />
