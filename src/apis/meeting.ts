@@ -4,17 +4,20 @@ import {
   type MeetingDetailInfo,
   type PaginationReturn,
   type PaginationResponse,
-  type ChatDataResponse,
 } from '@/type/response'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type Filters } from '@/type/filter'
-import { type ChatDataProps } from '@/type/chat'
 import { type EditMeetingReq } from '@/type/request'
 import { getLocalStorageItem } from '@/util/localStorage'
+import { type ChatMessage } from '@/type/chat'
 
 interface GetMeetingParams {
   center: Center
   filters: Filters
+  pageParam: number
+}
+interface GetChatsParams {
+  meetingId: number
   pageParam: number
 }
 
@@ -90,8 +93,8 @@ const getMeetingDetail = async (
   try {
     // 토큰 유무 분리
     const { data } = token
-      ? await authInstance.get(`/api/meetings/meetings/${meetingId}`)
-      : await instance.get(`/api/meetings/meetings/${meetingId}`)
+      ? await authInstance.get(`/api/meetings/${meetingId}`)
+      : await instance.get(`/api/meetings/${meetingId}`)
     return data.data
   } catch (error) {
     console.log(error)
@@ -138,12 +141,21 @@ const deleteMeetingWithdraw = async (meetingId: number): Promise<void> => {
   }
 }
 
-const getChatMsg = async (meetingId: number): Promise<ChatDataProps> => {
+const getChatMsg = async <T = ChatMessage[]>({
+  meetingId,
+  pageParam,
+}: GetChatsParams): Promise<PaginationReturn<T>> => {
   try {
-    const res = await authInstance.get<ChatDataResponse>(
-      `api/meetings/${meetingId}/chats`
+    const res = await authInstance.get(
+      `api/meetings/${meetingId}/chats?page=${pageParam}`
     )
-    return res.data?.data
+    const { data } = res.data
+    const chats = data?.chats
+    return {
+      result: chats.content,
+      nextPage: pageParam + 1,
+      isLast: chats.last,
+    }
   } catch (error) {
     console.log(error)
     throw error
