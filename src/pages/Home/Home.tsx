@@ -5,7 +5,6 @@ import useMap from '@/hooks/useMap'
 import {
   HomeLayout,
   FilterBox,
-  MapBox,
   ResetSearchBox,
   UserLocationButtonBox,
 } from './styles'
@@ -20,7 +19,6 @@ import Career from '@/components/filter/Career/Career'
 import TechStack from '@/components/filter/TechStack/TechStack'
 import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 import Region from '@/components/filter/Region/Region'
-import Header from '@/components/Header/Header'
 import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
 
 export default function Home(): JSX.Element {
@@ -157,7 +155,6 @@ export default function Home(): JSX.Element {
 
   return (
     <HomeLayout>
-      <Header />
       <FilterBox>
         <Career
           selectedFilters={filters.careers}
@@ -196,45 +193,39 @@ export default function Home(): JSX.Element {
           현 지도에서 검색
         </ModalBtn>
       </ResetSearchBox>
-      {/* Todo: 현 조회 결과 페이지네이션
-          <ModalBtn type="button" onClick={handleFetchPages}>
-            다음페이지
-          </ModalBtn> */}
-      <MapBox>
-        <Map
-          center={{
-            lat: 37.5667,
-            lng: 126.9784,
-          }}
-          style={{
-            width: '100%',
-            height: '932px',
-          }}
-          maxLevel={3}
-          minLevel={13}
-          onCreate={(maps) => {
-            setMapElement(maps)
-          }}
-        >
-          {meetings?.map(
-            ({ meetingName, meetingId, locationLat, locationLng }) => (
-              <MapMarker
-                key={meetingId}
-                title={meetingName}
-                onClick={handleSelectMarker}
-                image={{
-                  src: '/assets/mapMarker.svg',
-                  size: {
-                    width: meetingId === selectedMeeting?.meetingId ? 44 : 32,
-                    height: meetingId === selectedMeeting?.meetingId ? 44 : 32,
-                  },
-                }}
-                position={{ lat: locationLat, lng: locationLng }}
-              />
-            )
-          )}
-        </Map>
-      </MapBox>
+      <Map
+        center={{
+          lat: 37.5667,
+          lng: 126.9784,
+        }}
+        style={{
+          width: '100%',
+          height: '796px',
+        }}
+        maxLevel={3}
+        minLevel={13}
+        onCreate={(maps) => {
+          setMapElement(maps)
+        }}
+      >
+        {meetings?.map(
+          ({ meetingName, meetingId, locationLat, locationLng }) => (
+            <MapMarker
+              key={meetingId}
+              title={meetingName}
+              onClick={handleSelectMarker}
+              image={{
+                src: '/assets/mapMarker.svg',
+                size: {
+                  width: meetingId === selectedMeeting?.meetingId ? 44 : 32,
+                  height: meetingId === selectedMeeting?.meetingId ? 44 : 32,
+                },
+              }}
+              position={{ lat: locationLat, lng: locationLng }}
+            />
+          )
+        )}
+      </Map>
       {meetings != null && (
         <HomeMeetingsPanel
           meetings={meetings}

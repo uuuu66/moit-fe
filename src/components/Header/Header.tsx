@@ -1,11 +1,13 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { HeaderContainer } from './styles'
 import LoginButton from '../user/LoginButton/LoginButton'
 
 function Header(): JSX.Element {
   const navi = useNavigate()
+  const location = useLocation()
+  const isHeaderRequired = location.pathname === '/'
   return (
-    <HeaderContainer>
+    <HeaderContainer isShow={isHeaderRequired}>
       <button
         type="button"
         onClick={() => {

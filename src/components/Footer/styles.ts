@@ -3,8 +3,10 @@ import styled from 'styled-components'
 export const FooterLayout = styled.div`
   width: 100%;
   background: #f3f4fc;
-  height: 4rem;
+  height: 80px;
   display: flex;
+  z-index: 3;
+  position: relative;
 `
 
 export const ButtonBox = styled.div`
