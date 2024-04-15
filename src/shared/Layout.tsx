@@ -1,16 +1,18 @@
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import Footer from '@/components/Footer/Footer'
+import Header from '@/components/Header/Header'
 
 export default function Layout(): JSX.Element {
   return (
     <ScreenStyles>
       <LayoutStyles>
-        <ScrollBox>
-          <ContentsStyles>
+        <ContentsStyles>
+          <Header />
+          <ScrollBox>
             <Outlet />
-          </ContentsStyles>
-        </ScrollBox>
+          </ScrollBox>
+        </ContentsStyles>
         <Footer />
       </LayoutStyles>
       <TextBox>소개글</TextBox>
@@ -48,20 +50,20 @@ const LayoutStyles = styled.div`
   min-height: 780px;
   max-height: 932px;
   border: 1px solid #000;
-  position: relative;
   background: white;
+  position: relative;
+`
+
+const ContentsStyles = styled.div`
+  height: calc(100% - 80px);
 `
 
 const ScrollBox = styled.div`
-  height: calc(100% - 4rem);
+  width: 100%;
+  height: 100%;
   overflow: auto;
 
   &::-webkit-scrollbar {
     display: none;
   }
-`
-
-const ContentsStyles = styled.div`
-  width: 100%;
-  height: fit-content;
 `

@@ -1,13 +1,13 @@
 import styled from 'styled-components'
 
-export const HeaderContainer = styled.header`
+export const HeaderContainer = styled.header<{ isShow: boolean }>`
+  height: 56px;
   width: 100%;
   background: #f3f4fc;
-  z-index: 2;
-  display: flex;
+  display: ${({ isShow }) => (isShow ? 'flex' : 'none')};
   justify-content: space-between;
   align-items: center;
-  padding: 0 1.25rem;
+  padding: 0 20px;
 
   button {
     cursor: pointer;
