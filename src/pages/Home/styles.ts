@@ -1,28 +1,22 @@
 import styled from 'styled-components'
 
 export const HomeLayout = styled.div`
-  width: 100%;
   height: 100%;
-  position: relative;
-  display: grid;
-  grid-template-rows: 3rem auto 3rem;
-  overflow: hidden;
-`
-
-export const ContentsBox = styled.div`
-  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 export const MapBox = styled.div`
-  width: 100%;
   height: 100%;
+  width: 100%;
+  overflow: hidden;
 `
-
 export const FilterBox = styled.div`
   height: 0;
   width: 100%;
   position: absolute;
-  top: 2rem;
+  top: 6rem;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -31,12 +25,12 @@ export const FilterBox = styled.div`
 
 export const ResetSearchBox = styled(FilterBox)`
   top: unset;
-  bottom: 6rem;
+  bottom: 8rem;
   justify-content: center;
 `
 
 export const UserLocationButtonBox = styled(FilterBox)`
   top: unset;
-  bottom: 8rem;
+  bottom: 10rem;
   justify-content: flex-end;
 `

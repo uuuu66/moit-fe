@@ -3,9 +3,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import useMap from '@/hooks/useMap'
 import {
-  ContentsBox,
-  FilterBox,
   HomeLayout,
+  FilterBox,
   MapBox,
   ResetSearchBox,
   UserLocationButtonBox,
@@ -22,7 +21,6 @@ import TechStack from '@/components/filter/TechStack/TechStack'
 import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 import Region from '@/components/filter/Region/Region'
 import Header from '@/components/Header/Header'
-import Footer from '@/components/Footer/Footer'
 import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
 
 export default function Home(): JSX.Element {
@@ -160,101 +158,97 @@ export default function Home(): JSX.Element {
   return (
     <HomeLayout>
       <Header />
-      <ContentsBox>
-        <FilterBox>
-          <Career
-            selectedFilters={filters.careers}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('careers', num)
-            }}
-          />
-          <TechStack
-            selectedFilters={filters.techStacks}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('techStacks', num)
-            }}
-          />
-          <Region
-            selectedFilters={filters.region}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('region', num)
-            }}
-            handleSetCenter={(currentCenter: Center) => {
-              setCenter(currentCenter)
-            }}
-          />
-        </FilterBox>
-        <UserLocationButtonBox>
-          <ModalBtn
-            type="button"
-            onClick={() => {
-              getUserLocation(resetMaptoUserLocation)
-            }}
-          >
-            내 위치
-          </ModalBtn>
-        </UserLocationButtonBox>
-        <ResetSearchBox>
-          <ModalBtn type="button" onClick={setCurrentCenter}>
-            현 지도에서 검색
-          </ModalBtn>
-        </ResetSearchBox>
-        {/* Todo: 현 조회 결과 페이지네이션
+      <FilterBox>
+        <Career
+          selectedFilters={filters.careers}
+          handleSelectedFilters={(num) => {
+            handleSetFilters('careers', num)
+          }}
+        />
+        <TechStack
+          selectedFilters={filters.techStacks}
+          handleSelectedFilters={(num) => {
+            handleSetFilters('techStacks', num)
+          }}
+        />
+        <Region
+          selectedFilters={filters.region}
+          handleSelectedFilters={(num) => {
+            handleSetFilters('region', num)
+          }}
+          handleSetCenter={(currentCenter: Center) => {
+            setCenter(currentCenter)
+          }}
+        />
+      </FilterBox>
+      <UserLocationButtonBox>
+        <ModalBtn
+          type="button"
+          onClick={() => {
+            getUserLocation(resetMaptoUserLocation)
+          }}
+        >
+          내 위치
+        </ModalBtn>
+      </UserLocationButtonBox>
+      <ResetSearchBox>
+        <ModalBtn type="button" onClick={setCurrentCenter}>
+          현 지도에서 검색
+        </ModalBtn>
+      </ResetSearchBox>
+      {/* Todo: 현 조회 결과 페이지네이션
           <ModalBtn type="button" onClick={handleFetchPages}>
             다음페이지
           </ModalBtn> */}
-        <MapBox>
-          <Map
-            center={{
-              lat: 37.5667,
-              lng: 126.9784,
-            }}
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-            maxLevel={3}
-            minLevel={13}
-            onCreate={(maps) => {
-              setMapElement(maps)
-            }}
-          >
-            {meetings?.map(
-              ({ meetingName, meetingId, locationLat, locationLng }) => (
-                <MapMarker
-                  key={meetingId}
-                  title={meetingName}
-                  onClick={handleSelectMarker}
-                  image={{
-                    src: '/assets/mapMarker.svg',
-                    size: {
-                      width: meetingId === selectedMeeting?.meetingId ? 44 : 32,
-                      height:
-                        meetingId === selectedMeeting?.meetingId ? 44 : 32,
-                    },
-                  }}
-                  position={{ lat: locationLat, lng: locationLng }}
-                />
-              )
-            )}
-          </Map>
-        </MapBox>
-        {meetings != null && (
-          <HomeMeetingsPanel
-            meetings={meetings}
-            handleScrollEnd={handleFetchPages}
-          />
-        )}
-        {selectedMeeting != null && (
-          <HomeSelectedMeetingPanel
-            meeting={selectedMeeting}
-            handleClosePanel={() => {
-              setSelectedMeeting(null)
-            }}
-          />
-        )}
-      </ContentsBox>
-      <Footer />
+      <MapBox>
+        <Map
+          center={{
+            lat: 37.5667,
+            lng: 126.9784,
+          }}
+          style={{
+            width: '100%',
+            height: '932px',
+          }}
+          maxLevel={3}
+          minLevel={13}
+          onCreate={(maps) => {
+            setMapElement(maps)
+          }}
+        >
+          {meetings?.map(
+            ({ meetingName, meetingId, locationLat, locationLng }) => (
+              <MapMarker
+                key={meetingId}
+                title={meetingName}
+                onClick={handleSelectMarker}
+                image={{
+                  src: '/assets/mapMarker.svg',
+                  size: {
+                    width: meetingId === selectedMeeting?.meetingId ? 44 : 32,
+                    height: meetingId === selectedMeeting?.meetingId ? 44 : 32,
+                  },
+                }}
+                position={{ lat: locationLat, lng: locationLng }}
+              />
+            )
+          )}
+        </Map>
+      </MapBox>
+      {meetings != null && (
+        <HomeMeetingsPanel
+          meetings={meetings}
+          handleScrollEnd={handleFetchPages}
+        />
+      )}
+      {selectedMeeting != null && (
+        <HomeSelectedMeetingPanel
+          meeting={selectedMeeting}
+          handleClosePanel={() => {
+            setSelectedMeeting(null)
+          }}
+        />
+      )}
     </HomeLayout>
   )
 }
