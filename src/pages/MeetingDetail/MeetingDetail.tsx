@@ -127,8 +127,6 @@ function MeetingDetail(): JSX.Element {
           {data?.careerNameList.map((e: string) => (
             <CareerTag key={e}>#{e}</CareerTag>
           ))}
-        </div>
-        <div className="tagbox">
           {data?.skillNameList.map((e: string) => (
             <CareerTag key={e}>#{e}</CareerTag>
           ))}
@@ -198,8 +196,8 @@ function MeetingDetail(): JSX.Element {
               image={{
                 src: '/assets/mapMarker.svg',
                 size: {
-                  width: 20,
-                  height: 30,
+                  width: 60,
+                  height: 70,
                 },
               }}
               position={{
