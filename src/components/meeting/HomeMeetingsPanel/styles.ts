@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const HomeMeetingsPanelLayout = styled.div`
   position: absolute;
-  bottom: 0;
+  bottom: 3.9rem;
   width: 100%;
   z-index: 2;
 `

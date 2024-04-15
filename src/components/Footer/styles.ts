@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const FooterLayout = styled.div`
   width: 100%;
   background: #f3f4fc;
+  height: 4rem;
   display: flex;
 `
 
