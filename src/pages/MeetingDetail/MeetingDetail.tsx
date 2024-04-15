@@ -84,9 +84,8 @@ function MeetingDetail(): JSX.Element {
   const withdrawMeetingClick = (): void => {
     withdrawMutation.mutate()
   }
-
   const token: string = getLocalStorageItem('accessToken')
-  const decodedToken = jwtDecode(token)
+  const decodedToken = token != null ? jwtDecode(token) : ''
 
   const isFull = data?.totalCount === data?.registeredCount
 
