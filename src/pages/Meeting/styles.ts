@@ -156,4 +156,7 @@ export const CareerContainer = styled.div`
     padding: 10px;
     border-radius: 40px;
   }
+  .selected {
+    background-color: #d9d9d9;
+  }
 `

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import SockJS from 'sockjs-client/dist/sockjs'
 import { Stomp, type IMessage, type CompatClient } from '@stomp/stompjs'
 import { useParams } from 'react-router-dom'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { jwtDecode } from 'jwt-decode'
+import { throttle } from 'lodash'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
 import {
   BubbleBox,
@@ -27,16 +28,59 @@ function Chat(): JSX.Element {
 
   const [chatMessage, setChatMessage] = useState('')
   const [chats, setChats] = useState<ChatMessage[]>([])
+  const [prevScrollHeight, setPrevScrollHeight] = useState<number | null>(null)
 
   const socket = new SockJS(`${import.meta.env.VITE_SOCKET_URL}`)
   const token: string = getLocalStorageItem('accessToken')
   const headers = { Authorization: `Bearer ${token}` }
   const decodedToken = jwtDecode(token)
 
-  const { data } = useQuery({
-    queryKey: ['getChatMessage'],
-    queryFn: async () => await getChatMsg(Number(meetingId)),
+  //= ======================================================================
+  // 무한 스크롤
+  const scrollBoxRef = useRef<HTMLDivElement>(null)
+
+  const { data, fetchNextPage } = useInfiniteQuery({
+    queryKey: ['getAllChatMessages'],
+    queryFn: async ({ pageParam }) => {
+      return await getChatMsg({ meetingId: Number(meetingId), pageParam })
+    },
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.isLast) return lastPage.nextPage
+      return undefined
+    },
+    initialPageParam: 1,
   })
+
+  const handleFetchPages = (): void => {
+    setPrevScrollHeight(scrollBoxRef.current?.scrollHeight ?? null)
+    void fetchNextPage()
+  }
+
+  const handleScroll: () => void = throttle(() => {
+    if (scrollBoxRef?.current === null) return
+    const scrollBox = scrollBoxRef.current
+
+    // scroll이 맨 위에 닿았을 때 다음 페이지 요청
+    if (scrollBox.scrollTop === 0) {
+      handleFetchPages()
+    }
+  }, 500)
+
+  const chatDatas = useMemo(() => {
+    let list: ChatMessage[] = []
+    data != null &&
+      data.pages.forEach(({ result }) => (list = [...list, ...result]))
+    return list.reverse()
+  }, [data])
+
+  useEffect(() => {
+    const scrollBox = scrollBoxRef.current
+    scrollBox?.addEventListener('scroll', handleScroll)
+    return () => {
+      scrollBox?.removeEventListener('scroll', handleScroll)
+    }
+  }, [handleScroll])
+  //= ======================================================================
 
   useEffect(() => {
     stompClient.current = Stomp.over(socket)
@@ -70,7 +114,7 @@ function Chat(): JSX.Element {
       JSON.stringify(chatRequest)
     )
     setChatMessage('')
-    void queryClient.invalidateQueries({ queryKey: ['getChatMessage'] })
+    void queryClient.invalidateQueries({ queryKey: ['getAllChatMessages'] })
   }
 
   // Enter 눌렀을 때, 메시지 입력
@@ -81,22 +125,35 @@ function Chat(): JSX.Element {
     }
   }
 
-  useEffect(() => {
-    // 채팅 내역이 변경될 때마다 스크롤을 맨 아래로 이동
+  // 채팅 내역이 변경될 때마다 스크롤을 맨 아래로 이동
+  const scrollToBottom = (): void => {
     const messageContainer = document.getElementById('messageContainer')
     if (messageContainer !== null) {
       messageContainer.scrollTop = messageContainer.scrollHeight
     }
-    void queryClient.invalidateQueries({ queryKey: ['getChatMessage'] })
+  }
+  useEffect(() => {
+    scrollToBottom()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats, data])
+
+  useEffect(() => {
+    if (prevScrollHeight !== null && scrollBoxRef.current !== null) {
+      scrollBoxRef.current.scrollTop =
+        scrollBoxRef.current.scrollHeight - prevScrollHeight
+      setPrevScrollHeight(null)
+    } else {
+      scrollToBottom()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatDatas])
 
   return (
     <ChatContainer>
       <DetailHeader meetingId={Number(meetingId)} />
-      <MessageContainer id="messageContainer">
+      <MessageContainer id="messageContainer" ref={scrollBoxRef}>
         <BubbleContainer>
-          {data?.chats?.map((e: ChatMessage) => (
+          {chatDatas.map((e: ChatMessage) => (
             <BubbleBox
               key={e.chatId}
               $isMe={e.sender.memberEmail === decodedToken.sub}

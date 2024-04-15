@@ -298,6 +298,9 @@ function RegisterMeeting(): JSX.Element {
                 onClick={() => {
                   handleCareerClick(career.careerId)
                 }}
+                className={
+                  info.careerIds.includes(career.careerId) ? 'selected' : ''
+                }
               >
                 {career.careerName}
               </button>

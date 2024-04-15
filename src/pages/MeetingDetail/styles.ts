@@ -26,6 +26,9 @@ export const Box = styled.div`
 
   .tagbox {
     margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
   }
 `
 
