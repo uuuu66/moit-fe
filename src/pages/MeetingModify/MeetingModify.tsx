@@ -197,6 +197,7 @@ function MeetingModify(): JSX.Element {
           <InputBox>
             <span>모임 날짜</span>
           </InputBox>
+          <span style={{ color: 'red' }}>날짜, 시간은 변경 불가입니다</span>
         </InfoContainer>
         {/* 위치 찾기 */}
         <InfoContainer>
@@ -256,6 +257,9 @@ function MeetingModify(): JSX.Element {
                 onClick={() => {
                   handleCareerClick(career.careerId)
                 }}
+                className={
+                  info.careerIds.includes(career.careerId) ? 'selected' : ''
+                }
               >
                 {career.careerName}
               </button>
