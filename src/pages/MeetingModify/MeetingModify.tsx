@@ -32,43 +32,61 @@ function MeetingModify(): JSX.Element {
     queryKey: ['meetingListDetail', meetingId],
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
-
+  // console.log('data', data)
   const [stackName, setStackName] = useState<string[]>([])
   const [info, setInfo] = useState<EditMeetingReq>({
-    meetingName: data?.meetingName,
-    budget: data?.budget,
-    contents: data?.contents,
-    totalCount: data?.totalCount,
-    locationAddress: data?.locationAddress,
-    locationLat: data?.locationLat,
-    locationLng: data?.locationLng,
+    meetingName: '',
+    budget: 0,
+    contents: '',
+    totalCount: 0,
+    locationAddress: '',
+    locationLat: 0,
+    locationLng: 0,
     regionFirstName: '',
     regionSecondName: '',
-    skillIds: [],
-    careerIds: [],
+    skillIds: [1],
+    careerIds: [1],
   })
+  // console.log('info', info)
+  const careerNameToId = (careerNameList: string[]): number[] => {
+    const careerIds: number[] = []
+    careerNameList.forEach((name) => {
+      const foundCareer = careerData.find(
+        (career: Career) => career.careerName === name
+      )
+      if (foundCareer !== undefined) {
+        careerIds.push(foundCareer.careerId)
+      }
+    })
+    return careerIds
+  }
+  const careerIdList = careerNameToId(data?.careerNameList ?? [])
+  // console.log('careerIdList', careerIdList)
 
   useEffect(() => {
     setInfo({
-      meetingName: data?.meetingName,
-      budget: data?.budget,
-      contents: data?.contents,
-      totalCount: data?.totalCount,
-      locationAddress: data?.locationAddress,
-      locationLat: data?.locationLat,
-      locationLng: data?.locationLng,
+      meetingName: data?.meetingName ?? '',
+      budget: data?.budget ?? 0,
+      contents: data?.contents ?? '',
+      totalCount: data?.totalCount ?? 0,
+      locationAddress: data?.locationAddress ?? '',
+      locationLat: data?.locationLat ?? 0,
+      locationLng: data?.locationLng ?? 0,
       regionFirstName: '',
       regionSecondName: '',
       skillIds: [],
-      careerIds: [],
+      careerIds: careerIdList,
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   const editMutation = useMutation({
     mutationFn: async () => {
       await editMeeting(Number(meetingId), info)
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      navi(`/meetings/${meetingId}`)
+    },
     onError: (err) => {
       console.log(err)
     },
