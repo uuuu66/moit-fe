@@ -7,6 +7,7 @@ import {
   FilterContainer,
   FilterTitle,
   SelectedTagBox,
+  ToggleButton,
 } from '@/components/filter/FilterFrame/styles'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { theme } from '@/constants/theme'
@@ -89,7 +90,9 @@ export default function CareerModal({
           }}
           $isHigherPB={selectedCareer.length !== 0}
         >
-          <hr />
+          <ToggleButton onClick={handleModalClose}>
+            <hr />
+          </ToggleButton>
           <FilterTitle>경력</FilterTitle>
           <ul>{careerItems.map((item) => renderCareerItem(item))}</ul>
           <BottomBox>

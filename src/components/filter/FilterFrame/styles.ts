@@ -37,7 +37,7 @@ export const FilterContainer = styled.div<{ $isHigherPB: boolean }>`
   ul {
     padding-bottom: ${({ $isHigherPB }) => ($isHigherPB ? '144px' : '84px')};
     overflow-y: auto;
-    max-height: 532px; // TODO : 여기 손 봐야됨
+    max-height: 534px; // TODO : 여기 손 봐야됨
     li {
       cursor: pointer;
       &:hover {
@@ -49,12 +49,12 @@ export const FilterContainer = styled.div<{ $isHigherPB: boolean }>`
         padding: 18px 20px;
         display: flex;
         justify-content: space-between;
+        line-height: 1.5;
         ${({ theme }) => `
         color: ${theme.color.black30};
         font-size: ${theme.fontSize.medium};
         fontWeight: ${theme.fontWeight.light};
         `}
-
         span {
           min-height: 24px;
         }
@@ -65,14 +65,25 @@ export const FilterContainer = styled.div<{ $isHigherPB: boolean }>`
       }
     }
   }
+`
+
+export const ToggleButton = styled.div`
+  width: 100%;
+  padding: 15px 0 8px;
+  cursor: pointer;
 
   hr {
-    margin: 15px auto 8px;
+    margin: 0 auto;
     width: 80px;
     height: 5px;
     border-radius: 8px;
     background: ${({ theme }) => theme.color.black70};
   }
+`
+
+export const ListBox = styled.div`
+  display: grid;
+  grid-template-columns: 132px auto;
 `
 
 export const FilterTitle = styled.h2`
@@ -168,25 +179,5 @@ export const SearchInputBox = styled.div`
     font-size: ${theme.fontSize.small};
     background: ${theme.color.black10};
     `}
-  }
-`
-export const ListBox = styled.div`
-  display: flex;
-`
-
-export const SelectedStack = styled.div`
-  width: 24.375rem;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
-  margin-bottom: 1rem;
-  margin-left: 1.25rem;
-  overflow-x: auto;
-
-  div {
-    background-color: lightblue;
-    border-radius: 2.5rem;
-    padding: 0.375rem 0.75rem;
   }
 `

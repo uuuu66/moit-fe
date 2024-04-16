@@ -8,6 +8,7 @@ import {
   FilterTitle,
   SelectedTagBox,
   SearchInputBox,
+  ToggleButton,
 } from '../FilterFrame/styles'
 import { type TechStackLists, type TechStackList } from '@/type/filter'
 import CommonButton from '@/components/common/Button/CommonButton'
@@ -60,9 +61,8 @@ export default function TechStackModal({
     <li key={item.skillId}>
       <button
         type="button"
-        // className={selectedStack?.includes(item.skillId) ? 'selected' : ''}
         onClick={() => {
-          handleStackClick(item.skillId) // 여기가 문젠데
+          handleStackClick(item.skillId)
         }}
       >
         <span
@@ -115,7 +115,9 @@ export default function TechStackModal({
           }}
           $isHigherPB={selectedStackItems.length !== 0}
         >
-          <hr />
+          <ToggleButton onClick={handleModalClose}>
+            <hr />
+          </ToggleButton>
           <FilterTitle>기술스택</FilterTitle>
           <SearchInputBox>
             <input
@@ -124,7 +126,7 @@ export default function TechStackModal({
               onChange={handleSearchInputChange}
             />
           </SearchInputBox>
-          <ul style={{ height: '532px' }}>
+          <ul style={{ height: '534px' }}>
             {filteredTechStackItems.map((item: TechStackList) =>
               renderTechStackItem(item)
             )}

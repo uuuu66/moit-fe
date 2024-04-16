@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import ModalPortal from '@/components/modals/ModalPortal'
 import {
   Background,
@@ -8,6 +8,7 @@ import {
   FilterTitle,
   ListBox,
   SelectedTagBox,
+  ToggleButton,
 } from '../FilterFrame/styles'
 import {
   type SecondRegion,
@@ -18,6 +19,7 @@ import {
 import CommonButton from '@/components/common/Button/CommonButton'
 import { type Center } from '@/type/meeting'
 import { setLocalStorageItem } from '@/util/localStorage'
+import { theme } from '@/constants/theme'
 
 interface RegionModalProps {
   firstRegions: FirstRegions | undefined
@@ -62,7 +64,13 @@ export default function RegionModal({
         type="button"
         style={{
           background:
-            selectedFirstRegion === String(regionFirstId) ? '#ddd' : '#fff',
+            selectedFirstRegion === String(regionFirstId)
+              ? theme.color.white
+              : theme.color.pg1,
+          color:
+            selectedFirstRegion === String(regionFirstId)
+              ? theme.color.primary100
+              : theme.color.black30,
         }}
         onClick={() => {
           setSelectedFirstRegion(String(regionFirstId))
@@ -80,17 +88,20 @@ export default function RegionModal({
     <li key={regionSecondId}>
       <button
         type="button"
-        className={
-          selectedSecondRegion.includes(regionSecondId) ? 'selected' : ''
-        }
         onClick={() => {
           handleSecondRegionClick(regionSecondId)
         }}
       >
-        <span>{regionSecondName}</span>
-        <span>
-          {selectedSecondRegion.includes(regionSecondId) && <span>V</span>}
+        <span
+          className={
+            selectedSecondRegion.includes(regionSecondId) ? 'selected' : ''
+          }
+        >
+          {regionSecondName}
         </span>
+        {selectedSecondRegion.includes(regionSecondId) && (
+          <img src="/assets/check.svg" alt="selected" />
+        )}
       </button>
     </li>
   )
@@ -131,7 +142,9 @@ export default function RegionModal({
           }}
           $isHigherPB={selectedSecondRegion.length !== 0}
         >
-          <hr />
+          <ToggleButton onClick={handleModalClose}>
+            <hr />
+          </ToggleButton>
           <FilterTitle>모임 지역</FilterTitle>
           <ListBox>
             {firstRegions != null && (
@@ -145,7 +158,7 @@ export default function RegionModal({
             {selectedSecondRegion.length !== 0 && (
               <SelectedTagBox>
                 {selectedSecondRegion?.map((item) => (
-                  <Fragment key={item}>
+                  <div key={item}>
                     <span>
                       {
                         secondRegions?.find(
@@ -159,17 +172,26 @@ export default function RegionModal({
                         handleDeleteRegionClick(item)
                       }}
                     >
-                      X
+                      <img src="/assets/cancel.svg" alt="cancel" />
                     </button>
-                  </Fragment>
+                  </div>
                 ))}
               </SelectedTagBox>
             )}
             <BottomBoxNav>
-              <button type="button" onClick={handleResetClick}>
-                초기화
+              <button
+                className="reset-button"
+                type="button"
+                onClick={handleResetClick}
+              >
+                <img src="/assets/resetGray.svg" alt="reset" />
+                <p>초기화</p>
               </button>
-              <CommonButton size="small" handleClick={handleSelectClick}>
+              <CommonButton
+                size="large"
+                handleClick={handleSelectClick}
+                style={{ width: '100%', background: theme.color.primary100 }}
+              >
                 선택 완료하기
               </CommonButton>
             </BottomBoxNav>

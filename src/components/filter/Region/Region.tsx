@@ -59,29 +59,29 @@ export default function Region({
 
     return selectedFilters.length !== 0 ? getSelectedRegionName() : '지역'
   }
-
+  console.log(selectedFilters)
   return (
     <>
       <ModalBtn type="button" onClick={handleVisibleClick}>
         {filterDisplayName()}
         <img src="/assets/toggleDown.svg" alt="down" />
       </ModalBtn>
-      {/* {isShow && ( */}
-      <RegionModal
-        firstRegions={firstRegions}
-        secondRegions={secondRegions}
-        selectedFirstRegion={selectedFirstRegion}
-        selectedFilters={selectedFilters}
-        setSelectedFirstRegion={(name: string) => {
-          setSelectedFirstRegion(name)
-        }}
-        handleSelectedFilters={handleSelectedFilters}
-        handleSetCenter={handleSetCenter}
-        handleModalClose={() => {
-          setIsShow(false)
-        }}
-      />
-      {/* )} */}
+      {isShow && (
+        <RegionModal
+          firstRegions={firstRegions}
+          secondRegions={secondRegions}
+          selectedFirstRegion={selectedFirstRegion}
+          selectedFilters={selectedFilters}
+          setSelectedFirstRegion={(name: string) => {
+            setSelectedFirstRegion(name)
+          }}
+          handleSelectedFilters={handleSelectedFilters}
+          handleSetCenter={handleSetCenter}
+          handleModalClose={() => {
+            setIsShow(false)
+          }}
+        />
+      )}
     </>
   )
 }
