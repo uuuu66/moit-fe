@@ -29,7 +29,11 @@ export default function LoginButton(): JSX.Element {
   return (
     <>
       <button type="button" onClick={handleClickButton}>
-        {isLogin ? '로그아웃' : '로그인'}
+        {isLogin ? (
+          <img src="assets/login.svg" alt="/logout" />
+        ) : (
+          <img src="assets/login.svg" alt="/login" />
+        )}
       </button>
       {onLoginModal && (
         <LoginModal

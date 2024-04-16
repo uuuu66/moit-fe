@@ -19,14 +19,15 @@ export const theme = {
     black40: '#939393',
     black30: '#ACACAC',
     black20: '#DDDDDD',
-    white: 'FFFFFF',
+    white: '#FFFFFF',
     yellow: '#F7E600',
     green: '#57B04B',
+    pg1: '#F3F4FC', // 수정필요
   },
   fontSize: {
     large: '2.4rem',
     larger: '2.0rem',
-    larder2: '1.8rem',
+    larger2: '1.8rem',
     medium: '1.6rem',
     small: '1.4rem',
   },

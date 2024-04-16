@@ -18,7 +18,7 @@ export default function MypageButton(): JSX.Element {
   return (
     <>
       <button type="button" onClick={handleClickButton}>
-        마이페이지
+        <img src="assets/mypage.svg" alt="mypage" />
       </button>
       {onLoginModal && (
         <LoginModal

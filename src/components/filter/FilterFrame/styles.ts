@@ -1,10 +1,17 @@
 import styled from 'styled-components'
 
 export const ModalBtn = styled.button`
-  font-size: 0.875rem;
-  padding: 0.625rem 1rem;
-  background-color: #d9d9d9;
-  border-radius: 2.5rem;
+  padding: 8px 16px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
+  ${({ theme }) => `
+  background: ${theme.color.white};
+  font-size: ${theme.fontSize.small};
+  color: ${theme.color.black50};
+    `}
 `
 
 export const Background = styled.div`

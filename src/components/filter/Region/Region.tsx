@@ -47,11 +47,11 @@ export default function Region({
       ({ regionSecondId }) => regionSecondId === selectedFilters[0]
     )?.regionSecondName
 
-    if (firstRegion == null || secondRegion == null) return ''
+    if (firstRegion == null || secondRegion == null) return '지역'
 
-    return secondRegion.includes(firstRegion)
+    return secondRegion.includes('전체')
       ? secondRegion
-      : `${firstRegion} ${secondRegion}`
+      : `${firstRegion.slice(0, 2)} ${secondRegion}`
   }
 
   const filterDisplayName = (): string => {
@@ -64,6 +64,7 @@ export default function Region({
     <>
       <ModalBtn type="button" onClick={handleVisibleClick}>
         {filterDisplayName()}
+        <img src="assets/toggleDown.svg" alt="down" />
       </ModalBtn>
       {isShow && (
         <RegionModal

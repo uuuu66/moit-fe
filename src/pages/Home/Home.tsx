@@ -7,6 +7,7 @@ import {
   FilterBox,
   ResetSearchBox,
   UserLocationButtonBox,
+  ResetSearchButton,
 } from './styles'
 import { type GetMeeting, type Center } from '@/type/meeting'
 import { meetingKeys } from '@/constants/queryKeys'
@@ -17,7 +18,6 @@ import { type FiltersKey, type Filters } from '@/type/filter'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import Career from '@/components/filter/Career/Career'
 import TechStack from '@/components/filter/TechStack/TechStack'
-import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 import Region from '@/components/filter/Region/Region'
 import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
 
@@ -156,42 +156,47 @@ export default function Home(): JSX.Element {
   return (
     <HomeLayout>
       <FilterBox>
-        <Career
-          selectedFilters={filters.careers}
-          handleSelectedFilters={(num) => {
-            handleSetFilters('careers', num)
-          }}
-        />
-        <TechStack
-          selectedFilters={filters.techStacks}
-          handleSelectedFilters={(num) => {
-            handleSetFilters('techStacks', num)
-          }}
-        />
-        <Region
-          selectedFilters={filters.region}
-          handleSelectedFilters={(num) => {
-            handleSetFilters('region', num)
-          }}
-          handleSetCenter={(currentCenter: Center) => {
-            setCenter(currentCenter)
-          }}
-        />
+        <div className="scroll-box">
+          <Career
+            selectedFilters={filters.careers}
+            handleSelectedFilters={(num) => {
+              handleSetFilters('careers', num)
+            }}
+          />
+          <TechStack
+            selectedFilters={filters.techStacks}
+            handleSelectedFilters={(num) => {
+              handleSetFilters('techStacks', num)
+            }}
+          />
+          <Region
+            selectedFilters={filters.region}
+            handleSelectedFilters={(num) => {
+              handleSetFilters('region', num)
+            }}
+            handleSetCenter={(currentCenter: Center) => {
+              setCenter(currentCenter)
+            }}
+          />
+        </div>
       </FilterBox>
       <UserLocationButtonBox>
-        <ModalBtn
+        <button
           type="button"
           onClick={() => {
             getUserLocation(resetMaptoUserLocation)
           }}
         >
-          내 위치
-        </ModalBtn>
+          <div>
+            <img src="assets/location.svg" alt="location" />
+          </div>
+        </button>
       </UserLocationButtonBox>
       <ResetSearchBox>
-        <ModalBtn type="button" onClick={setCurrentCenter}>
-          현 지도에서 검색
-        </ModalBtn>
+        <ResetSearchButton type="button" onClick={setCurrentCenter}>
+          <img src="assets/reset.svg" alt="reset" />
+          <p>현 지도에서 검색</p>
+        </ResetSearchButton>
       </ResetSearchBox>
       <Map
         center={{
@@ -200,7 +205,7 @@ export default function Home(): JSX.Element {
         }}
         style={{
           width: '100%',
-          height: '796px',
+          height: '820px',
         }}
         maxLevel={3}
         minLevel={13}

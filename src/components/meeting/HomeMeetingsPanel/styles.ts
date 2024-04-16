@@ -2,23 +2,48 @@ import styled from 'styled-components'
 
 export const HomeMeetingsPanelLayout = styled.div`
   position: absolute;
-  bottom: 3.9rem;
+  bottom: 66px;
   width: 100%;
   z-index: 2;
 `
 
 export const ToggleBox = styled.button`
   width: 100%;
-  height: 1.5rem;
+  height: 7rem;
   border-radius: 20px 20px 0 0;
   box-shadow: 0px -1px 2px #777;
-  background: #fff;
+  background: ${({ theme }) => theme.color.pg1};
   position: relative;
   z-index: 3;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  hr {
+    width: 80px;
+    height: 5px;
+    border-radius: 8px;
+    background: ${({ theme }) => theme.color.black70};
+  }
+
+  div {
+    width: 100%;
+    height: 48px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+
+    ${({ theme }) => `
+    color: ${theme.color.black80};
+    font-size: ${theme.fontSize.larger};
+    font-weight: ${theme.fontWeight.bold};
+    line-height: 1;
+    `}
+  }
 `
 
 export const MeetingsBackground = styled.div`

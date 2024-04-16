@@ -1,30 +1,22 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import { HeaderContainer } from './styles'
+import { Link, useLocation } from 'react-router-dom'
+import { ButtonBox, HeaderContainer } from './styles'
 import LoginButton from '../user/LoginButton/LoginButton'
 
 function Header(): JSX.Element {
-  const navi = useNavigate()
   const location = useLocation()
   const isHeaderRequired = location.pathname === '/'
+
   return (
-    <HeaderContainer isShow={isHeaderRequired}>
-      <button
-        type="button"
-        onClick={() => {
-          navi('/')
-        }}
-      >
-        LOGO
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          navi('/search')
-        }}
-      >
-        검색
-      </button>
-      <LoginButton />
+    <HeaderContainer $isShow={isHeaderRequired}>
+      <Link to="/">
+        <img src="assets/logoHeader.svg" alt="logo" />
+      </Link>
+      <ButtonBox>
+        <Link to="/search">
+          <img src="assets/search.svg" alt="search" />
+        </Link>
+        <LoginButton />
+      </ButtonBox>
     </HeaderContainer>
   )
 }
