@@ -55,7 +55,7 @@ const LayoutStyles = styled.div`
 `
 
 const ContentsStyles = styled.div`
-  height: calc(100% - 80px);
+  height: calc(100% - 66px);
 `
 
 const ScrollBox = styled.div`

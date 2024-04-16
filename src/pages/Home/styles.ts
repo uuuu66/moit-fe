@@ -6,11 +6,11 @@ export const HomeLayout = styled.div`
 `
 
 export const FilterBox = styled.div`
-  height: 0;
   width: 100%;
+  height: 0;
   position: absolute;
   top: 84px;
-  left: 20px;
+  padding: 0 20px;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -21,14 +21,11 @@ export const ResetSearchBox = styled(FilterBox)`
   margin: 0;
   top: unset;
   bottom: 120px;
-  left: 0;
   justify-content: center;
 `
 
 export const UserLocationButtonBox = styled(FilterBox)`
-  margin: 0;
   top: unset;
   bottom: 150px;
-  left: -20px;
   justify-content: flex-end;
 `

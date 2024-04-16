@@ -200,7 +200,7 @@ export default function Home(): JSX.Element {
         }}
         style={{
           width: '100%',
-          height: '796px',
+          height: '820px',
         }}
         maxLevel={3}
         minLevel={13}
