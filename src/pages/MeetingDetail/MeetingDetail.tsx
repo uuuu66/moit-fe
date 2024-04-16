@@ -3,7 +3,6 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { jwtDecode } from 'jwt-decode'
 import { RegisterTitle } from '../Meeting/styles'
 import useMap from '@/hooks/useMap'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
@@ -15,13 +14,11 @@ import {
   DetailWholeContainer,
 } from './styles'
 import {
-  deleteMeeting,
   deleteMeetingWithdraw,
   getMeetingDetail,
   postMeetingSub,
 } from '@/apis/meeting'
 import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
-import { getLocalStorageItem } from '@/util/localStorage'
 import CommonButton from '@/components/common/Button/CommonButton'
 
 function MeetingDetail(): JSX.Element {
@@ -48,18 +45,6 @@ function MeetingDetail(): JSX.Element {
     },
   })
 
-  const deleteMutation = useMutation({
-    mutationFn: async () => {
-      await deleteMeeting(Number(meetingId))
-    },
-    onSuccess: () => {
-      navi('/')
-    },
-    onError: (error) => {
-      console.log('error', error)
-    },
-  })
-
   const withdrawMutation = useMutation({
     mutationFn: async () => {
       await deleteMeetingWithdraw(Number(meetingId))
@@ -77,15 +62,9 @@ function MeetingDetail(): JSX.Element {
     postSubMutation.mutate()
   }
 
-  const deleteMeetingClick = (): void => {
-    deleteMutation.mutate()
-  }
-
   const withdrawMeetingClick = (): void => {
     withdrawMutation.mutate()
   }
-  const token: string = getLocalStorageItem('accessToken')
-  const decodedToken = token != null ? jwtDecode(token) : ''
 
   const isFull = data?.totalCount === data?.registeredCount
 
@@ -99,23 +78,6 @@ function MeetingDetail(): JSX.Element {
           <span>{data?.meetingName}</span>
         </h1>
       </RegisterTitle>
-      {decodedToken.sub === data?.creatorEmail ? (
-        <>
-          <button type="button" onClick={deleteMeetingClick}>
-            삭제
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              navi(`modify`)
-            }}
-          >
-            수정
-          </button>
-        </>
-      ) : (
-        ''
-      )}
       {/* 2 */}
       <Box>
         <div className="userInfo">
@@ -191,7 +153,6 @@ function MeetingDetail(): JSX.Element {
           >
             <MapMarker
               key={`${meetingId}`}
-              // title={meetingName}
               image={{
                 src: '/assets/mapMarker.svg',
                 size: {
