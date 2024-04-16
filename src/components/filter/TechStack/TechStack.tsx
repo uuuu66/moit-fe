@@ -46,6 +46,7 @@ function TechStack({
     <>
       <ModalBtn type="button" onClick={handleVisibleClick}>
         {filterDisplayName}
+        <img src="assets/toggleDown.svg" alt="down" />
       </ModalBtn>
       {isShow && (
         <TechStackModal

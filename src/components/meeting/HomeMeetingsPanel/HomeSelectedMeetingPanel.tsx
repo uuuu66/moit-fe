@@ -36,7 +36,9 @@ export default function HomeSelectedMeetingPanel({
   } = meeting
   return (
     <HomeMeetingsPanelLayout>
-      <ToggleBox onClick={handleClosePanel}>리스트 닫기</ToggleBox>
+      <ToggleBox onClick={handleClosePanel}>
+        <hr />
+      </ToggleBox>
       <MeetingsBackground onClick={handleClosePanel} />
       <MeetingsBox>
         <CardBox>

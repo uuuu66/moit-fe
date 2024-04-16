@@ -54,7 +54,11 @@ export default function HomeMeetingsPanel({
           setOnListOpen(!onListOpen)
         }}
       >
-        {`리스트 ${onListOpen ? '닫기' : '열기'}`}
+        <hr />
+        <div>
+          <span>👨‍💻</span>
+          <p>내 주위 모각코</p>
+        </div>
       </ToggleBox>
       {onListOpen && (
         <>

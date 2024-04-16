@@ -5,6 +5,7 @@ import LoginButton from '../user/LoginButton/LoginButton'
 function Header(): JSX.Element {
   const location = useLocation()
   const isHeaderRequired = location.pathname === '/'
+
   return (
     <HeaderContainer $isShow={isHeaderRequired}>
       <Link to="/">
