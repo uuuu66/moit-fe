@@ -9,11 +9,11 @@ function Header(): JSX.Element {
   return (
     <HeaderContainer $isShow={isHeaderRequired}>
       <Link to="/">
-        <img src="assets/logoHeader.svg" alt="logo" />
+        <img src="/assets/logoHeader.svg" alt="logo" />
       </Link>
       <ButtonBox>
         <Link to="/search">
-          <img src="assets/search.svg" alt="search" />
+          <img src="/assets/search.svg" alt="search" />
         </Link>
         <LoginButton />
       </ButtonBox>

@@ -5,6 +5,7 @@ interface ButtonProps {
   children: ReactNode
   size: 'small' | 'large'
   handleClick?: () => void
+  style?: React.CSSProperties
 }
 
 // 추후에 onClick이벤트 추가 (현재는 타입에러 때문에 빼두었음)
@@ -12,9 +13,10 @@ function CommonButton({
   children,
   size,
   handleClick,
+  style,
 }: ButtonProps): JSX.Element {
   return (
-    <Btn type="submit" size={size} onClick={handleClick}>
+    <Btn type="submit" size={size} onClick={handleClick} style={style}>
       <BtnSpan>{children}</BtnSpan>
     </Btn>
   )
@@ -22,6 +24,7 @@ function CommonButton({
 
 CommonButton.defaultProps = {
   handleClick: () => {},
+  style: undefined,
 }
 
 export default CommonButton

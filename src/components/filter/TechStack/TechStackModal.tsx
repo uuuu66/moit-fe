@@ -6,11 +6,12 @@ import {
   BottomBoxNav,
   FilterContainer,
   FilterTitle,
-  SelectedStack,
-  TechStackInput,
+  SelectedTagBox,
+  SearchInputBox,
 } from '../FilterFrame/styles'
 import { type TechStackLists, type TechStackList } from '@/type/filter'
 import CommonButton from '@/components/common/Button/CommonButton'
+import { theme } from '@/constants/theme'
 
 interface TechStackModalProps {
   techItems: TechStackLists
@@ -64,10 +65,16 @@ export default function TechStackModal({
           handleStackClick(item.skillId) // 여기가 문젠데
         }}
       >
-        <span>{item.skillName}</span>
-        <span>
-          {selectedStackItems?.includes(item.skillId) && <span>V</span>}
+        <span
+          className={
+            selectedStackItems.includes(item.skillId) ? 'selected' : ''
+          }
+        >
+          {item.skillName}
         </span>
+        {selectedStackItems.includes(item.skillId) && (
+          <img src="/assets/check.svg" alt="selected" />
+        )}
       </button>
     </li>
   )
@@ -106,45 +113,59 @@ export default function TechStackModal({
           onClick={(e) => {
             e.stopPropagation()
           }}
+          $isHigherPB={selectedStackItems.length !== 0}
         >
+          <hr />
           <FilterTitle>기술스택</FilterTitle>
-          <TechStackInput
-            placeholder="기술 스택을 검색해 주세요"
-            value={searchItem}
-            onChange={handleSearchInputChange}
-          />
-          <ul>
+          <SearchInputBox>
+            <input
+              placeholder="기술 스택을 검색해 주세요"
+              value={searchItem}
+              onChange={handleSearchInputChange}
+            />
+          </SearchInputBox>
+          <ul style={{ height: '532px' }}>
             {filteredTechStackItems.map((item: TechStackList) =>
               renderTechStackItem(item)
             )}
           </ul>
           <BottomBox>
-            <SelectedStack>
-              {selectedStackItems?.map((selectedId) => (
-                <div key={selectedId}>
-                  {/* 여기 span을 문자열로 바꿔서 보이게 해야함 */}
-                  <span>
-                    {
-                      techItems?.find(({ skillId }) => skillId === selectedId)
-                        ?.skillName
-                    }
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleDeleteStackClick(selectedId)
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </SelectedStack>
+            {selectedStackItems.length !== 0 && (
+              <SelectedTagBox>
+                {selectedStackItems?.map((selectedId) => (
+                  <div key={selectedId}>
+                    <span>
+                      {
+                        techItems?.find(({ skillId }) => skillId === selectedId)
+                          ?.skillName
+                      }
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleDeleteStackClick(selectedId)
+                      }}
+                    >
+                      <img src="/assets/cancel.svg" alt="cancel" />
+                    </button>
+                  </div>
+                ))}
+              </SelectedTagBox>
+            )}
             <BottomBoxNav>
-              <button type="button" onClick={handleResetClick}>
-                초기화
+              <button
+                className="reset-button"
+                type="button"
+                onClick={handleResetClick}
+              >
+                <img src="/assets/resetGray.svg" alt="reset" />
+                <p>초기화</p>
               </button>
-              <CommonButton size="small" handleClick={handleCompleteClick}>
+              <CommonButton
+                size="large"
+                handleClick={handleCompleteClick}
+                style={{ width: '100%', background: theme.color.primary100 }}
+              >
                 선택 완료하기
               </CommonButton>
             </BottomBoxNav>

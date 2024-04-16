@@ -53,7 +53,7 @@ export const ResetSearchButton = styled(ModalBtn)`
 export const UserLocationButtonBox = styled(ResetSearchBox)`
   bottom: 180px;
   justify-content: flex-end;
-  padding-right: 20px;
+  padding-right: 16px;
 
   div {
     width: 56px;
@@ -64,5 +64,6 @@ export const UserLocationButtonBox = styled(ResetSearchBox)`
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 4px;
   }
 `

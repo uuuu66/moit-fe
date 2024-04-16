@@ -18,7 +18,7 @@ export default function AddMeetingButton(): JSX.Element {
   return (
     <>
       <button type="button" onClick={handleClickButton}>
-        <img src="assets/addMeeting.svg" alt="addMeeting" />
+        <img src="/assets/addMeeting.svg" alt="addMeeting" />
       </button>
       {onLoginModal && (
         <LoginModal

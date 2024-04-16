@@ -38,7 +38,7 @@ export default function Mypage(): JSX.Element {
         <h2>MY PAGE</h2>
         <ProfileBox>
           <ImageBox>
-            <img src="assets/logo.svg" alt="profile" />
+            <img src="/assets/logo.svg" alt="profile" />
           </ImageBox>
           <InfoCardBox>
             <InfoCard>
@@ -77,7 +77,7 @@ export default function Mypage(): JSX.Element {
                 >
                   <p>{meetingName}</p>
                   <div>
-                    <img src="assets/enter.svg" alt="enter" />
+                    <img src="/assets/enter.svg" alt="enter" />
                   </div>
                 </MeetingCard>
               ))

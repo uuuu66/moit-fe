@@ -16,10 +16,10 @@ function Career({
 
   const careerItems = [
     { careerName: '신입', id: 1 },
-    { careerName: '주니어(1~4)', id: 2 },
-    { careerName: '미들(5~8)', id: 3 },
-    { careerName: '시니어(9~12)', id: 4 },
-    { careerName: '엑스퍼트(13이상)', id: 5 },
+    { careerName: '주니어 (1 ~ 4)', id: 2 },
+    { careerName: '미들 (5 ~ 8)', id: 3 },
+    { careerName: '시니어 (9 ~ 12)', id: 4 },
+    { careerName: '엑스퍼트 (13 이상)', id: 5 },
   ]
 
   const filterDisplayName =
@@ -38,7 +38,7 @@ function Career({
     <>
       <ModalBtn type="button" onClick={handleVisibleClick}>
         {filterDisplayName}
-        <img src="assets/toggleDown.svg" alt="down" />
+        <img src="/assets/toggleDown.svg" alt="down" />
       </ModalBtn>
       {isShow && (
         <CareerModal

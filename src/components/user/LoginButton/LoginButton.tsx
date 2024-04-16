@@ -30,9 +30,9 @@ export default function LoginButton(): JSX.Element {
     <>
       <button type="button" onClick={handleClickButton}>
         {isLogin ? (
-          <img src="assets/login.svg" alt="/logout" />
+          <img src="/assets/login.svg" alt="/logout" />
         ) : (
-          <img src="assets/login.svg" alt="/login" />
+          <img src="/assets/login.svg" alt="/login" />
         )}
       </button>
       {onLoginModal && (

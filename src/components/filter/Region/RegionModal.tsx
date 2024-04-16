@@ -7,7 +7,7 @@ import {
   FilterContainer,
   FilterTitle,
   ListBox,
-  SelectedStack,
+  SelectedTagBox,
 } from '../FilterFrame/styles'
 import {
   type SecondRegion,
@@ -68,7 +68,7 @@ export default function RegionModal({
           setSelectedFirstRegion(String(regionFirstId))
         }}
       >
-        <span>{regionFirstName}</span>
+        <span>{regionFirstName.slice(0, 2)}</span>
       </button>
     </li>
   )
@@ -129,7 +129,9 @@ export default function RegionModal({
           onClick={(e) => {
             e.stopPropagation()
           }}
+          $isHigherPB={selectedSecondRegion.length !== 0}
         >
+          <hr />
           <FilterTitle>모임 지역</FilterTitle>
           <ListBox>
             {firstRegions != null && (
@@ -140,27 +142,29 @@ export default function RegionModal({
             )}
           </ListBox>
           <BottomBox>
-            <SelectedStack>
-              {selectedSecondRegion?.map((item) => (
-                <Fragment key={item}>
-                  <span>
-                    {
-                      secondRegions?.find(
-                        ({ regionSecondId }) => regionSecondId === item
-                      )?.regionSecondName
-                    }
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleDeleteRegionClick(item)
-                    }}
-                  >
-                    X
-                  </button>
-                </Fragment>
-              ))}
-            </SelectedStack>
+            {selectedSecondRegion.length !== 0 && (
+              <SelectedTagBox>
+                {selectedSecondRegion?.map((item) => (
+                  <Fragment key={item}>
+                    <span>
+                      {
+                        secondRegions?.find(
+                          ({ regionSecondId }) => regionSecondId === item
+                        )?.regionSecondName
+                      }
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleDeleteRegionClick(item)
+                      }}
+                    >
+                      X
+                    </button>
+                  </Fragment>
+                ))}
+              </SelectedTagBox>
+            )}
             <BottomBoxNav>
               <button type="button" onClick={handleResetClick}>
                 초기화

@@ -6,9 +6,10 @@ import {
   BottomBoxNav,
   FilterContainer,
   FilterTitle,
-  SelectedCareer,
+  SelectedTagBox,
 } from '@/components/filter/FilterFrame/styles'
 import CommonButton from '@/components/common/Button/CommonButton'
+import { theme } from '@/constants/theme'
 
 interface CareerModalProps {
   careerItems: Array<{ careerName: string; id: number }>
@@ -56,13 +57,16 @@ export default function CareerModal({
     <li key={id}>
       <button
         type="button"
-        className={selectedCareer.includes(id) ? 'selected' : ''}
         onClick={() => {
           handleCareerClick(id)
         }}
       >
-        <span>{careerName}</span>
-        <span>{selectedCareer.includes(id) && <span>V</span>}</span>
+        <span className={selectedCareer.includes(id) ? 'selected' : ''}>
+          {careerName}
+        </span>
+        {selectedCareer.includes(id) && (
+          <img src="/assets/check.svg" alt="selected" />
+        )}
       </button>
     </li>
   )
@@ -83,32 +87,45 @@ export default function CareerModal({
           onClick={(e) => {
             e.stopPropagation()
           }}
+          $isHigherPB={selectedCareer.length !== 0}
         >
+          <hr />
           <FilterTitle>경력</FilterTitle>
           <ul>{careerItems.map((item) => renderCareerItem(item))}</ul>
           <BottomBox>
-            <SelectedCareer>
-              {selectedCareer.map((item) => (
-                <div key={item}>
-                  <span>
-                    {careerItems.find(({ id }) => id === item)?.careerName}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleDeleteCareerClick(item)
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </SelectedCareer>
+            {selectedCareer.length !== 0 && (
+              <SelectedTagBox>
+                {selectedCareer.map((item) => (
+                  <div key={item}>
+                    <span>
+                      {careerItems.find(({ id }) => id === item)?.careerName}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleDeleteCareerClick(item)
+                      }}
+                    >
+                      <img src="/assets/cancel.svg" alt="cancel" />
+                    </button>
+                  </div>
+                ))}
+              </SelectedTagBox>
+            )}
             <BottomBoxNav>
-              <button type="button" onClick={handleResetClick}>
-                초기화
+              <button
+                className="reset-button"
+                type="button"
+                onClick={handleResetClick}
+              >
+                <img src="/assets/resetGray.svg" alt="reset" />
+                <p>초기화</p>
               </button>
-              <CommonButton size="small" handleClick={handleSelectClick}>
+              <CommonButton
+                size="large"
+                handleClick={handleSelectClick}
+                style={{ width: '100%', background: theme.color.primary100 }}
+              >
                 선택 완료하기
               </CommonButton>
             </BottomBoxNav>

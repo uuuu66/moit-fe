@@ -19,6 +19,7 @@ export const theme = {
     black40: '#939393',
     black30: '#ACACAC',
     black20: '#DDDDDD',
+    black10: '#f3f3f3',
     white: '#FFFFFF',
     yellow: '#F7E600',
     green: '#57B04B',

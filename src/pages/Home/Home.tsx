@@ -188,13 +188,13 @@ export default function Home(): JSX.Element {
           }}
         >
           <div>
-            <img src="assets/location.svg" alt="location" />
+            <img src="/assets/location.svg" alt="location" />
           </div>
         </button>
       </UserLocationButtonBox>
       <ResetSearchBox>
         <ResetSearchButton type="button" onClick={setCurrentCenter}>
-          <img src="assets/reset.svg" alt="reset" />
+          <img src="/assets/reset.svg" alt="reset" />
           <p>현 지도에서 검색</p>
         </ResetSearchButton>
       </ResetSearchBox>
