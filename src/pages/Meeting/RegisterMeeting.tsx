@@ -4,14 +4,12 @@ import dayjs from 'dayjs'
 import { useMutation } from '@tanstack/react-query'
 import CommonButton from '@/components/common/Button/CommonButton'
 import {
-  AccountContainer,
   CareerContainer,
   InfoContainer,
   InfoHeader,
   InfoTitle,
   InputBox,
   MemberCount,
-  MemberCountBtn,
   PriceBox,
   RegisterTitle,
   WholeContainer,
@@ -22,7 +20,9 @@ import TimeChoice from '@/components/meeting/TimeChoice/TimeChoice'
 import FindLocation from '@/components/meeting/FindLocation/FindLocation'
 import { careerData, type Career } from '@/constants/careerData'
 import { postMeetingData } from '@/apis/meeting'
-import TechStack from '@/components/filter/TechStack/TechStack'
+import { DetailButtonContainer } from '../MeetingDetail/styles'
+import { theme } from '@/constants/theme'
+import MeetingTechStack from '@/components/filter/TechStack/MeetingTechStack'
 
 export interface Info {
   meetingName: string
@@ -68,7 +68,7 @@ function RegisterMeeting(): JSX.Element {
     }))
   }
   const handleContentChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
     setInfo((prevState) => ({
       ...prevState,
@@ -84,7 +84,6 @@ function RegisterMeeting(): JSX.Element {
   }
 
   const handleStartTimeChange = (time: Date | null): void => {
-    // console.log('time111111', time)
     setInfo((prevState) => ({
       ...prevState,
       meetingStartTime: time,
@@ -183,39 +182,37 @@ function RegisterMeeting(): JSX.Element {
             navi(-1)
           }}
         >
-          &#60;
+          <img src="/assets/meetingLeftArrow.svg" alt="go back" />
         </button>
         <h2>모임 생성하기</h2>
       </InfoHeader>
       <RegisterTitle>
-        <h1>
-          <span>모임을</span>
-          <span>소개해 주세요!</span>
-        </h1>
+        <h1>모임을 소개해 주세요!</h1>
         <span>흩어져 있던 개발자들을 불러 봐요</span>
       </RegisterTitle>
       <div>
         <InfoContainer>
-          <InfoTitle>모임 이름을 정해 주세요</InfoTitle>
+          <InfoTitle>모임명을 정해 볼까요?</InfoTitle>
+          <span>알아보기 쉽게 한 줄로 작성해 주세요</span>
           <InputBox>
-            <label htmlFor="nameInput">한 줄로 작성해 주세요</label>
+            <label htmlFor="nameInput">모임명</label>
             <input
               type="text"
               id="nameInput"
-              placeholder="ex) 같이 리액트 공부해요"
+              placeholder="ex) 강남역에서 오후 2시 모각코 구합니다"
               value={info.meetingName}
               onChange={handleNameChange}
             />
           </InputBox>
         </InfoContainer>
         <InfoContainer>
-          <InfoTitle>모임 내용을 작성해 주세요</InfoTitle>
+          <InfoTitle>모임을 소개해 볼까요?</InfoTitle>
           <InputBox>
-            <label htmlFor="contentInput">설명해 주세요</label>
-            <input
-              type="text"
+            <label htmlFor="contentInput">
+              간단한 모임 소개를 작성해 주세요
+            </label>
+            <textarea
               id="contentInput"
-              placeholder="ex) 뭐할래?"
               value={info.contents}
               onChange={handleContentChange}
             />
@@ -225,7 +222,7 @@ function RegisterMeeting(): JSX.Element {
         <InfoContainer>
           <InfoTitle>언제 만날까요?</InfoTitle>
           <InputBox>
-            <span>모임 날짜</span>
+            <span className="meetingDate">모임 날짜</span>
             <DateChoice
               meetingDate={info.meetingDate}
               handleDateChange={handleDateChange}
@@ -246,44 +243,40 @@ function RegisterMeeting(): JSX.Element {
             setInfo={setInfo}
             locationAddress={info.locationAddress}
           />
-          {/* <input
-            className="where"
-            type="text"
-            placeholder="모임 장소 이름이나 주소를 검색해 보세요"
-          /> */}
         </InfoContainer>
         <InfoContainer>
           <InfoTitle>몇 명이서 모일까요?</InfoTitle>
           <span>본인을 포함한 최소 인원을 설정해 주세요</span>
           <MemberCount>
-            <MemberCountBtn type="button" onClick={handleMemCountDownClick}>
-              -
-            </MemberCountBtn>
+            <button type="button" onClick={handleMemCountDownClick}>
+              <img src="/assets/meetingMinus.svg" alt="minus" />
+            </button>
             <div>{info.totalCount}</div>
-            <MemberCountBtn type="button" onClick={handleMemCountUpClick}>
-              +
-            </MemberCountBtn>
+            <button type="button" onClick={handleMemCountUpClick}>
+              <img src="/assets/meetingPlus.svg" alt="plus" />
+            </button>
           </MemberCount>
         </InfoContainer>
-        <AccountContainer>
-          <div>
-            <h3>참가비가 필요한가요?</h3>
-            <span>부담스럽지 않은 금액이 좋아요</span>
-          </div>
+        <InfoContainer>
+          <InfoTitle>참가비가 필요한가요?</InfoTitle>
+          <span>부담스럽지 않은 금액이 좋아요</span>
           <PriceBox>
-            <input
-              type="number"
-              id="price"
-              placeholder="ex) 3,000"
-              value={info.budget}
-              onChange={handleBudgetChange}
-            />
-            <label htmlFor="price">원</label>
+            <label htmlFor="price">참가 금액</label>
+            <div>
+              <input
+                type="number"
+                id="price"
+                placeholder="ex)3,000"
+                value={info.budget}
+                onChange={handleBudgetChange}
+              />
+              <label htmlFor="price">원</label>
+            </div>
           </PriceBox>
-        </AccountContainer>
+        </InfoContainer>
         <InfoContainer>
           <InfoTitle>모임에 필요한 기술 스택을 알려 주세요</InfoTitle>
-          <TechStack
+          <MeetingTechStack
             selectedFilters={info.skillIds}
             handleSelectedFilters={handleTechStackClick}
           />
@@ -308,9 +301,15 @@ function RegisterMeeting(): JSX.Element {
           </CareerContainer>
         </InfoContainer>
       </div>
-      <CommonButton size="large" handleClick={handleMeetingSubmit}>
-        생성하기
-      </CommonButton>
+      <DetailButtonContainer>
+        <CommonButton
+          size="large"
+          handleClick={handleMeetingSubmit}
+          style={{ backgroundColor: `${theme.color.primary100}` }}
+        >
+          생성하기
+        </CommonButton>
+      </DetailButtonContainer>
     </WholeContainer>
   )
 }

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import useMap from '@/hooks/useMap'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type EditMeetingReq } from '@/type/request'
+import { theme } from '@/constants/theme'
 
 declare global {
   interface Window {
@@ -65,13 +66,14 @@ function FindLocation({ info, setInfo, locationAddress }: Props): JSX.Element {
   }
   return (
     <LocationContainer>
-      <button type="button" onClick={handleButtonClick}>
+      <label htmlFor="meetingPlace">모임 장소</label>
+      <button type="button" id="meetingPlace" onClick={handleButtonClick}>
         <span>
           {locationAddress !== ''
             ? locationAddress
-            : '모임 장소 이름이나 주소를 검색해 보세요'}
+            : '장소 이름이나 주소를 검색해 보세요'}
         </span>
-        <div>icon</div>
+        <img src="/assets/search.svg" alt="search" />
       </button>
     </LocationContainer>
   )
@@ -80,16 +82,23 @@ function FindLocation({ info, setInfo, locationAddress }: Props): JSX.Element {
 export default FindLocation
 
 export const LocationContainer = styled.div`
-  background-color: #e9e9e9;
-  padding: 1rem;
+  color: ${theme.color.black40};
+  background-color: ${theme.color.white};
+  border: 1px solid ${theme.color.line2};
+  margin-top: 2rem;
+  padding: 1.6rem 2rem;
   border-radius: 0.5rem;
 
+  label {
+    font-size: 1.2rem;
+  }
   button {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-top: 0.4rem;
     span {
-      color: gray;
+      font-size: ${theme.fontSize.medium};
     }
   }
 `
