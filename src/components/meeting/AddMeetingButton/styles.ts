@@ -8,30 +8,64 @@ export const LoginModalLayout = styled.div`
   border-radius: 20px 20px 0 0;
   display: flex;
   flex-direction: column;
-  padding: 3.125rem 1.25rem;
+  padding: 26px 20px 0;
+  gap: 40px;
+
+  hr {
+    width: 130px;
+    height: 5px;
+    margin: 21px auto 8px;
+    border-radius: 25px;
+    background: ${({ theme }) => theme.color.black100};
+  }
 `
+export const CloseBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  img {
+    width: 12px;
+  }
+`
+
 export const ContentsBox = styled.div`
-  width: 12rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 3rem;
+  gap: 16px;
+
+  img {
+    width: 43px;
+  }
 
   h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1.5;
+    width: 200px;
+    ${({ theme }) => `
+    color: ${theme.color.black90};
+    font-size: ${theme.fontSize.large};
+    font-weight: ${theme.fontWeight.bold};
+    `}
   }
 
   p {
-    font-size: 1rem;
+    ${({ theme }) => `
+    color: ${theme.color.black40};
+    font-size: ${theme.fontSize.medium};
+    font-weight: ${theme.fontWeight.normal};
+    `}
   }
 `
 
 export const ButtonBox = styled.div`
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 16px;
 `
 
 export const LoginButton = styled.button`

@@ -220,10 +220,13 @@ export default function Home(): JSX.Element {
               title={meetingName}
               onClick={handleSelectMarker}
               image={{
-                src: '/assets/mapMarker.svg',
+                src:
+                  meetingId === selectedMeeting?.meetingId
+                    ? '/assets/markerSelected.svg'
+                    : '/assets/marker.svg',
                 size: {
-                  width: meetingId === selectedMeeting?.meetingId ? 44 : 32,
-                  height: meetingId === selectedMeeting?.meetingId ? 44 : 32,
+                  width: meetingId === selectedMeeting?.meetingId ? 48 : 40,
+                  height: meetingId === selectedMeeting?.meetingId ? 48 : 40,
                 },
               }}
               position={{ lat: locationLat, lng: locationLng }}
