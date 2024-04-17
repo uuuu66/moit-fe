@@ -85,7 +85,7 @@ export default function Search(): JSX.Element {
               navigate(-1)
             }}
           >
-            <img src="/assets/left.svg" alt="icon" />
+            <img src="/assets/left.svg" alt="left" />
           </button>
           <InputBox>
             <input
@@ -146,7 +146,10 @@ export default function Search(): JSX.Element {
       {data != null && (
         <CardBox>
           {meetings.length === 0 ? (
-            <p>조회된 내용이 없습니다</p>
+            <EmptyTextBox>
+              <img src="/assets/warning.svg" alt="warning" />
+              <p>조회된 내용이 없습니다</p>
+            </EmptyTextBox>
           ) : (
             <>
               {meetings.map(
