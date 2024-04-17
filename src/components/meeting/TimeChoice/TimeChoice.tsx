@@ -43,41 +43,53 @@ function TimeChoice({
       }}
     >
       <TimeBox>
-        <span>시작 시간</span>
+        <div>
+          <img src="/assets/meetingClock.svg" alt="clock" />
+          <span>시작 시간</span>
+        </div>
         <label
           htmlFor="datepick1"
           style={{ display: 'flex', justifyContent: 'space-between' }}
         >
           <input type="text" id="datepick1" style={{ display: 'none' }} />
-          <DatePicker
+          <StDatePicker
             selected={startTime}
             shouldCloseOnSelect
             showTimeSelect
             showTimeSelectOnly
-            timeCaption="시간 선택"
+            timeCaption="시작 시간"
             dateFormat="h시 mm분"
             onChange={handleStartTimeChange}
             placeholderText="00시 00분"
           />
-          <div className="down_icon">&#60;</div>
+          <img src="/assets/meetingDownArrow.svg" alt="downArrow" />
         </label>
       </TimeBox>
       <TimeBox>
-        <span>종료 시간</span>
-        <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div>
+          <img src="/assets/meetingClock.svg" alt="clock" />
+          <span>종료 시간</span>
+        </div>
+        <label
+          htmlFor="datepick1"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <input type="text" id="datepick1" style={{ display: 'none' }} />
-          <DatePicker
+          <StDatePicker
             selected={endTime}
             shouldCloseOnSelect
             onChange={handleEndTimeChange}
             showTimeSelect
             showTimeSelectOnly
             timeIntervals={30}
-            timeCaption="Time"
+            timeCaption="종료 시간"
             dateFormat="h시 mm분"
             placeholderText="00시 00분"
           />
-          <div className="down_icon">&#60;</div>
+          <img src="/assets/meetingDownArrow.svg" alt="downArrow" />
         </label>
       </TimeBox>
     </div>
@@ -88,6 +100,11 @@ export default TimeChoice
 
 export const TimeBox = styled(InputBox)`
   width: 100%;
+  div {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
   span {
     font-size: 12px;
     color: gray;
@@ -95,7 +112,12 @@ export const TimeBox = styled(InputBox)`
   label {
     color: black;
   }
-  .down_icon {
-    rotate: 270deg;
+`
+
+export const StDatePicker = styled(DatePicker)`
+  /* display: flex;
+  flex-direction: column; */
+  &::placeholder {
+    font-size: 1.6rem;
   }
 `
