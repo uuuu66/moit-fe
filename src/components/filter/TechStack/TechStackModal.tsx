@@ -113,7 +113,6 @@ export default function TechStackModal({
           onClick={(e) => {
             e.stopPropagation()
           }}
-          $isHigherPB={selectedStackItems.length !== 0}
         >
           <ToggleButton onClick={handleModalClose}>
             <hr />

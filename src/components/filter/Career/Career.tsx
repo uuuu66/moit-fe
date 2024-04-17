@@ -38,7 +38,7 @@ function Career({
     <>
       <ModalBtn type="button" onClick={handleVisibleClick}>
         {filterDisplayName}
-        <img src="/assets/toggleDown.svg" alt="down" />
+        <img src="/assets/down.svg" alt="down" />
       </ModalBtn>
       {isShow && (
         <CareerModal

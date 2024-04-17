@@ -5,105 +5,152 @@ export const SearchLayout = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
 `
 
 export const SearchBox = styled.div`
-  padding: 0.75rem 1.25rem;
+  padding: 20px;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .input-flex-box {
+    display: flex;
+    gap: 8px;
+  }
 `
 
 export const InputBox = styled.div`
   width: 100%;
   background-color: #e9e9e9;
   display: flex;
-  padding: 0.75rem 1rem;
+  padding: 14px 20px;
   border-radius: 8px;
-  gap: 0.5rem;
+  gap: 8px;
 
   input {
     width: 100%;
-    font-size: 0.875rem;
+    font-size: ${({ theme }) => theme.fontSize.small};
   }
 `
 
-export const SectionBox = styled.div`
-  padding: 0 1.25rem;
+export const ToggleBox = styled.div`
+  border-radius: 8px;
+  background: ${({ theme }) => theme.color.pg1};
+  overflow: hidden;
 
   h1 {
-    margin-bottom: 1.25rem;
-    font-weight: 600;
-    color: #313131;
+    ${({ theme }) => `
+    color: ${theme.color.black80};
+    font-size: ${theme.fontSize.larger};
+    font-weight: ${theme.fontWeight.bold};
+    `}
+  }
+
+  img {
+    width: 18px;
+    margin-right: 8px;
   }
 `
 
-export const TagBox = styled.div`
+export const ToggleButton = styled.button`
+  width: 100%;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+export const RecentTagBox = styled.div`
+  padding: 16px 20px;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
+  height: 142px;
+  overflow: auto;
+
+  button {
+    height: 32px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    ${({ theme }) => `
+    background: ${theme.color.primary20};
+    color: ${theme.color.primary100};
+    font-size: ${theme.fontSize.small};
+    font-weight: ${theme.fontWeight.normal};
+    `}
+  }
+`
+
+export const EmptyTextBox = styled.div`
+  width: 100%;
+  height: 142px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  img {
+    width: 42px;
+  }
+
+  p {
+    ${({ theme }) => `
+    color: ${theme.color.black40};
+    font-size: ${theme.fontSize.medium};
+    font-weight: ${theme.fontWeight.normal};
+    `}
+  }
+`
+
+export const CardBox = styled.div`
+  padding: 20px;
+  background: ${({ theme }) => theme.color.pg1};
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   overflow: auto;
 
   &::-webkit-scrollbar {
     display: none;
   }
-
-  button {
-    padding: 0.375rem 0.75rem;
-    border: 1px solid #667ae4;
-    border-radius: 20px;
-    color: #667ae4;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-  }
-`
-
-export const CardBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  max-height: 550px; // Todo: 검색 바 크기에 따라 정해줄 것 (for 스크롤 적용)
-  overflow: auto;
 `
 export const MeetingCard = styled.div`
-  width: 100%;
-  padding: 1.25rem;
   border-radius: 12px;
-  background: #e7e4e4;
+  background: ${({ theme }) => theme.color.white};
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  cursor: pointer;
 
-  hr {
-    width: 100%;
+  &:hover {
+    border: ${({ theme }) => `1px solid ${theme.color.primary100}`};
   }
-`
-export const ContentsBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+
+  .card-flex-box {
+    padding-right: 24px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
 
   h2 {
-    font-weight: 700;
-    word-break: keep-all;
-  }
-`
-
-export const SKillsBox = styled.div`
-  display: flex;
-  gap: 0.375rem;
-  font-size: 0.75rem;
-
-  p {
-    padding: 0.375rem 0.75rem;
-    background: #fff;
-    border-radius: 25px;
-  }
-`
-
-export const SubContentsBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  p {
-    font-size: 0.75rem;
+    padding: 16px 16px 0;
+    ${({ theme }) => `
+    color: ${theme.color.primary100};
+    font-size: ${theme.fontSize.medium};
+    font-weight: ${theme.fontWeight.bold};
+    `}
   }
 `

@@ -26,7 +26,7 @@ export const Background = styled.div`
   z-index: 99;
 `
 
-export const FilterContainer = styled.div<{ $isHigherPB: boolean }>`
+export const FilterContainer = styled.div`
   width: 100%;
   position: absolute;
   bottom: 0px;
@@ -35,7 +35,7 @@ export const FilterContainer = styled.div<{ $isHigherPB: boolean }>`
   background-color: ${({ theme }) => theme.color.white};
 
   ul {
-    padding-bottom: ${({ $isHigherPB }) => ($isHigherPB ? '144px' : '84px')};
+    padding-bottom: 144px;
     overflow-y: auto;
     max-height: 534px; // TODO : 여기 손 봐야됨
     li {

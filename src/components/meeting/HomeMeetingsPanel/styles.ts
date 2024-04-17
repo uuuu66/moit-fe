@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 export const HomeMeetingsPanelLayout = styled.div`
   width: 100%;
-  padding-bottom: 8px;
   border-radius: 20px 20px 0 0;
   background-color: ${({ theme }) => theme.color.bg2};
   position: absolute;

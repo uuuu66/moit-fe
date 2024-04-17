@@ -6,7 +6,6 @@ import {
   ButtonBox,
   CloseBox,
   ContentsBox,
-  LoginButton,
   LoginModalLayout,
 } from '../meeting/AddMeetingButton/styles'
 import CommonButton from '../common/Button/CommonButton'

@@ -5,18 +5,23 @@ import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetingsBySearch } from '@/apis/meeting'
 import {
   CardBox,
-  ContentsBox,
+  EmptyTextBox,
   InputBox,
   MeetingCard,
-  SKillsBox,
   SearchBox,
   SearchLayout,
-  SectionBox,
-  SubContentsBox,
-  TagBox,
+  RecentTagBox,
+  ToggleBox,
+  ToggleButton,
 } from './styles'
 import { type GetMeeting } from '@/type/meeting'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
+import {
+  CardIconText,
+  ContentsBox,
+  TextBox,
+  TagBox,
+} from '@/components/meeting/MeetingCard/styles'
 
 export default function Search(): JSX.Element {
   const [inputText, setInputText] = useState('')
@@ -24,6 +29,7 @@ export default function Search(): JSX.Element {
   const [recents, setRecents] = useState<string[]>(
     (getLocalStorageItem('recents') as string[]) ?? []
   )
+  const [onRecentsToggle, setOnRecentsToggle] = useState(true)
   const navigate = useNavigate()
 
   const { data } = useInfiniteQuery({
@@ -45,10 +51,6 @@ export default function Search(): JSX.Element {
       data.pages.forEach(({ result }) => (list = [...list, ...result]))
     return list
   }, [data])
-
-  // const handleFetchPages = (): void => {
-  //   void fetchNextPage()
-  // }
 
   const handleSearch = (): void => {
     if (inputText.trim().length === 0) {
@@ -76,89 +78,131 @@ export default function Search(): JSX.Element {
   return (
     <SearchLayout>
       <SearchBox>
-        <button
-          type="button"
-          onClick={() => {
-            navigate(-1)
-          }}
-        >
-          <img src="/assets/back.svg" alt="icon" />
-        </button>
-        <InputBox>
-          <input
-            type="text"
-            placeholder="모임 이름, 모임 내용, 주소를 검색해 보세요"
-            value={inputText}
-            onChange={(e) => {
-              setInputText(e.currentTarget.value)
+        <div className="input-flex-box">
+          <button
+            type="button"
+            onClick={() => {
+              navigate(-1)
             }}
-          />
-          <button type="button" onClick={handleSearch}>
-            <img src="/assets/search.svg" alt="icon" />
+          >
+            <img src="/assets/left.svg" alt="icon" />
           </button>
-        </InputBox>
-      </SearchBox>
-      <SectionBox>
-        <h1>최근 검색어</h1>
-        {recents.length !== 0 ? (
-          <TagBox>
-            {recents.map((word, index) => (
-              <button
-                type="button"
-                // eslint-disable-next-line react/no-array-index-key
-                key={`${word}_${index}`}
-                value={word}
-                onClick={(e) => {
-                  setInputText(e.currentTarget.value)
-                  setKeyword(e.currentTarget.value)
-                }}
-              >
-                {word}
-              </button>
+          <InputBox>
+            <input
+              type="text"
+              placeholder="모임 이름, 모임 내용, 주소를 검색해 보세요"
+              value={inputText}
+              onChange={(e) => {
+                setInputText(e.currentTarget.value)
+              }}
+            />
+            <button type="button" onClick={handleSearch}>
+              <img src="/assets/search.svg" alt="icon" />
+            </button>
+          </InputBox>
+        </div>
+        <ToggleBox>
+          <ToggleButton
+            onClick={() => {
+              setOnRecentsToggle(!onRecentsToggle)
+            }}
+          >
+            <h1>
+              <img src="/assets/watch.svg" alt="watch" />
+              최근 검색어
+            </h1>
+            {onRecentsToggle ? (
+              <img src="/assets/up.svg" alt="up" />
+            ) : (
+              <img src="/assets/down.svg" alt="down" />
+            )}
+          </ToggleButton>
+          {onRecentsToggle &&
+            (recents.length !== 0 ? (
+              <RecentTagBox>
+                {recents.map((word, index) => (
+                  <button
+                    type="button"
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={`${word}_${index}`}
+                    value={word}
+                    onClick={(e) => {
+                      setInputText(e.currentTarget.value)
+                      setKeyword(e.currentTarget.value)
+                    }}
+                  >
+                    {word}
+                  </button>
+                ))}
+              </RecentTagBox>
+            ) : (
+              <EmptyTextBox>
+                <img src="/assets/warning.svg" alt="warning" />
+                <p>최근 검색한 내용이 없습니다</p>
+              </EmptyTextBox>
             ))}
-          </TagBox>
-        ) : (
-          <p>저장된 검색어가 없습니다!</p>
-        )}
-      </SectionBox>
-      <SectionBox>
-        <h1>내 주변 스터디 모임</h1>
-        {data != null && meetings.length === 0 ? (
-          <p>조회된 내용이 없습니다</p>
-        ) : (
-          <CardBox>
-            {meetings?.length != null &&
-              meetings.map(
+        </ToggleBox>
+      </SearchBox>
+      {data != null && (
+        <CardBox>
+          {meetings.length === 0 ? (
+            <p>조회된 내용이 없습니다</p>
+          ) : (
+            <>
+              {meetings.map(
                 ({
                   meetingId,
                   meetingName,
-                  skillList,
                   locationAddress,
                   meetingDate,
+                  meetingEndTime,
+                  meetingStartTime,
                   registeredCount,
                   totalCount,
+                  skillList,
                 }) => (
-                  <MeetingCard key={meetingId}>
-                    <ContentsBox>
-                      <h2>{meetingName}</h2>
-                      <SKillsBox>
-                        {skillList.map(({ id, skillName }) => (
-                          <p key={id}>{skillName}</p>
-                        ))}
-                      </SKillsBox>
-                    </ContentsBox>
-                    <hr />
-                    <SubContentsBox>
-                      <p>{`${locationAddress.split(' ')[0]} ${locationAddress.split(' ')[1]}`}</p>
-                      <p>{meetingDate}</p>
-                      <p>{`${registeredCount} / ${totalCount}`}</p>
-                    </SubContentsBox>
+                  <MeetingCard
+                    key={meetingId}
+                    onClick={() => {
+                      navigate(`/meetings/${meetingId}`)
+                    }}
+                  >
+                    <h2>{meetingName}</h2>
+                    <div className="card-flex-box">
+                      <ContentsBox>
+                        <TextBox>
+                          <CardIconText>
+                            <img src="/assets/time.svg" alt="time" />
+                            <p>{`${meetingDate} | ${meetingStartTime} - ${meetingEndTime}`}</p>
+                          </CardIconText>
+                          <div className="flex-box">
+                            <CardIconText>
+                              <img src="/assets/pin.svg" alt="pin" />
+                              <p>{`${locationAddress.split(' ')[0]} ${locationAddress.split(' ')[1]}`}</p>
+                            </CardIconText>
+                            <CardIconText>
+                              <img src="/assets/member.svg" alt="member" />
+                              <p>{`${registeredCount} / ${totalCount}`}</p>
+                            </CardIconText>
+                          </div>
+                        </TextBox>
+                        <TagBox>
+                          <div>
+                            {skillList.map(({ skillName, id }) => (
+                              <p key={`${id}_${skillName}`}>{skillName}</p>
+                            ))}
+                          </div>
+                        </TagBox>
+                      </ContentsBox>
+                      <img src="/assets/right.svg" alt="right" />
+                    </div>
                   </MeetingCard>
                 )
               )}
-          </CardBox>
-        )}
-      </SectionBox>
+            </>
+          )}
+        </CardBox>
+      )}
     </SearchLayout>
   )
 }
