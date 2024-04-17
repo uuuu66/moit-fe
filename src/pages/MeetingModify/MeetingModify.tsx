@@ -2,38 +2,47 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
-  AccountContainer,
   CareerContainer,
   InfoContainer,
   InfoHeader,
   InfoTitle,
   InputBox,
   MemberCount,
-  MemberCountBtn,
   PriceBox,
   RegisterTitle,
   WholeContainer,
 } from '../Meeting/styles'
 import FindLocation from '@/components/meeting/FindLocation/FindLocation'
-import TechStack from '@/components/filter/TechStack/TechStack'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { editMeeting, getMeetingDetail } from '@/apis/meeting'
 import useMap from '@/hooks/useMap'
 import { type EditMeetingReq } from '@/type/request'
 import { type Career, careerData } from '@/constants/careerData'
+import { DetailButtonContainer } from '../MeetingDetail/styles'
+import { theme } from '@/constants/theme'
+import MeetingTechStack from '@/components/filter/TechStack/MeetingTechStack'
+import { getTechStackList } from '@/apis/filter'
+import {
+  DisabledDateBox,
+  DisabledTimeBox,
+  DisabledTimeBoxContainer,
+} from './styles'
 
 function MeetingModify(): JSX.Element {
   useMap()
   const navi = useNavigate()
   const { meetingId } = useParams()
 
-  // 비동기
   const { data } = useQuery({
     queryKey: ['meetingListDetail', meetingId],
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
-  // console.log('data', data)
-  const [stackName, setStackName] = useState<string[]>([])
+
+  const { data: techStackList } = useQuery({
+    queryKey: ['stackList'],
+    queryFn: async () => await getTechStackList(),
+  })
+
   const [info, setInfo] = useState<EditMeetingReq>({
     meetingName: '',
     budget: 0,
@@ -44,10 +53,10 @@ function MeetingModify(): JSX.Element {
     locationLng: 0,
     regionFirstName: '',
     regionSecondName: '',
-    skillIds: [1],
-    careerIds: [1],
+    skillIds: [],
+    careerIds: [],
   })
-  // console.log('info', info)
+
   const careerNameToId = (careerNameList: string[]): number[] => {
     const careerIds: number[] = []
     careerNameList.forEach((name) => {
@@ -61,7 +70,20 @@ function MeetingModify(): JSX.Element {
     return careerIds
   }
   const careerIdList = careerNameToId(data?.careerNameList ?? [])
-  // console.log('careerIdList', careerIdList)
+
+  const skillNameToId = (skillNameList: string[]): number[] => {
+    const skillIds: number[] = []
+    skillNameList.forEach((name) => {
+      const foundSkill = techStackList?.find(
+        (skill) => skill.skillName === name
+      )
+      if (foundSkill !== undefined) {
+        skillIds.push(foundSkill.skillId)
+      }
+    })
+    return skillIds
+  }
+  const skillIdList = skillNameToId(data?.skillNameList ?? [])
 
   useEffect(() => {
     setInfo({
@@ -74,7 +96,7 @@ function MeetingModify(): JSX.Element {
       locationLng: data?.locationLng ?? 0,
       regionFirstName: '',
       regionSecondName: '',
-      skillIds: [],
+      skillIds: skillIdList,
       careerIds: careerIdList,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,7 +121,7 @@ function MeetingModify(): JSX.Element {
     }))
   }
   const handleContentChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
     setInfo((prevState) => ({
       ...prevState,
@@ -131,16 +153,11 @@ function MeetingModify(): JSX.Element {
     }))
   }
 
-  const handleTechStackClick = (
-    selectedStacks: number[],
-    selectedStacksName?: string[]
-  ): void => {
+  const handleTechStackClick = (selectedStacks: number[]): void => {
     setInfo((prevState) => ({
       ...prevState,
       skillIds: selectedStacks,
     }))
-
-    selectedStacksName != null && setStackName(selectedStacksName)
   }
 
   const handleCareerClick = (careerId: number): void => {
@@ -176,34 +193,32 @@ function MeetingModify(): JSX.Element {
         <h2>모임 생성하기</h2>
       </InfoHeader>
       <RegisterTitle>
-        <h1>
-          <span>모임을</span>
-          <span>소개해 주세요!</span>
-        </h1>
+        <h1>모임을 소개해 주세요!</h1>
         <span>흩어져 있던 개발자들을 불러 봐요</span>
       </RegisterTitle>
       <div>
         <InfoContainer>
-          <InfoTitle>모임 이름을 정해 주세요</InfoTitle>
+          <InfoTitle>모임명을 정해 볼까요?</InfoTitle>
+          <span>알아보기 쉽게 한 줄로 작성해 주세요</span>
           <InputBox>
-            <label htmlFor="nameInput">한 줄로 작성해 주세요</label>
+            <label htmlFor="nameInput">모임명</label>
             <input
               type="text"
               id="nameInput"
-              placeholder="ex) 같이 리액트 공부해요"
+              placeholder="ex) 강남역에서 오후 2시 모각코 구합니다"
               value={info.meetingName}
               onChange={handleNameChange}
             />
           </InputBox>
         </InfoContainer>
         <InfoContainer>
-          <InfoTitle>모임 내용을 작성해 주세요</InfoTitle>
+          <InfoTitle>모임을 소개해 볼까요?</InfoTitle>
           <InputBox>
-            <label htmlFor="contentInput">설명해 주세요</label>
-            <input
-              type="text"
+            <label htmlFor="contentInput">
+              간단한 모임 소개를 작성해 주세요
+            </label>
+            <textarea
               id="contentInput"
-              placeholder="ex) 뭐할래?"
               value={info.contents}
               onChange={handleContentChange}
             />
@@ -212,10 +227,42 @@ function MeetingModify(): JSX.Element {
         {/* 날짜, 시간 선택 */}
         <InfoContainer>
           <InfoTitle>언제 만날까요?</InfoTitle>
-          <InputBox>
-            <span>모임 날짜</span>
-          </InputBox>
-          <span style={{ color: 'red' }}>날짜, 시간은 변경 불가입니다</span>
+          <DisabledDateBox>
+            <span className="meetingDate">모임 날짜</span>
+            <div className="date">
+              <span>{data?.meetingDate}</span>
+              <img
+                src="/assets/meetingCalendar.svg"
+                alt="달력"
+                style={{ width: '2rem' }}
+              />
+            </div>
+          </DisabledDateBox>
+          <DisabledTimeBoxContainer>
+            <DisabledTimeBox>
+              <div className="dateTitle">
+                <img src="/assets/meetingClock.svg" alt="clock" />
+                <span>시작 시간</span>
+              </div>
+              <div className="dateTime">
+                <span>{data?.meetingStartTime}</span>
+                <img src="/assets/meetingDownArrow.svg" alt="clock" />
+              </div>
+            </DisabledTimeBox>
+            <DisabledTimeBox>
+              <div className="dateTitle">
+                <img src="/assets/meetingClock.svg" alt="clock" />
+                <span>종료 시간</span>
+              </div>
+              <div className="dateTime">
+                <span>{data?.meetingEndTime}</span>
+                <img src="/assets/meetingDownArrow.svg" alt="clock" />
+              </div>
+            </DisabledTimeBox>
+          </DisabledTimeBoxContainer>
+          <div className="dateInfo">
+            <span>날짜, 시간은 수정이 불가능합니다</span>
+          </div>
         </InfoContainer>
         {/* 위치 찾기 */}
         <InfoContainer>
@@ -230,40 +277,38 @@ function MeetingModify(): JSX.Element {
           <InfoTitle>몇 명이서 모일까요?</InfoTitle>
           <span>본인을 포함한 최소 인원을 설정해 주세요</span>
           <MemberCount>
-            <MemberCountBtn type="button" onClick={handleMemCountDownClick}>
-              -
-            </MemberCountBtn>
+            <button type="button" onClick={handleMemCountDownClick}>
+              <img src="/assets/meetingMinus.svg" alt="minus" />
+            </button>
             <div>{info.totalCount}</div>
-            <MemberCountBtn type="button" onClick={handleMemCountUpClick}>
-              +
-            </MemberCountBtn>
+            <button type="button" onClick={handleMemCountUpClick}>
+              <img src="/assets/meetingPlus.svg" alt="plus" />
+            </button>
           </MemberCount>
         </InfoContainer>
-        <AccountContainer>
-          <div>
-            <h3>참가비가 필요한가요?</h3>
-            <span>부담스럽지 않은 금액이 좋아요</span>
-          </div>
+        <InfoContainer>
+          <InfoTitle>참가비가 필요한가요?</InfoTitle>
+          <span>부담스럽지 않은 금액이 좋아요</span>
           <PriceBox>
-            <input
-              type="number"
-              id="price"
-              placeholder="ex) 3,000"
-              value={info.budget}
-              onChange={handleBudgetChange}
-            />
-            <label htmlFor="price">원</label>
+            <label htmlFor="price">참가 금액</label>
+            <div>
+              <input
+                type="number"
+                id="price"
+                placeholder="ex)3,000"
+                value={info.budget}
+                onChange={handleBudgetChange}
+              />
+              <label htmlFor="price">원</label>
+            </div>
           </PriceBox>
-        </AccountContainer>
+        </InfoContainer>
         <InfoContainer>
           <InfoTitle>모임에 필요한 기술 스택을 알려 주세요</InfoTitle>
-          <TechStack
+          <MeetingTechStack
             selectedFilters={info.skillIds}
             handleSelectedFilters={handleTechStackClick}
           />
-          {stackName.map((name) => (
-            <p key={name}>{name}</p>
-          ))}
         </InfoContainer>
         <InfoContainer>
           <InfoTitle>경력을 알려 주세요</InfoTitle>
@@ -285,9 +330,15 @@ function MeetingModify(): JSX.Element {
           </CareerContainer>
         </InfoContainer>
       </div>
-      <CommonButton size="large" handleClick={handleMeetingModifySubmit}>
-        수정하기
-      </CommonButton>
+      <DetailButtonContainer>
+        <CommonButton
+          size="large"
+          handleClick={handleMeetingModifySubmit}
+          style={{ backgroundColor: `${theme.color.primary100}` }}
+        >
+          수정하기
+        </CommonButton>
+      </DetailButtonContainer>
     </WholeContainer>
   )
 }

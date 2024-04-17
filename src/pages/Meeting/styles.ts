@@ -1,11 +1,14 @@
 import styled from 'styled-components'
+import { theme } from '@/constants/theme'
 
 export const WholeContainer = styled.div`
-  /* border: 1px solid green; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: ${theme.fontSize.medium};
+  background-color: ${theme.color.bg3};
+  color: ${theme.color.primary100};
 `
 
 export const InfoHeader = styled.header`
@@ -14,92 +17,90 @@ export const InfoHeader = styled.header`
   align-items: center;
   grid-template-columns: 1fr 2fr;
   padding: 18.5px 20px;
+
   button {
     text-align: left;
     font-size: large;
+  }
+  h2 {
+    font-size: ${theme.fontSize.medium};
+    color: ${theme.color.black60};
   }
 `
 
 export const RegisterTitle = styled.div`
   width: 100%;
-  padding: 1rem 20px;
+  padding: 1rem 2rem;
 
   h1 {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 0.8rem;
-
-    span {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: black;
-    }
+    font-size: ${theme.fontSize.large};
+    font-weight: ${theme.fontWeight.bold};
+    padding-bottom: 0.8rem;
+    color: ${theme.color.black80};
   }
   span {
-    font-size: 1rem;
-    color: gray;
+    font-size: ${theme.fontSize.medium};
+    color: ${theme.color.black40};
   }
 `
 
 export const InputBox = styled.div`
-  background-color: #e9e9e9;
+  background-color: ${theme.color.white};
   display: flex;
   flex-direction: column;
-  padding: 20px 10px;
-  border-radius: 0.5rem;
+  padding: 1.6rem 2rem;
+  margin-top: 2rem;
+  border: 1px solid ${theme.color.line2};
+  border-radius: 0.8rem;
   gap: 0.4rem;
 
-  label {
-    font-size: 12px;
-    color: gray;
+  &:focus-within {
+    border-color: ${theme.color.primary100};
   }
-  span {
-    font-size: 12px;
-    color: gray;
+  label {
+    font-size: 1.2rem;
+    color: ${theme.color.black40};
+  }
+  textarea {
+    height: 14rem;
   }
 `
 
 export const InfoContainer = styled.div`
-  margin: 3rem 20px;
+  margin: 3rem 2rem;
 
   span {
-    font-size: 14px;
+    font-size: ${theme.fontSize.small};
+    color: ${theme.color.black40};
   }
-  .where {
+  .meetingDate {
+    font-size: 1.2rem;
+    color: ${theme.color.black40};
+  }
+  .dateInfo {
     width: 100%;
-    background-color: #e9e9e9;
-    border-radius: 0.5rem;
-    height: 48px;
+    text-align: right;
+    margin-top: 0.8rem;
+    span {
+      color: ${theme.color.warn};
+      font-weight: ${theme.fontWeight.normal};
+    }
   }
 `
 
-export const AccountContainer = styled(InfoContainer)`
-  display: flex;
-  align-items: center;
-  gap: 2rem;
+export const PriceBox = styled(InputBox)`
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 
-  h3 {
-    font-size: 20px;
-    margin-bottom: 1rem;
-    color: gray;
+    label {
+      font-size: ${theme.fontSize.medium};
+      color: ${theme.color.primary100};
+    }
   }
-
-  span {
-    color: gray;
-  }
-`
-
-export const PriceBox = styled.div`
-  background-color: #e9e9e9;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
   input {
-    width: 5rem;
+    width: 100%;
     text-align: right;
     padding-right: 0.5rem;
   }
@@ -116,13 +117,14 @@ export const PriceBox = styled.div`
 `
 
 export const NameInfoContainer = styled.div`
-  padding: 0 20px;
+  padding: 0 2rem;
 `
 
 export const InfoTitle = styled.h3`
-  font-size: 20px;
-  margin: 1rem 0;
-  color: gray;
+  /* margin: 1rem 0; */
+  font-size: ${theme.fontSize.larger};
+  font-weight: ${theme.fontWeight.bold};
+  color: ${theme.color.primary100};
 `
 
 export const MemberCount = styled.div`
@@ -131,32 +133,31 @@ export const MemberCount = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 42px;
+  gap: 4.2rem;
 
   div {
-    font-size: 40px;
+    font-size: 4rem;
     font-weight: 800;
+    color: ${theme.color.primary100};
   }
 `
-export const MemberCountBtn = styled.button`
-  width: 3.125rem;
-  height: 3.125rem;
-  background-color: #e9e9e9;
-  border-radius: 50%;
-`
+
 export const CareerContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  /* margin: 1rem 20px; */
+  margin-top: 2rem;
 
   button {
     font-size: 14px;
-    background-color: #e9e9e9;
-    padding: 10px;
-    border-radius: 40px;
+    color: ${theme.color.black40};
+    background-color: ${theme.color.bg2};
+    padding: 1rem;
+    border-radius: 4rem;
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 4px 0px;
   }
   .selected {
-    background-color: #d9d9d9;
+    color: ${theme.color.white};
+    background-color: ${theme.color.primary100};
   }
 `

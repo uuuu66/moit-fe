@@ -27,7 +27,8 @@ export const theme = {
     yellow: '#F7E600',
     green: '#57B04B',
     pg1: '#F3F4FC', // 수정필요
-    line2: '#e6e4e4',
+    line2: '#E6E4E4',
+    warn: '#FF3257',
   },
   fontSize: {
     large: '2.4rem',
