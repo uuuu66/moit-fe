@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import SockJS from 'sockjs-client/dist/sockjs'
-import { Stomp, type IMessage, type CompatClient } from '@stomp/stompjs'
+import { Stomp, type CompatClient } from '@stomp/stompjs'
 import { useParams } from 'react-router-dom'
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { jwtDecode } from 'jwt-decode'
@@ -14,6 +14,7 @@ import {
   MessageContainer,
   MsgInputBox,
   SendButton,
+  SendTime,
   Username,
 } from './styles'
 import { getLocalStorageItem } from '@/util/localStorage'
@@ -25,9 +26,7 @@ function Chat(): JSX.Element {
 
   const queryClient = useQueryClient()
   const stompClient = useRef<CompatClient | null>(null)
-
-  const [chatMessage, setChatMessage] = useState('')
-  const [chats, setChats] = useState<ChatMessage[]>([])
+  const test = useRef<HTMLInputElement | null>(null)
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | null>(null)
 
   const socket = new SockJS(`${import.meta.env.VITE_SOCKET_URL}`)
@@ -37,6 +36,8 @@ function Chat(): JSX.Element {
 
   //= ======================================================================
   // 무한 스크롤
+
+  // TODO
   const scrollBoxRef = useRef<HTMLDivElement>(null)
 
   const { data, fetchNextPage } = useInfiniteQuery({
@@ -51,11 +52,13 @@ function Chat(): JSX.Element {
     initialPageParam: 1,
   })
 
+  // TODO
   const handleFetchPages = (): void => {
     setPrevScrollHeight(scrollBoxRef.current?.scrollHeight ?? null)
-    void fetchNextPage()
+    void fetchNextPage() // 어디서 발동시킬지 잘 생각
   }
 
+  // TODO
   const handleScroll: () => void = throttle(() => {
     if (scrollBoxRef?.current === null) return
     const scrollBox = scrollBoxRef.current
@@ -86,14 +89,7 @@ function Chat(): JSX.Element {
     stompClient.current = Stomp.over(socket)
 
     stompClient.current?.connect(headers, (): void => {
-      stompClient.current?.subscribe(
-        `/topic/rooms/${meetingId}/chat`,
-        (message: IMessage) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          const newMessage: ChatMessage = JSON.parse(message.body)
-          setChats((prev) => [...prev, newMessage])
-        }
-      )
+      stompClient.current?.subscribe(`/topic/rooms/${meetingId}/chat`, () => {})
     })
 
     return () => {
@@ -106,21 +102,22 @@ function Chat(): JSX.Element {
 
   // TODO: send 개선
   const sendChatMessage = (): void => {
-    const chatRequest = { content: chatMessage }
-    if (chatMessage === '') return
+    const chatRequest = { content: test.current?.value }
+    if (test.current?.value === '') return
     stompClient.current?.send(
       `/app/api/meetings/${meetingId}/chat`,
       headers,
       JSON.stringify(chatRequest)
     )
-    setChatMessage('')
+    if (test.current !== null) {
+      test.current.value = ''
+    }
     void queryClient.invalidateQueries({ queryKey: ['getAllChatMessages'] })
   }
 
   // Enter 눌렀을 때, 메시지 입력
   const handleKeyEnter = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
-      e.preventDefault()
       sendChatMessage()
     }
   }
@@ -132,10 +129,10 @@ function Chat(): JSX.Element {
       messageContainer.scrollTop = messageContainer.scrollHeight
     }
   }
+
   useEffect(() => {
     scrollToBottom()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chats, data])
+  }, [data])
 
   useEffect(() => {
     if (prevScrollHeight !== null && scrollBoxRef.current !== null) {
@@ -165,7 +162,7 @@ function Chat(): JSX.Element {
                 <ChatBubble $isMe={e.sender.memberEmail === decodedToken.sub}>
                   {e.content}
                 </ChatBubble>
-                {e.createdAt.slice(11, 16)}
+                <SendTime>{e.createdAt.slice(11, 16)}</SendTime>
               </div>
             </BubbleBox>
           ))}
@@ -174,16 +171,15 @@ function Chat(): JSX.Element {
       <MsgInputBox>
         <input
           type="text"
-          value={chatMessage}
-          onChange={(e) => {
-            setChatMessage(e.target.value)
-          }}
+          ref={test}
           onKeyUp={(e) => {
             handleKeyEnter(e)
           }}
-          placeholder="Type your message..."
+          placeholder="메세지를 입력해 주세요"
         />
-        <SendButton onClick={sendChatMessage}>Send</SendButton>
+        <SendButton onClick={sendChatMessage}>
+          <img src="/assets/send.svg" alt="" />
+        </SendButton>
       </MsgInputBox>
     </ChatContainer>
   )
