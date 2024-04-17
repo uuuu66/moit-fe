@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const ModalBtn = styled.button`
+  margin-top: 2px;
   padding: 8px 16px;
   border-radius: 40px;
   display: flex;

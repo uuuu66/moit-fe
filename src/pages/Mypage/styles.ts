@@ -7,7 +7,7 @@ export const MypageLayout = styled.div`
   background: ${({ theme }) => theme.color.bg1};
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 48px;
 `
 
 export const NavBox = styled.header`
