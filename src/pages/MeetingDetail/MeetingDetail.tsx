@@ -22,6 +22,7 @@ import {
 } from '@/apis/meeting'
 import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
 import CommonButton from '@/components/common/Button/CommonButton'
+import { theme } from '@/constants/theme'
 
 function MeetingDetail(): JSX.Element {
   useMap()
@@ -133,7 +134,7 @@ function MeetingDetail(): JSX.Element {
         {/* 3 */}
         <Box1>
           <DetailInfoTitle>이런 모임이에요</DetailInfoTitle>
-          <p>{data?.contents}</p>
+          <pre>{data?.contents}</pre>
         </Box1>
         {/* 4 */}
         <Box1>
@@ -157,8 +158,8 @@ function MeetingDetail(): JSX.Element {
                 image={{
                   src: '/assets/markerSelected.svg',
                   size: {
-                    width: 60,
-                    height: 70,
+                    width: 50,
+                    height: 60,
                   },
                 }}
                 position={{
@@ -175,7 +176,11 @@ function MeetingDetail(): JSX.Element {
         {isFull ? (
           <CommonButton size="large">모집이 마감되었습니다</CommonButton>
         ) : data?.join === true ? (
-          <CommonButton size="large" handleClick={withdrawMeetingClick}>
+          <CommonButton
+            size="large"
+            handleClick={withdrawMeetingClick}
+            style={{ backgroundColor: `${theme.color.primary100}` }}
+          >
             모임 탈퇴하기
           </CommonButton>
         ) : (

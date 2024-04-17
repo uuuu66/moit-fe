@@ -9,6 +9,7 @@ export const DetailWholeContainer = styled(ChatContainer)`
 
 export const DetailInfoContainer = styled(DetailWholeContainer)`
   background-color: ${theme.color.pg1};
+  width: 100%;
   height: 100%;
   overflow-y: auto;
   margin-top: 1rem;
@@ -58,10 +59,11 @@ export const Box = styled.div`
 `
 
 export const Box1 = styled(Box)`
+  display: flex;
   background-color: ${theme.color.white};
   gap: 1.2rem;
 
-  p {
+  pre {
     font-size: ${theme.fontSize.small};
     color: ${theme.color.black60};
   }
