@@ -32,6 +32,7 @@ export const TitleBox = styled.div`
 `
 
 export const ContentsBox = styled.div`
+  width: 100%;
   padding: 16px 20px;
   background: ${({ theme }) => theme.color.white};
   display: flex;

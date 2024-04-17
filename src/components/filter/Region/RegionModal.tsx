@@ -140,7 +140,6 @@ export default function RegionModal({
           onClick={(e) => {
             e.stopPropagation()
           }}
-          $isHigherPB={selectedSecondRegion.length !== 0}
         >
           <ToggleButton onClick={handleModalClose}>
             <hr />

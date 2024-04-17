@@ -88,7 +88,6 @@ export default function CareerModal({
           onClick={(e) => {
             e.stopPropagation()
           }}
-          $isHigherPB={selectedCareer.length !== 0}
         >
           <ToggleButton onClick={handleModalClose}>
             <hr />

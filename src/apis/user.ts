@@ -43,7 +43,7 @@ const resetAccessToken = async (): Promise<void> => {
 const logout = async (): Promise<void> => {
   const refreshToken = getLocalStorageItem('refreshToken')
   try {
-    await authInstance.post('/api/member/logout', { refreshToken })
+    await authInstance.post('/api/auth/logout', { refreshToken })
   } catch (error) {
     console.log(error)
     throw error

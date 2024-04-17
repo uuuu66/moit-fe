@@ -30,7 +30,11 @@ export default function LoginButton(): JSX.Element {
     <>
       <button type="button" onClick={handleClickButton}>
         {isLogin ? (
-          <img src="/assets/login.svg" alt="/logout" />
+          <img
+            src="/assets/logout.svg"
+            alt="/logout"
+            style={{ width: '28px' }}
+          />
         ) : (
           <img src="/assets/login.svg" alt="/login" />
         )}
