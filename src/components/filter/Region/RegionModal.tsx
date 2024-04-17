@@ -66,7 +66,7 @@ export default function RegionModal({
           background:
             selectedFirstRegion === String(regionFirstId)
               ? theme.color.white
-              : theme.color.pg1,
+              : theme.color.bg1,
           color:
             selectedFirstRegion === String(regionFirstId)
               ? theme.color.primary100

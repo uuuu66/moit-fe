@@ -59,7 +59,7 @@ export default function Region({
 
     return selectedFilters.length !== 0 ? getSelectedRegionName() : '지역'
   }
-  console.log(selectedFilters)
+
   return (
     <>
       <ModalBtn type="button" onClick={handleVisibleClick}>

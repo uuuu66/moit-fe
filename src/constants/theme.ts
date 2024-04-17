@@ -20,10 +20,12 @@ export const theme = {
     black30: '#ACACAC',
     black20: '#DDDDDD',
     black10: '#f3f3f3',
+    bg1: '#F9FAFC',
+    bg2: '#F3F3F3',
+    bg3: '#F9FAFD',
     white: '#FFFFFF',
     yellow: '#F7E600',
     green: '#57B04B',
-    pg1: '#F3F4FC', // 수정필요
   },
   fontSize: {
     large: '2.4rem',
@@ -31,6 +33,7 @@ export const theme = {
     larger2: '1.8rem',
     medium: '1.6rem',
     small: '1.4rem',
+    smaller: '1.2rem',
   },
   fontWeight: {
     bold: 700,

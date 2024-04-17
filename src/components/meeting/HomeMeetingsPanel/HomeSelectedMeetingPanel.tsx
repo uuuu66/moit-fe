@@ -2,13 +2,9 @@ import { useNavigate } from 'react-router-dom'
 import { type GetMeeting } from '@/type/meeting'
 import {
   CardBox,
-  ContentsBox,
   HomeMeetingsPanelLayout,
-  MeetingCard,
   MeetingsBackground,
   MeetingsBox,
-  TagBox,
-  TextBox,
   ToggleBox,
 } from './styles'
 
@@ -42,7 +38,7 @@ export default function HomeSelectedMeetingPanel({
       <MeetingsBackground onClick={handleClosePanel} />
       <MeetingsBox>
         <CardBox>
-          <MeetingCard
+          {/* <MeetingCard
             key={meetingId}
             onClick={() => {
               navigate(`/meetings/${meetingId}`)
@@ -70,7 +66,7 @@ export default function HomeSelectedMeetingPanel({
                 </div>
               </TagBox>
             </ContentsBox>
-          </MeetingCard>
+          </MeetingCard> */}
         </CardBox>
       </MeetingsBox>
     </HomeMeetingsPanelLayout>
