@@ -155,7 +155,7 @@ function MeetingDetail(): JSX.Element {
               <MapMarker
                 key={`${meetingId}`}
                 image={{
-                  src: '/assets/mapMarker.svg',
+                  src: '/assets/markerSelected.svg',
                   size: {
                     width: 60,
                     height: 70,

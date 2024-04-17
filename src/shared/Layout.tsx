@@ -21,6 +21,7 @@ export default function Layout(): JSX.Element {
           </ScrollBox>
         </ContentsStyles>
         <Footer />
+        <div id="modal" />
       </LayoutStyles>
       <TextBox>소개글</TextBox>
     </ScreenStyles>
@@ -55,7 +56,6 @@ const LayoutStyles = styled.div<{ $screenHeight: number }>`
   min-width: 360px;
   max-width: 430px;
   height: ${({ $screenHeight }) => `${$screenHeight}px`};
-  /* min-height: 780px; */
   max-height: 932px;
   border: 1px solid #000;
   background: white;

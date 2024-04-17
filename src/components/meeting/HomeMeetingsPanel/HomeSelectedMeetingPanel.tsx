@@ -1,16 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { type GetMeeting } from '@/type/meeting'
 import {
-  CardBox,
-  ContentsBox,
   HomeMeetingsPanelLayout,
-  MeetingCard,
   MeetingsBackground,
-  MeetingsBox,
-  TagBox,
-  TextBox,
-  ToggleBox,
+  SelectedCardToggleBox,
 } from './styles'
+import HomeSelectedMeetingCard from '../MeetingCard/HomeSelectedMeetingCard'
 
 interface HomeSelectedMeetingPanelProps {
   meeting: GetMeeting
@@ -34,45 +29,25 @@ export default function HomeSelectedMeetingPanel({
     skillList,
     careerList,
   } = meeting
+
   return (
     <HomeMeetingsPanelLayout>
-      <ToggleBox onClick={handleClosePanel}>
+      <SelectedCardToggleBox onClick={handleClosePanel}>
         <hr />
-      </ToggleBox>
+      </SelectedCardToggleBox>
       <MeetingsBackground onClick={handleClosePanel} />
-      <MeetingsBox>
-        <CardBox>
-          <MeetingCard
-            key={meetingId}
-            onClick={() => {
-              navigate(`/meetings/${meetingId}`)
-            }}
-          >
-            <h3>{meetingName}</h3>
-            <hr />
-            <ContentsBox>
-              <TextBox>
-                <p>{meetingDate}</p>
-                <p>{`${meetingStartTime} - ${meetingEndTime}`}</p>
-              </TextBox>
-              <TextBox>
-                <p>{`${locationAddress.split(' ')[0]} ${locationAddress.split(' ')[1]}`}</p>
-                <p>{`${registeredCount} / ${totalCount}`}</p>
-              </TextBox>
-              <TagBox>
-                <div>
-                  {careerList.map(({ careerName, id }) => (
-                    <p key={id}>{careerName}</p>
-                  ))}
-                  {skillList.map(({ skillName, id }) => (
-                    <p key={id}>{skillName}</p>
-                  ))}
-                </div>
-              </TagBox>
-            </ContentsBox>
-          </MeetingCard>
-        </CardBox>
-      </MeetingsBox>
+      <HomeSelectedMeetingCard
+        title={meetingName}
+        date={meetingDate}
+        time={`${meetingStartTime} - ${meetingEndTime}`}
+        address={`${locationAddress.split(' ')[0]} ${locationAddress.split(' ')[1]}`}
+        memberCount={`${registeredCount} / ${totalCount}`}
+        careerList={careerList.map(({ careerName }) => careerName).join(', ')}
+        tags={skillList}
+        handleCardClick={() => {
+          navigate(`/meetings/${meetingId}`)
+        }}
+      />
     </HomeMeetingsPanelLayout>
   )
 }

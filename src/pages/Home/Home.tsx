@@ -188,13 +188,13 @@ export default function Home(): JSX.Element {
           }}
         >
           <div>
-            <img src="assets/location.svg" alt="location" />
+            <img src="/assets/location.svg" alt="location" />
           </div>
         </button>
       </UserLocationButtonBox>
       <ResetSearchBox>
         <ResetSearchButton type="button" onClick={setCurrentCenter}>
-          <img src="assets/reset.svg" alt="reset" />
+          <img src="/assets/reset.svg" alt="reset" />
           <p>현 지도에서 검색</p>
         </ResetSearchButton>
       </ResetSearchBox>
@@ -220,10 +220,13 @@ export default function Home(): JSX.Element {
               title={meetingName}
               onClick={handleSelectMarker}
               image={{
-                src: '/assets/mapMarker.svg',
+                src:
+                  meetingId === selectedMeeting?.meetingId
+                    ? '/assets/markerSelected.svg'
+                    : '/assets/marker.svg',
                 size: {
-                  width: meetingId === selectedMeeting?.meetingId ? 44 : 32,
-                  height: meetingId === selectedMeeting?.meetingId ? 44 : 32,
+                  width: meetingId === selectedMeeting?.meetingId ? 48 : 40,
+                  height: meetingId === selectedMeeting?.meetingId ? 48 : 40,
                 },
               }}
               position={{ lat: locationLat, lng: locationLng }}

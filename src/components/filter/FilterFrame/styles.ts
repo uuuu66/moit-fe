@@ -15,111 +15,169 @@ export const ModalBtn = styled.button`
 `
 
 export const Background = styled.div`
-  height: 100%;
-  max-height: 844px;
-  width: 24.375rem;
-  position: fixed;
-  left: 0;
-  top: 0;
+  width: 100%;
+  min-width: 360px;
+  max-width: 430px;
+  height: 932px;
   background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  left: 0;
+  bottom: 0;
   z-index: 99;
 `
 
-export const FilterContainer = styled.div`
-  width: 24.375rem;
+export const FilterContainer = styled.div<{ $isHigherPB: boolean }>`
+  width: 100%;
   position: absolute;
   bottom: 0px;
   left: 0;
-  border: 0.0625rem solid #d9d9d9;
-  border-radius: 1.25rem 1.25rem 0 0;
-  background-color: #ffffff;
+  border-radius: 20px 20px 0 0;
+  background-color: ${({ theme }) => theme.color.white};
 
   ul {
-    padding-left: 1.25rem;
-    padding-bottom: 7.5rem;
+    padding-bottom: ${({ $isHigherPB }) => ($isHigherPB ? '144px' : '84px')};
     overflow-y: auto;
-    max-height: 31.25rem; // TODO : 여기 손 봐야됨
+    max-height: 534px; // TODO : 여기 손 봐야됨
     li {
       cursor: pointer;
+      &:hover {
+        background-color: ${({ theme }) => theme.color.primary10};
+      }
 
       button {
         width: 100%;
-        padding: 0.90625rem 0;
+        padding: 18px 20px;
         display: flex;
         justify-content: space-between;
-        padding-right: 1.25rem;
+        line-height: 1.5;
+        ${({ theme }) => `
+        color: ${theme.color.black30};
+        font-size: ${theme.fontSize.medium};
+        fontWeight: ${theme.fontWeight.light};
+        `}
+        span {
+          min-height: 24px;
+        }
+
+        .selected {
+          color: ${({ theme }) => theme.color.primary100};
+        }
       }
     }
   }
 `
 
+export const ToggleButton = styled.div`
+  width: 100%;
+  padding: 15px 0 8px;
+  cursor: pointer;
+
+  hr {
+    margin: 0 auto;
+    width: 80px;
+    height: 5px;
+    border-radius: 8px;
+    background: ${({ theme }) => theme.color.black70};
+  }
+`
+
+export const ListBox = styled.div`
+  display: grid;
+  grid-template-columns: 132px auto;
+`
+
 export const FilterTitle = styled.h2`
-  font-size: 1.25rem;
-  margin: 1.25rem;
+  margin: 16px 20px;
+  ${({ theme }) => `
+  color: ${theme.color.black70};  
+  font-size: ${theme.fontSize.larger};
+  font-weight: ${theme.fontWeight.bold};
+  `}
 `
 export const BottomBox = styled.div`
-  width: 24.375rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.125rem;
+  width: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
-  background-color: #ffffff;
-  border-top: 0.0625rem solid #d9d9d9;
+  ${({ theme }) => `
+  border-top: 1px solid ${theme.color.black20};
+  background-color: ${theme.color.white};
+  `}
+`
+
+export const SelectedTagBox = styled.div`
+  width: 100%;
+  padding: 12px 10px;
+  display: inline-flex;
+  white-space: nowrap;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+
+  div {
+    border-radius: 40px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    ${({ theme }) => `
+    background: ${theme.color.black10};
+    color: ${theme.color.black70};
+    font-size: ${theme.fontSize.medium};
+    font-weight: ${theme.fontWeight.normal};
+    `}
+  }
+
+  button {
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 8px;
+    }
+  }
 `
 
 export const BottomBoxNav = styled.div`
   width: 100%;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
 
-export const SelectedCareer = styled.div`
-  width: 24.375rem;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
-  margin-bottom: 1rem;
-  margin-left: 1.25rem;
-  overflow-x: auto;
+  .reset-button {
+    margin: 0 20px;
+    display: inline-flex;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 
-  div {
-    background-color: lightblue;
-    border-radius: 2.5rem;
-    padding: 0.375rem 0.75rem;
+    p {
+      ${({ theme }) => `
+      color: ${theme.color.black30};
+      font-size: ${theme.fontSize.medium};
+    `};
+    }
   }
 `
 
-export const TechStackInput = styled.input`
-  width: 20.5rem;
-  height: 3rem;
-  margin: 0.625rem 1.25rem;
-  padding-left: 1rem;
-  border-radius: 2.5rem;
-  background-color: #e9e9e9;
-`
-export const ListBox = styled.div`
-  display: flex;
-`
+export const SearchInputBox = styled.div`
+  width: 100%;
+  padding: 10px 20px;
 
-export const SelectedStack = styled.div`
-  width: 24.375rem;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
-  margin-bottom: 1rem;
-  margin-left: 1.25rem;
-  overflow-x: auto;
-
-  div {
-    background-color: lightblue;
-    border-radius: 2.5rem;
-    padding: 0.375rem 0.75rem;
+  input {
+    border-radius: 40px;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    width: 100%;
+    ${({ theme }) => `
+    color: ${theme.color.black40};
+    font-size: ${theme.fontSize.small};
+    background: ${theme.color.black10};
+    `}
   }
 `

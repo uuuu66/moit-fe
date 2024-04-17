@@ -4,10 +4,13 @@ import ModalPortal from './ModalPortal'
 import { KAKAO_OAUTH, NAVER_OAUTH } from '@/constants/auth'
 import {
   ButtonBox,
+  CloseBox,
   ContentsBox,
   LoginButton,
   LoginModalLayout,
 } from '../meeting/AddMeetingButton/styles'
+import CommonButton from '../common/Button/CommonButton'
+import { theme } from '@/constants/theme'
 
 interface LoginModalProps {
   handleCloseModal: () => void
@@ -28,18 +31,45 @@ export default function LoginModal({
             e.stopPropagation()
           }}
         >
+          <CloseBox>
+            <button type="button" onClick={handleCloseModal}>
+              <img src="/assets/cancel.svg" alt="cancel" />
+            </button>
+          </CloseBox>
           <ContentsBox>
+            <img src="/assets/logo.svg" alt="logo" />
             <h2>MOIT에 참가하려면 로그인 해주세요</h2>
-            <p>개발 모임 찾을 땐 MOIT</p>
+            <div>
+              <p>5초면 가입 완료!</p>
+              <p>더 편하고 빠르게 MOIT과 만나봐요</p>
+            </div>
           </ContentsBox>
           <ButtonBox>
-            <Link to={kakaoLoginURL}>
-              <LoginButton>카카오로 시작하기</LoginButton>
+            <Link to={kakaoLoginURL} style={{ textDecoration: 'none' }}>
+              <CommonButton
+                size="large"
+                style={{
+                  width: '100%',
+                  background: theme.color.yellow,
+                  color: theme.color.black100,
+                }}
+              >
+                카카오로 시작하기
+              </CommonButton>
             </Link>
-            <Link to={naverLoginURL}>
-              <LoginButton>네이버로 시작하기</LoginButton>
+            <Link to={naverLoginURL} style={{ textDecoration: 'none' }}>
+              <CommonButton
+                size="large"
+                style={{
+                  width: '100%',
+                  background: theme.color.green,
+                }}
+              >
+                네이버로 시작하기
+              </CommonButton>
             </Link>
           </ButtonBox>
+          <hr />
         </LoginModalLayout>
       </Background>
     </ModalPortal>

@@ -5,16 +5,18 @@ interface ButtonProps {
 }
 
 export const Btn = styled.button<ButtonProps>`
-  width: ${(props) => (props.size === 'small' ? '15.3125rem' : '21.875rem')};
+  width: ${(props) => (props.size === 'small' ? '245px' : '350px')};
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000000;
-  color: #ffffff;
-  border-radius: 5rem;
-  padding: 1rem 0;
+  ${({ theme }) => `
+  color: ${theme.color.white};
+  background-color: ${theme.color.black100};
+  `};
+  border-radius: 40px;
+  padding: 16px 0;
 `
 export const BtnSpan = styled.span`
-  font-size: 1rem;
+  font-size: ${({ theme }) => theme.fontSize.medium};
   font-weight: 600;
 `
