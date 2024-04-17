@@ -93,3 +93,63 @@ export const TagBox = styled.div`
     `}
   }
 `
+
+export const HomeSelectedMeetingCardLayout = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: ${({ theme }) => theme.color.white};
+  position: relative;
+
+  hr {
+    width: 100%;
+    border: 1px solid ${({ theme }) => theme.color.black10};
+  }
+`
+
+export const SelectedCardTitleBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h3 {
+    width: 286px;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    ${({ theme }) => `
+    color: ${theme.color.black80};
+    font-size: ${theme.fontSize.large};
+    font-weight: ${theme.fontWeight.bold};
+    `}
+  }
+
+  .title-flex-box {
+    display: flex;
+    gap: 12px;
+
+    p {
+      color: ${({ theme }) => theme.color.black60};
+    }
+  }
+`
+
+export const SelectedCardContentsBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .contents-flex-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  strong {
+    /* min-width: 50px; */
+    margin-right: 8px;
+    font-weight: ${({ theme }) => theme.fontWeight.normal};
+  }
+`
