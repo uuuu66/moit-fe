@@ -21,7 +21,7 @@ export const SearchBox = styled.div`
 
 export const InputBox = styled.div`
   width: 100%;
-  background-color: #e9e9e9;
+  background-color: ${({ theme }) => theme.color.bg2};
   display: flex;
   padding: 14px 20px;
   border-radius: 8px;
@@ -107,6 +107,7 @@ export const EmptyTextBox = styled.div`
 `
 
 export const CardBox = styled.div`
+  height: 100%;
   padding: 20px;
   background: ${({ theme }) => theme.color.pg1};
   display: flex;
