@@ -3,6 +3,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
+import { jwtDecode } from 'jwt-decode'
 import useMap from '@/hooks/useMap'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
 import {
@@ -23,6 +24,9 @@ import {
 import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { theme } from '@/constants/theme'
+import LoadingPage from '@/shared/LoadingPage'
+import ErrorPage from '@/shared/ErrorPage'
+import { getLocalStorageItem } from '@/util/localStorage'
 
 function MeetingDetail(): JSX.Element {
   useMap()
@@ -30,7 +34,7 @@ function MeetingDetail(): JSX.Element {
   const navi = useNavigate()
   const { meetingId } = useParams()
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['meetingListDetail', meetingId],
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
@@ -70,6 +74,12 @@ function MeetingDetail(): JSX.Element {
   }
 
   const isFull = data?.totalCount === data?.registeredCount
+
+  const token: string = getLocalStorageItem('accessToken')
+  const decodedToken = token != null ? jwtDecode(token) : ''
+
+  if (isLoading) return <LoadingPage name="페이지를" />
+  if (isError) return <ErrorPage />
 
   return (
     <DetailWholeContainer>
@@ -172,21 +182,23 @@ function MeetingDetail(): JSX.Element {
         </Box1>
         {/* 5 */}
       </DetailInfoContainer>
-      <DetailButtonContainer>
-        {isFull ? (
-          <CommonButton size="large">모집이 마감되었습니다</CommonButton>
-        ) : data?.join === true ? (
-          <CommonButton
-            size="large"
-            handleClick={withdrawMeetingClick}
-            style={{ backgroundColor: `${theme.color.primary100}` }}
-          >
-            모임 탈퇴하기
-          </CommonButton>
-        ) : (
-          <JoinMeetingButton handleJoinMeeting={handleMeetingSubClick} />
-        )}
-      </DetailButtonContainer>
+      {decodedToken.sub !== data?.creatorEmail && (
+        <DetailButtonContainer>
+          {data?.join === true ? (
+            <CommonButton
+              size="large"
+              handleClick={withdrawMeetingClick}
+              style={{ backgroundColor: `${theme.color.primary100}` }}
+            >
+              모임 탈퇴하기
+            </CommonButton>
+          ) : isFull ? (
+            <CommonButton size="large">모집이 마감되었습니다</CommonButton>
+          ) : (
+            <JoinMeetingButton handleJoinMeeting={handleMeetingSubClick} />
+          )}
+        </DetailButtonContainer>
+      )}
     </DetailWholeContainer>
   )
 }

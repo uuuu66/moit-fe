@@ -9,6 +9,10 @@ export const WholeContainer = styled.div`
   font-size: ${theme.fontSize.medium};
   background-color: ${theme.color.bg3};
   color: ${theme.color.primary100};
+
+  .info {
+    width: 100%;
+  }
 `
 
 export const InfoHeader = styled.header`

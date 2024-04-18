@@ -20,6 +20,8 @@ import Career from '@/components/filter/Career/Career'
 import TechStack from '@/components/filter/TechStack/TechStack'
 import Region from '@/components/filter/Region/Region'
 import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
+import LoadingPage from '@/shared/LoadingPage'
+import ErrorPage from '@/shared/ErrorPage'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -58,7 +60,7 @@ export default function Home(): JSX.Element {
   }
 
   // 좌표에 따라 데이터 패칭
-  const { data, fetchNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: meetingKeys.filter({ ...center, ...filters }),
     queryFn: async ({ pageParam }) => {
       return await getMeetings({ center, filters, pageParam })
@@ -152,6 +154,9 @@ export default function Home(): JSX.Element {
     )
     setSelectedMeeting(target[0])
   }
+
+  if (isLoading) return <LoadingPage name="페이지를" />
+  if (isError) return <ErrorPage />
 
   return (
     <HomeLayout>

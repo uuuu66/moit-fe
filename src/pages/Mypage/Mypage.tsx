@@ -22,12 +22,14 @@ import { getMyMeetings, getProfile } from '@/apis/user'
 import { getLocalStorageItem } from '@/util/localStorage'
 import { type MyMeeting } from '@/type/user'
 import { CardIconText } from '@/components/meeting/MeetingCard/styles'
+import LoadingPage from '../../shared/LoadingPage'
+import ErrorPage from '@/shared/ErrorPage'
 
 export default function Mypage(): JSX.Element {
   const [onTotalOpen, setOnTotalOpen] = useState(false)
   const navigate = useNavigate()
 
-  const { data: profileInfo } = useQuery({
+  const { data: profileInfo, isError } = useQuery({
     queryKey: userKeys.profile,
     queryFn: async () => await getProfile(),
   })
@@ -37,7 +39,7 @@ export default function Mypage(): JSX.Element {
     queryFn: async () => await getMyMeetings(),
   })
 
-  if (profileInfo == null) return <div>로딩중</div>
+  if (profileInfo == null) return <LoadingPage name="페이지를" />
 
   const getCurrentMeetings = (): MyMeeting[] => {
     if (meetings == null || meetings?.length === 0) return []
@@ -45,6 +47,8 @@ export default function Mypage(): JSX.Element {
   }
   const token: string = getLocalStorageItem('accessToken')
   const { enterMeeting, studyTime, heldMeeting } = profileInfo
+
+  if (isError) return <ErrorPage />
 
   return (
     <MypageLayout>

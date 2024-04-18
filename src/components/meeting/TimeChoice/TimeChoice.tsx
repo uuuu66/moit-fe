@@ -40,6 +40,7 @@ function TimeChoice({
         justifyContent: 'space-between',
         gap: '1rem',
         marginTop: '1rem',
+        width: '100%',
       }}
     >
       <TimeBox>
@@ -99,7 +100,7 @@ function TimeChoice({
 export default TimeChoice
 
 export const TimeBox = styled(InputBox)`
-  width: 100%;
+  width: 48%;
   div {
     display: flex;
     align-items: center;
