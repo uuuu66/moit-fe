@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import Footer from '@/components/Footer/Footer'
 import Header from '@/components/Header/Header'
+import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
+import Onboarding from './Onboarding'
 
 export default function Layout(): JSX.Element {
   const [screenHeight, setScreenHeight] = useState(0)
@@ -11,18 +13,32 @@ export default function Layout(): JSX.Element {
     setScreenHeight(window.innerHeight)
   }, [])
 
+  const isFirstStatus: boolean = getLocalStorageItem('isFirst')
+  const [isFirstState, setIsFirstState] = useState<boolean>(
+    isFirstStatus === null
+  )
+
   return (
     <ScreenStyles $screenHeight={screenHeight}>
-      <LayoutStyles $screenHeight={screenHeight}>
-        <ContentsStyles>
-          <Header />
-          <ScrollBox>
-            <Outlet />
-          </ScrollBox>
-        </ContentsStyles>
-        <Footer />
-        <div id="modal" />
-      </LayoutStyles>
+      {isFirstState ? (
+        <Onboarding
+          handleClick={() => {
+            setLocalStorageItem('isFirst', false)
+            setIsFirstState(!isFirstState)
+          }}
+        />
+      ) : (
+        <LayoutStyles $screenHeight={screenHeight}>
+          <ContentsStyles>
+            <Header />
+            <ScrollBox>
+              <Outlet />
+            </ScrollBox>
+          </ContentsStyles>
+          <Footer />
+          <div id="modal" />
+        </LayoutStyles>
+      )}
       <TextBox>
         <h1>폰트 테스트 500</h1>
         <h3>폰트 테스트 500</h3>
