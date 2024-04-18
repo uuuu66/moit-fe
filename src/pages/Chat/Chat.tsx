@@ -28,7 +28,8 @@ function Chat(): JSX.Element {
 
   const queryClient = useQueryClient()
   const stompClient = useRef<CompatClient | null>(null)
-  const test = useRef<HTMLInputElement | null>(null)
+  const userMessage = useRef<HTMLInputElement | null>(null)
+  const [chats, setChats] = useState<ChatMessage[]>([])
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | null>(null)
 
   const socket = new SockJS(`${import.meta.env.VITE_SOCKET_URL}`)
@@ -91,7 +92,13 @@ function Chat(): JSX.Element {
     stompClient.current = Stomp.over(socket)
 
     stompClient.current?.connect(headers, (): void => {
-      stompClient.current?.subscribe(`/topic/rooms/${meetingId}/chat`, () => {})
+      stompClient.current?.subscribe(
+        `/topic/rooms/${meetingId}/chat`,
+        (message) => {
+          const newMessage = JSON.parse(message.body)
+          setChats((prev) => [...prev, newMessage])
+        }
+      )
     })
 
     return () => {
@@ -104,17 +111,17 @@ function Chat(): JSX.Element {
 
   // TODO: send 개선
   const sendChatMessage = (): void => {
-    const chatRequest = { content: test.current?.value }
-    if (test.current?.value === '') return
+    const chatRequest = { content: userMessage.current?.value }
+    if (userMessage.current?.value === '') return
+
     stompClient.current?.send(
       `/app/api/meetings/${meetingId}/chat`,
       headers,
       JSON.stringify(chatRequest)
     )
-    if (test.current !== null) {
-      test.current.value = ''
+    if (userMessage.current !== null) {
+      userMessage.current.value = ''
     }
-    void queryClient.invalidateQueries({ queryKey: ['getAllChatMessages'] })
   }
 
   // Enter 눌렀을 때, 메시지 입력
@@ -134,7 +141,8 @@ function Chat(): JSX.Element {
 
   useEffect(() => {
     scrollToBottom()
-  }, [data])
+    void queryClient.invalidateQueries({ queryKey: ['getAllChatMessages'] })
+  }, [data, chats, queryClient])
 
   useEffect(() => {
     if (prevScrollHeight !== null && scrollBoxRef.current !== null) {
@@ -144,6 +152,7 @@ function Chat(): JSX.Element {
     } else {
       scrollToBottom()
     }
+    void queryClient.invalidateQueries({ queryKey: ['getAllChatMessages'] })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatDatas])
 
@@ -176,7 +185,7 @@ function Chat(): JSX.Element {
       <MsgInputBox>
         <input
           type="text"
-          ref={test}
+          ref={userMessage}
           onKeyUp={(e) => {
             handleKeyEnter(e)
           }}
