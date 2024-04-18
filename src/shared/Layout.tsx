@@ -23,7 +23,12 @@ export default function Layout(): JSX.Element {
         <Footer />
         <div id="modal" />
       </LayoutStyles>
-      <TextBox>소개글</TextBox>
+      <TextBox>
+        <h1>폰트 테스트 500</h1>
+        <h3>폰트 테스트 500</h3>
+        <h4>폰트 테스트 600</h4>
+        <h5>폰트 테스트 700</h5>
+      </TextBox>
     </ScreenStyles>
   )
 }
@@ -43,6 +48,23 @@ const ScreenStyles = styled.div<{ $screenHeight: number }>`
 
 const TextBox = styled.div`
   display: none;
+  h1 {
+    font-size: 24px;
+    font-weight: 500;
+    font-family: serif;
+  }
+  h3 {
+    font-size: 24px;
+    font-weight: 500;
+  }
+  h4 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  h5 {
+    font-size: 24px;
+    font-weight: 700;
+  }
 
   @media screen and (min-width: 995px) {
     display: unset;
