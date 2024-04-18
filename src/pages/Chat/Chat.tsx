@@ -20,6 +20,8 @@ import {
 import { getLocalStorageItem } from '@/util/localStorage'
 import { getChatMsg } from '@/apis/meeting'
 import { type ChatMessage } from '@/type/chat'
+import LoadingPage from '@/shared/LoadingPage'
+import ErrorPage from '@/shared/ErrorPage'
 
 function Chat(): JSX.Element {
   const { meetingId } = useParams()
@@ -40,7 +42,7 @@ function Chat(): JSX.Element {
   // TODO
   const scrollBoxRef = useRef<HTMLDivElement>(null)
 
-  const { data, fetchNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: ['getAllChatMessages'],
     queryFn: async ({ pageParam }) => {
       return await getChatMsg({ meetingId: Number(meetingId), pageParam })
@@ -144,6 +146,9 @@ function Chat(): JSX.Element {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatDatas])
+
+  if (isLoading) return <LoadingPage name="페이지를" />
+  if (isError) return <ErrorPage />
 
   return (
     <ChatContainer>

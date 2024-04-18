@@ -190,7 +190,7 @@ function RegisterMeeting(): JSX.Element {
         <h1>모임을 소개해 주세요!</h1>
         <span>흩어져 있던 개발자들을 불러 봐요</span>
       </RegisterTitle>
-      <div>
+      <div className="info">
         <InfoContainer>
           <InfoTitle>모임명을 정해 볼까요?</InfoTitle>
           <span>알아보기 쉽게 한 줄로 작성해 주세요</span>

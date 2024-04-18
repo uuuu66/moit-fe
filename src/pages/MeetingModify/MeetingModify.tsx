@@ -27,13 +27,15 @@ import {
   DisabledTimeBox,
   DisabledTimeBoxContainer,
 } from './styles'
+import LoadingPage from '@/shared/LoadingPage'
+import ErrorPage from '@/shared/ErrorPage'
 
 function MeetingModify(): JSX.Element {
   useMap()
   const navi = useNavigate()
   const { meetingId } = useParams()
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['meetingListDetail', meetingId],
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
@@ -178,6 +180,9 @@ function MeetingModify(): JSX.Element {
   const handleMeetingModifySubmit = (): void => {
     editMutation.mutate()
   }
+
+  if (isLoading) return <LoadingPage name="페이지를" />
+  if (isError) return <ErrorPage />
 
   return (
     <WholeContainer>

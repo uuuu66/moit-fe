@@ -22,6 +22,8 @@ import {
   TextBox,
   TagBox,
 } from '@/components/meeting/MeetingCard/styles'
+import LoadingPage from '@/shared/LoadingPage'
+import ErrorPage from '@/shared/ErrorPage'
 
 export default function Search(): JSX.Element {
   const [inputText, setInputText] = useState('')
@@ -32,7 +34,7 @@ export default function Search(): JSX.Element {
   const [onRecentsToggle, setOnRecentsToggle] = useState(true)
   const navigate = useNavigate()
 
-  const { data } = useInfiniteQuery({
+  const { data, isLoading, isError } = useInfiniteQuery({
     queryKey: meetingKeys.search(keyword),
     queryFn: async ({ pageParam }) => {
       return await getMeetingsBySearch({ text: keyword, pageParam })
@@ -74,6 +76,9 @@ export default function Search(): JSX.Element {
     }
     setRecents([text, ...recents.filter((word) => word !== text)].slice(0, 10))
   }
+
+  if (isLoading) return <LoadingPage name="페이지를" />
+  if (isError) return <ErrorPage />
 
   return (
     <SearchLayout>
