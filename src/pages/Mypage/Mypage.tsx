@@ -43,7 +43,7 @@ export default function Mypage(): JSX.Element {
 
   const getCurrentMeetings = (): MyMeeting[] => {
     if (meetings == null || meetings?.length === 0) return []
-    return onTotalOpen ? meetings : [meetings[0], meetings[1]]
+    return onTotalOpen ? meetings : meetings.slice(0, 2)
   }
   const token: string = getLocalStorageItem('accessToken')
   const { enterMeeting, studyTime, heldMeeting } = profileInfo
@@ -105,7 +105,7 @@ export default function Mypage(): JSX.Element {
               setOnTotalOpen(!onTotalOpen)
             }}
           >
-            {meetings?.length !== 0 && (
+            {meetings != null && meetings.length > 2 && (
               <span>{onTotalOpen ? '목록 접기' : '모두보기'}</span>
             )}
           </button>
