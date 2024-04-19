@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetingsBySearch } from '@/apis/meeting'
 import {
@@ -27,8 +27,14 @@ import ErrorPage from '@/shared/ErrorPage'
 import useScrollEnd from '@/hooks/useScrollEnd'
 
 export default function Search(): JSX.Element {
-  const [inputText, setInputText] = useState('')
-  const [keyword, setKeyword] = useState('')
+  const [queries] = useSearchParams()
+  const keyword = queries.get('keyword') ?? ''
+  const [inputText, setInputText] = useState(keyword ?? '')
+
+  useEffect(() => {
+    setInputText(keyword)
+  }, [keyword])
+
   const [recents, setRecents] = useState<string[]>(
     (getLocalStorageItem('recents') as string[]) ?? []
   )
@@ -76,8 +82,8 @@ export default function Search(): JSX.Element {
       window.alert('검색어를 입력해 주세요.')
       return
     }
-    setKeyword(inputText)
     handleRecents(inputText)
+    navigate(`?keyword=${inputText}`)
   }
 
   const handleRecents = (text: string): void => {
@@ -92,6 +98,11 @@ export default function Search(): JSX.Element {
       setLocalStorageItem('recents', currentRecents)
     }
     setRecents([text, ...recents.filter((word) => word !== text)].slice(0, 10))
+  }
+
+  const handleCickTag = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    const targetValue = e.currentTarget.value
+    navigate(`?keyword=${targetValue}`)
   }
 
   if (isLoading) return <LoadingPage name="페이지를" />
@@ -151,10 +162,7 @@ export default function Search(): JSX.Element {
                     // eslint-disable-next-line react/no-array-index-key
                     key={`${word}_${index}`}
                     value={word}
-                    onClick={(e) => {
-                      setInputText(e.currentTarget.value)
-                      setKeyword(e.currentTarget.value)
-                    }}
+                    onClick={handleCickTag}
                   >
                     {word}
                   </button>
