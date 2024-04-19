@@ -18,7 +18,7 @@ import {
   LogoutBox,
 } from './styles'
 import { userKeys } from '@/constants/queryKeys'
-import { getMyMeetings, getProfile } from '@/apis/user'
+import { getMyMeetings, getProfile, logout } from '@/apis/user'
 import { getLocalStorageItem } from '@/util/localStorage'
 import { type MyMeeting } from '@/type/user'
 import { CardIconText } from '@/components/meeting/MeetingCard/styles'
@@ -137,7 +137,15 @@ export default function Mypage(): JSX.Element {
           )}
         </MeetingCardBox>
       </MeetingsBox>
-      <LogoutBox>
+      <LogoutBox
+        onClick={(): void => {
+          logout()
+            .catch(() => {})
+            .finally(() => {
+              navigate('/')
+            })
+        }}
+      >
         <div className="logout-flex-box">
           <img src="/assets/logout.svg" alt="logout" />
           <p>로그아웃</p>
