@@ -1,6 +1,7 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { throttle } from 'lodash'
 import useMap from '@/hooks/useMap'
 import {
   HomeLayout,
@@ -79,9 +80,9 @@ export default function Home(): JSX.Element {
     return list
   }, [data])
 
-  const handleFetchPages = (): void => {
+  const handleFetchPages = throttle(() => {
     void fetchNextPage()
-  }
+  }, 3000)
 
   // 조회한 마커가 모두 보이도록 지도 위치 조정
   useEffect(() => {

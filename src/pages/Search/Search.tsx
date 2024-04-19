@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetingsBySearch } from '@/apis/meeting'
@@ -24,6 +24,7 @@ import {
 } from '@/components/meeting/MeetingCard/styles'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
+import useScrollEnd from '@/hooks/useScrollEnd'
 
 export default function Search(): JSX.Element {
   const [inputText, setInputText] = useState('')
@@ -32,9 +33,11 @@ export default function Search(): JSX.Element {
     (getLocalStorageItem('recents') as string[]) ?? []
   )
   const [onRecentsToggle, setOnRecentsToggle] = useState(true)
+  const scrollBoxRef = useRef<HTMLDivElement>(null)
+  const { handleScroll } = useScrollEnd()
   const navigate = useNavigate()
 
-  const { data, isLoading, isError } = useInfiniteQuery({
+  const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: meetingKeys.search(keyword),
     queryFn: async ({ pageParam }) => {
       return await getMeetingsBySearch({ text: keyword, pageParam })
@@ -46,6 +49,20 @@ export default function Search(): JSX.Element {
     initialPageParam: 1,
     enabled: keyword !== '',
   })
+
+  useEffect(() => {
+    const handleFetchPages = (): void => {
+      void fetchNextPage()
+    }
+    const scrollBox = scrollBoxRef?.current
+    const handleScrollEvent = (): void => {
+      handleScroll(scrollBox, handleFetchPages)
+    }
+    scrollBox?.addEventListener('scroll', handleScrollEvent)
+    return () => {
+      scrollBox?.removeEventListener('scroll', handleScrollEvent)
+    }
+  }, [fetchNextPage, handleScroll])
 
   const meetings = useMemo(() => {
     let list: GetMeeting[] = []
@@ -100,6 +117,9 @@ export default function Search(): JSX.Element {
               onChange={(e) => {
                 setInputText(e.currentTarget.value)
               }}
+              onKeyUp={(e) => {
+                e.key === 'Enter' && handleSearch()
+              }}
             />
             <button type="button" onClick={handleSearch}>
               <img src="/assets/search.svg" alt="icon" />
@@ -149,7 +169,7 @@ export default function Search(): JSX.Element {
         </ToggleBox>
       </SearchBox>
       {data != null && (
-        <CardBox>
+        <CardBox ref={scrollBoxRef}>
           {meetings.length === 0 ? (
             <EmptyTextBox>
               <img src="/assets/warning.svg" alt="warning" />

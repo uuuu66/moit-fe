@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { throttle } from 'lodash'
 import { useNavigate } from 'react-router-dom'
 import { type GetMeeting } from '@/type/meeting'
 import {
@@ -10,6 +9,7 @@ import {
   ToggleBox,
 } from './styles'
 import HomeMeetingsCard from '../MeetingCard/HomeMeetingsCard'
+import useScrollEnd from '@/hooks/useScrollEnd'
 
 interface HomeMeetingsPanelProps {
   meetings: GetMeeting[]
@@ -24,25 +24,18 @@ export default function HomeMeetingsPanel({
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
 
-  const handleScroll: () => void = throttle(() => {
-    if (scrollBoxRef?.current === null) return
-    const scrollBox = scrollBoxRef.current
-
-    if (
-      scrollBox.scrollHeight - 50 <=
-      scrollBox.scrollTop + scrollBox.clientHeight
-    ) {
-      handleScrollEnd()
-    }
-  }, 500)
+  const { handleScroll } = useScrollEnd()
 
   useEffect(() => {
     const scrollBox = scrollBoxRef?.current
-    scrollBox?.addEventListener('scroll', handleScroll)
-    return () => {
-      scrollBox?.removeEventListener('scroll', handleScroll)
+    const handleScrollEvent = (): void => {
+      handleScroll(scrollBox, handleScrollEnd)
     }
-  }, [handleScroll, onListOpen])
+    scrollBox?.addEventListener('scroll', handleScrollEvent)
+    return () => {
+      scrollBox?.removeEventListener('scroll', handleScrollEvent)
+    }
+  }, [onListOpen, handleScroll, handleScrollEnd])
 
   return (
     <HomeMeetingsPanelLayout>
