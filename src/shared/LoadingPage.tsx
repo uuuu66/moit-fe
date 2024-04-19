@@ -1,9 +1,13 @@
 import styled from 'styled-components'
 import { theme } from '@/constants/theme'
 
-function LoadingPage({ name }: { name: string }): JSX.Element {
+interface LoadingPageProps {
+  name: string
+  isFade?: boolean
+}
+function LoadingPage({ name, isFade }: LoadingPageProps): JSX.Element {
   return (
-    <Container>
+    <Container $isFade={!!(isFade ?? false)}>
       <img src="/assets/logo.svg" alt="logo" />
       <div className="change">{name}</div>
       <div>불러오는 중...</div>
@@ -15,11 +19,22 @@ function LoadingPage({ name }: { name: string }): JSX.Element {
   )
 }
 
+LoadingPage.defaultProps = {
+  isFade: false,
+}
+
 export default LoadingPage
 
-export const Container = styled.div`
+export const Container = styled.div<{ $isFade: boolean }>`
+  width: 100%;
+  bottom: 0;
+  position: absolute;
+  z-index: 99;
   height: 100%;
-  background: linear-gradient(rgba(102, 122, 228, 0.15) 5%, white 30%);
+  background: linear-gradient(
+    rgba(102, 122, 228, 0.15) 5%,
+    ${({ $isFade }) => ($isFade ? 'rgba(255, 255, 255, 0.6)' : '#fff')} 30%
+  );
   display: flex;
   flex-direction: column;
   align-items: center;

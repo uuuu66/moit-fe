@@ -13,7 +13,6 @@ import {
 import { type GetMeeting, type Center } from '@/type/meeting'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
-import getUserLocation from '@/util/getUserLocation'
 import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
 import { type FiltersKey, type Filters } from '@/type/filter'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
@@ -23,6 +22,7 @@ import Region from '@/components/filter/Region/Region'
 import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
+import useUserLocation from '@/hooks/useUserLocation'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -39,13 +39,14 @@ export default function Home(): JSX.Element {
     region: getLocalStorageItem('region') ?? [],
   })
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
+  const { setUserLocation, isLoading: isLocateLoading } = useUserLocation()
 
   useEffect(() => {
     // 첫 접속 시: 유저 위치 조회 후 setCenter
     const locationValue = getLocalStorageItem('center')
     if (locationValue != null) return
-    getUserLocation(handleUserFirstLocation)
-  }, [])
+    setUserLocation(handleUserFirstLocation)
+  }, [setUserLocation])
 
   // 센터상태 변경 시 값을 로컬스토리지에 저장
   useEffect(() => {
@@ -156,11 +157,10 @@ export default function Home(): JSX.Element {
     setSelectedMeeting(target[0])
   }
 
-  if (isLoading) return <LoadingPage name="페이지를" />
   if (isError) return <ErrorPage />
-
   return (
     <HomeLayout>
+      {(isLoading || isLocateLoading) && <LoadingPage name="페이지를" isFade />}
       <FilterBox>
         <div className="scroll-box">
           <Career
@@ -190,7 +190,7 @@ export default function Home(): JSX.Element {
         <button
           type="button"
           onClick={() => {
-            getUserLocation(resetMaptoUserLocation)
+            setUserLocation(resetMaptoUserLocation)
           }}
         >
           <div>
