@@ -69,9 +69,11 @@ function FindLocation({ info, setInfo, locationAddress }: Props): JSX.Element {
       <label htmlFor="meetingPlace">모임 장소</label>
       <button type="button" id="meetingPlace" onClick={handleButtonClick}>
         <span>
-          {locationAddress !== ''
-            ? locationAddress
-            : '장소 이름이나 주소를 검색해 보세요'}
+          {locationAddress !== '' ? (
+            <span className="address">{locationAddress}</span>
+          ) : (
+            '장소 이름이나 주소를 검색해 보세요'
+          )}
         </span>
         <img src="/assets/search.svg" alt="search" />
       </button>
@@ -100,5 +102,9 @@ export const LocationContainer = styled.div`
     span {
       font-size: ${theme.fontSize.medium};
     }
+  }
+  .address {
+    color: ${theme.color.primary100};
+    font-weight: ${theme.fontWeight.normal};
   }
 `
