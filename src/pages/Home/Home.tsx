@@ -23,6 +23,7 @@ import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/Hom
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import useUserLocation from '@/hooks/useUserLocation'
+import useScreenSize from '@/hooks/useScreenSize'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -40,6 +41,7 @@ export default function Home(): JSX.Element {
   })
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
   const { setUserLocation, isLoading: isLocateLoading } = useUserLocation()
+  const { screenHeight } = useScreenSize()
 
   useEffect(() => {
     // 첫 접속 시: 유저 위치 조회 후 setCenter
@@ -217,7 +219,7 @@ export default function Home(): JSX.Element {
         }}
         style={{
           width: '100%',
-          height: '820px',
+          height: screenHeight < 932 ? `${screenHeight - 114}px` : '820px',
         }}
         maxLevel={3}
         minLevel={13}

@@ -10,6 +10,7 @@ import {
 } from './styles'
 import HomeMeetingsCard from '../MeetingCard/HomeMeetingsCard'
 import useScrollEnd from '@/hooks/useScrollEnd'
+import useScreenSize from '@/hooks/useScreenSize'
 
 interface HomeMeetingsPanelProps {
   meetings: GetMeeting[]
@@ -23,6 +24,7 @@ export default function HomeMeetingsPanel({
   const [onListOpen, setOnListOpen] = useState(false)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
+  const { screenHeight } = useScreenSize()
 
   const { handleScroll } = useScrollEnd()
 
@@ -57,7 +59,7 @@ export default function HomeMeetingsPanel({
               setOnListOpen(!onListOpen)
             }}
           />
-          <MeetingsBox ref={scrollBoxRef}>
+          <MeetingsBox $isSmall={screenHeight < 800} ref={scrollBoxRef}>
             <CardBox>
               {meetings.map(
                 ({

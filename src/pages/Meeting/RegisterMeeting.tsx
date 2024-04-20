@@ -156,8 +156,6 @@ function RegisterMeeting(): JSX.Element {
     },
   })
 
-  console.log('info', info)
-
   const isBlank =
     info.meetingName === '' ||
     info.meetingDate === null ||

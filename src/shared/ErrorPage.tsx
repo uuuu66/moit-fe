@@ -8,7 +8,7 @@ function ErrorPage(): JSX.Element {
     navi('/')
   }
   return (
-    <Container>
+    <Container $isFade={false}>
       <img src="/assets/errorLogo.svg" alt="logo" />
       <div>페이지를</div>
       <div>불러올 수 없습니다</div>
