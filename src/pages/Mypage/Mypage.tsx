@@ -16,9 +16,10 @@ import {
   TitleBox,
   EmptyTextBox,
   LogoutBox,
+  SectionLine,
 } from './styles'
 import { userKeys } from '@/constants/queryKeys'
-import { getMyMeetings, getProfile } from '@/apis/user'
+import { getMyMeetings, getProfile, logout } from '@/apis/user'
 import { getLocalStorageItem } from '@/util/localStorage'
 import { type MyMeeting } from '@/type/user'
 import { CardIconText } from '@/components/meeting/MeetingCard/styles'
@@ -43,7 +44,7 @@ export default function Mypage(): JSX.Element {
 
   const getCurrentMeetings = (): MyMeeting[] => {
     if (meetings == null || meetings?.length === 0) return []
-    return onTotalOpen ? meetings : [meetings[0], meetings[1]]
+    return onTotalOpen ? meetings : meetings.slice(0, 2)
   }
   const token: string = getLocalStorageItem('accessToken')
   const { enterMeeting, studyTime, heldMeeting } = profileInfo
@@ -94,6 +95,7 @@ export default function Mypage(): JSX.Element {
           </InfoCard>
         </InfoCardBox>
       </ProfileBox>
+      <SectionLine />
       <MeetingsBox>
         <ButtonBox>
           <div className="button-flex-box">
@@ -105,30 +107,40 @@ export default function Mypage(): JSX.Element {
               setOnTotalOpen(!onTotalOpen)
             }}
           >
-            {meetings?.length !== 0 && (
-              <span>{onTotalOpen ? '목록 접기' : '모두보기'}</span>
+            {meetings != null && meetings.length > 2 && (
+              <span>{onTotalOpen ? '목록 접기' : '더보기'}</span>
             )}
           </button>
         </ButtonBox>
         <MeetingCardBox>
           {getCurrentMeetings().length !== 0 ? (
-            getCurrentMeetings().map(({ meetingId, meetingName }) => (
-              <MeetingCard
-                key={meetingId}
-                onClick={() => {
-                  navigate(`/meetings/${meetingId}/chats`)
-                }}
-              >
-                <TitleBox>
-                  <h2>{meetingName}</h2>
-                  <img src="/assets/enter.svg" alt="enter" />
-                </TitleBox>
-                <CardIconText>
-                  <img src="/assets/calendar.svg" alt="calendar" />
-                  <p>데이터 받아서 수정 필요</p>
-                </CardIconText>
-              </MeetingCard>
-            ))
+            getCurrentMeetings().map(
+              ({
+                meetingId,
+                meetingName,
+                meetingDate,
+                meetingStartTime,
+                meetingEndTime,
+              }) => (
+                <MeetingCard
+                  key={meetingId}
+                  onClick={() => {
+                    navigate(`/meetings/${meetingId}/chats`)
+                  }}
+                >
+                  <span>참여중</span>
+                  <TitleBox>
+                    <h2>{meetingName}</h2>
+                    <img src="/assets/enter.svg" alt="enter" />
+                  </TitleBox>
+                  <hr />
+                  <CardIconText>
+                    <img src="/assets/calendar.svg" alt="calendar" />
+                    <p>{`${meetingDate} | ${meetingStartTime} - ${meetingEndTime}`}</p>
+                  </CardIconText>
+                </MeetingCard>
+              )
+            )
           ) : (
             <EmptyTextBox>
               <img src="/assets/warning.svg" alt="warning" />
@@ -137,7 +149,16 @@ export default function Mypage(): JSX.Element {
           )}
         </MeetingCardBox>
       </MeetingsBox>
-      <LogoutBox>
+      <SectionLine />
+      <LogoutBox
+        onClick={(): void => {
+          logout()
+            .catch(() => {})
+            .finally(() => {
+              navigate('/')
+            })
+        }}
+      >
         <div className="logout-flex-box">
           <img src="/assets/logout.svg" alt="logout" />
           <p>로그아웃</p>

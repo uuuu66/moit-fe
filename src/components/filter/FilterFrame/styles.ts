@@ -48,8 +48,11 @@ export const FilterContainer = styled.div`
 
   ul {
     padding-bottom: 144px;
+    max-height: 534px;
     overflow-y: auto;
-    max-height: 534px; // TODO : 여기 손 봐야됨
+    &::-webkit-scrollbar {
+      display: none;
+    }
     li {
       cursor: pointer;
       &:hover {
@@ -125,6 +128,10 @@ export const SelectedTagBox = styled.div`
   align-items: center;
   gap: 12px;
   overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   div {
     border-radius: 40px;

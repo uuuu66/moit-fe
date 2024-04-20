@@ -52,7 +52,8 @@ export const TextBox = styled.div`
 `
 
 export const CardIconText = styled.div`
-  display: flex;
+  display: inline-flex;
+  white-space: nowrap;
   align-items: center;
 
   p {
@@ -74,6 +75,10 @@ export const CardIconText = styled.div`
 export const TagBox = styled.div`
   width: 100%;
   overflow: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   div {
     display: flex;

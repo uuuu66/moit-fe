@@ -38,6 +38,7 @@ export default function Search(): JSX.Element {
   const [recents, setRecents] = useState<string[]>(
     (getLocalStorageItem('recents') as string[]) ?? []
   )
+  const hasRecents = recents.length !== 0
   const [onRecentsToggle, setOnRecentsToggle] = useState(true)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const { handleScroll } = useScrollEnd()
@@ -139,7 +140,9 @@ export default function Search(): JSX.Element {
         </div>
         <ToggleBox>
           <ToggleButton
+            $isPointer={hasRecents}
             onClick={() => {
+              if (!hasRecents) return
               setOnRecentsToggle(!onRecentsToggle)
             }}
           >
@@ -147,33 +150,28 @@ export default function Search(): JSX.Element {
               <img src="/assets/watch.svg" alt="watch" />
               최근 검색어
             </h1>
-            {onRecentsToggle ? (
-              <img src="/assets/up.svg" alt="up" />
-            ) : (
-              <img src="/assets/down.svg" alt="down" />
-            )}
+            {hasRecents &&
+              (onRecentsToggle ? (
+                <img src="/assets/up.svg" alt="up" />
+              ) : (
+                <img src="/assets/down.svg" alt="down" />
+              ))}
           </ToggleButton>
-          {onRecentsToggle &&
-            (recents.length !== 0 ? (
-              <RecentTagBox>
-                {recents.map((word, index) => (
-                  <button
-                    type="button"
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={`${word}_${index}`}
-                    value={word}
-                    onClick={handleCickTag}
-                  >
-                    {word}
-                  </button>
-                ))}
-              </RecentTagBox>
-            ) : (
-              <EmptyTextBox>
-                <img src="/assets/warning.svg" alt="warning" />
-                <p>최근 검색한 내용이 없습니다</p>
-              </EmptyTextBox>
-            ))}
+          {hasRecents && onRecentsToggle && (
+            <RecentTagBox>
+              {recents.map((word, index) => (
+                <button
+                  type="button"
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`${word}_${index}`}
+                  value={word}
+                  onClick={handleCickTag}
+                >
+                  {word}
+                </button>
+              ))}
+            </RecentTagBox>
+          )}
         </ToggleBox>
       </SearchBox>
       {data != null && (
