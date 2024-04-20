@@ -66,6 +66,7 @@ export const Box1 = styled(Box)`
   pre {
     font-size: ${theme.fontSize.small};
     color: ${theme.color.black60};
+    white-space: pre-wrap;
   }
 `
 

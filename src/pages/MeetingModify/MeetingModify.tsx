@@ -19,7 +19,6 @@ import useMap from '@/hooks/useMap'
 import { type EditMeetingReq } from '@/type/request'
 import { type Career, careerData } from '@/constants/careerData'
 import { DetailButtonContainer } from '../MeetingDetail/styles'
-import { theme } from '@/constants/theme'
 import MeetingTechStack from '@/components/filter/TechStack/MeetingTechStack'
 import { getTechStackList } from '@/apis/filter'
 import {
@@ -140,19 +139,25 @@ function MeetingModify(): JSX.Element {
   }
 
   const handleMemCountUpClick = (): void => {
-    setInfo((prevState) => ({
-      ...prevState,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      totalCount: prevState.totalCount! + 1,
-    }))
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (info.totalCount! < 10) {
+      setInfo((prevState) => ({
+        ...prevState,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        totalCount: prevState.totalCount! + 1,
+      }))
+    }
   }
 
   const handleMemCountDownClick = (): void => {
-    setInfo((prevState) => ({
-      ...prevState,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      totalCount: prevState.totalCount! - 1,
-    }))
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (info.totalCount! > 2) {
+      setInfo((prevState) => ({
+        ...prevState,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        totalCount: prevState.totalCount! - 1,
+      }))
+    }
   }
 
   const handleTechStackClick = (selectedStacks: number[]): void => {
@@ -177,7 +182,18 @@ function MeetingModify(): JSX.Element {
     })
   }
 
+  const isBlank =
+    info.meetingName === '' ||
+    info.locationAddress === '' ||
+    Number.isNaN(info.budget) ||
+    info.skillIds.length === 0 ||
+    info.careerIds.length === 0
+
   const handleMeetingModifySubmit = (): void => {
+    if (isBlank) {
+      window.alert('빈 칸 채우세요')
+      return
+    }
     editMutation.mutate()
   }
 
@@ -213,21 +229,23 @@ function MeetingModify(): JSX.Element {
               placeholder="ex) 강남역에서 오후 2시 모각코 구합니다"
               value={info.meetingName}
               onChange={handleNameChange}
+              maxLength={34}
             />
           </InputBox>
+          <span className="check">{info.meetingName?.length}/34</span>
         </InfoContainer>
         <InfoContainer>
           <InfoTitle>모임을 소개해 볼까요?</InfoTitle>
           <InputBox>
-            <label htmlFor="contentInput">
-              간단한 모임 소개를 작성해 주세요
-            </label>
             <textarea
               id="contentInput"
               value={info.contents}
               onChange={handleContentChange}
+              maxLength={300}
+              placeholder="간단한 모임 소개를 작성해 주세요"
             />
           </InputBox>
+          <span className="check">{info.contents?.length}/300</span>
         </InfoContainer>
         {/* 날짜, 시간 선택 */}
         <InfoContainer>
@@ -303,6 +321,12 @@ function MeetingModify(): JSX.Element {
                 placeholder="ex)3,000"
                 value={info.budget}
                 onChange={handleBudgetChange}
+                onKeyPress={(e) => {
+                  const regex = /^[0-9\b]+$/
+                  if (!regex.test(e.key)) {
+                    e.preventDefault()
+                  }
+                }}
               />
               <label htmlFor="price">원</label>
             </div>
@@ -336,13 +360,15 @@ function MeetingModify(): JSX.Element {
         </InfoContainer>
       </div>
       <DetailButtonContainer>
-        <CommonButton
-          size="large"
-          handleClick={handleMeetingModifySubmit}
-          style={{ backgroundColor: `${theme.color.primary100}` }}
-        >
-          수정하기
-        </CommonButton>
+        {isBlank ? (
+          <CommonButton size="large" disabled>
+            수정하기
+          </CommonButton>
+        ) : (
+          <CommonButton size="large" handleClick={handleMeetingModifySubmit}>
+            수정하기
+          </CommonButton>
+        )}
       </DetailButtonContainer>
     </WholeContainer>
   )

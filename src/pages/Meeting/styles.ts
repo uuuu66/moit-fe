@@ -65,13 +65,23 @@ export const InputBox = styled.div`
     font-size: 1.2rem;
     color: ${theme.color.black40};
   }
+  input {
+    &::placeholder {
+      color: ${theme.color.black40};
+    }
+  }
   textarea {
     height: 14rem;
+    &::placeholder {
+      color: ${theme.color.black40};
+    }
   }
 `
 
 export const InfoContainer = styled.div`
-  margin: 3rem 2rem;
+  margin: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
 
   span {
     font-size: ${theme.fontSize.small};
@@ -89,6 +99,11 @@ export const InfoContainer = styled.div`
       color: ${theme.color.warn};
       font-weight: ${theme.fontWeight.normal};
     }
+  }
+  .check {
+    width: 100%;
+    text-align: right;
+    margin-top: 0.8rem;
   }
 `
 

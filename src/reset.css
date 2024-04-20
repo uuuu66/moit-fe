@@ -135,6 +135,10 @@ body {
     border: 1px solid #e6e4e4;
     font-size: 1.4rem;
   }
+  .react-datepicker-wrapper {
+    font-size: 1.6rem;
+    color: #667ae4;
+  }
   .react-datepicker__header {
     border-bottom: none;
     /* background-color: #ffffff; */

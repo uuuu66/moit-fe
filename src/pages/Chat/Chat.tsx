@@ -152,7 +152,6 @@ function Chat(): JSX.Element {
     } else {
       scrollToBottom()
     }
-    void queryClient.invalidateQueries({ queryKey: ['getAllChatMessages'] })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatDatas])
 

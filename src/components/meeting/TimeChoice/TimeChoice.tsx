@@ -1,7 +1,10 @@
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
+import { useState } from 'react'
+// import { getHours, getMinutes, isAfter, setHours, setMinutes } from 'date-fns'
 import { InputBox } from '../../../pages/Meeting/styles'
+import { theme } from '@/constants/theme'
 
 interface TimeChoiceProps {
   startTime: Date | null | undefined
@@ -16,22 +19,26 @@ function TimeChoice({
   handleStartTimeChange,
   handleEndTimeChange,
 }: TimeChoiceProps): JSX.Element {
-  // const [startTime, setStartTime] = useState(null)
-  // const [endTime, setEndTime] = useState(null)
-  // const [isSelected, setIsSelected] = useState(false)
+  const [isSelected, setIsSelected] = useState(false)
 
-  // const onSelectStartTime = (time) => {
-  //   console.log('time', time)
-  //   setStartTime(time)
-  //   // handleStartTimeChange(time)
-  //   setIsSelected(true)
-  //   setEndTime(null)
-  // }
+  const onSelect = (time: Date): void => {
+    handleStartTimeChange(time)
+    setIsSelected(true)
+  }
 
-  // const onSelectEndTime = (time) => {
-  //   setEndTime(time)
-  //   // handleEndTimeChange(time)
-  // }
+  // const maxEndTime = setHours(startTime, getHours(startTime) + 6)
+
+  // // Check if the maxEndTime exceeds the current day
+  // const currentHour = getHours(new Date())
+  // const isMaxEndTimeAfterCurrentDay = isAfter(
+  //   maxEndTime,
+  //   setHours(new Date(), currentHour)
+  // )
+
+  // // Adjust max time accordingly
+  // const maxTime = isMaxEndTimeAfterCurrentDay
+  //   ? setHours(new Date(), currentHour)
+  //   : maxEndTime
 
   return (
     <div
@@ -48,10 +55,7 @@ function TimeChoice({
           <img src="/assets/meetingClock.svg" alt="clock" />
           <span>시작 시간</span>
         </div>
-        <label
-          htmlFor="datepick1"
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
+        <label htmlFor="datepick1">
           <input type="text" id="datepick1" style={{ display: 'none' }} />
           <StDatePicker
             selected={startTime}
@@ -60,10 +64,14 @@ function TimeChoice({
             showTimeSelectOnly
             timeCaption="시작 시간"
             dateFormat="h시 mm분"
-            onChange={handleStartTimeChange}
+            onChange={onSelect}
             placeholderText="00시 00분"
           />
-          <img src="/assets/meetingDownArrow.svg" alt="downArrow" />
+          <img
+            src="/assets/meetingDownArrow.svg"
+            alt="downArrow"
+            className="arrow"
+          />
         </label>
       </TimeBox>
       <TimeBox>
@@ -71,13 +79,7 @@ function TimeChoice({
           <img src="/assets/meetingClock.svg" alt="clock" />
           <span>종료 시간</span>
         </div>
-        <label
-          htmlFor="datepick1"
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
+        <label htmlFor="datepick1">
           <input type="text" id="datepick1" style={{ display: 'none' }} />
           <StDatePicker
             selected={endTime}
@@ -85,13 +87,18 @@ function TimeChoice({
             onChange={handleEndTimeChange}
             showTimeSelect
             showTimeSelectOnly
-            timeIntervals={30}
             timeCaption="종료 시간"
             dateFormat="h시 mm분"
             placeholderText="00시 00분"
+            disabled={!isSelected}
           />
-          <img src="/assets/meetingDownArrow.svg" alt="downArrow" />
+          <img
+            src="/assets/meetingDownArrow.svg"
+            alt="downArrow"
+            className="arrow"
+          />
         </label>
+        {/* <span>시작 시간을 선택해 주세요</span> */}
       </TimeBox>
     </div>
   )
@@ -112,13 +119,22 @@ export const TimeBox = styled(InputBox)`
   }
   label {
     color: black;
+    position: relative;
+    /* z-index: 1; */
+  }
+  .arrow {
+    /* background-color: wheat; */
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 `
 
 export const StDatePicker = styled(DatePicker)`
-  /* display: flex;
-  flex-direction: column; */
   &::placeholder {
     font-size: 1.6rem;
   }
+  /* &:disabled {
+    background-color: ${theme.color.black40};
+  } */
 `
