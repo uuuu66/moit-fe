@@ -3,6 +3,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
 import { useState } from 'react'
 // import { getHours, getMinutes, isAfter, setHours, setMinutes } from 'date-fns'
+import { setHours, setMinutes } from 'date-fns'
 import { InputBox } from '../../../pages/Meeting/styles'
 import { theme } from '@/constants/theme'
 
@@ -39,7 +40,8 @@ function TimeChoice({
   // const maxTime = isMaxEndTimeAfterCurrentDay
   //   ? setHours(new Date(), currentHour)
   //   : maxEndTime
-
+  const minTime = startTime != null ? new Date(startTime) : new Date()
+  const maxTime = setHours(setMinutes(new Date(), 30), 23)
   return (
     <div
       style={{
@@ -91,6 +93,8 @@ function TimeChoice({
             dateFormat="h시 mm분"
             placeholderText="00시 00분"
             disabled={!isSelected}
+            minTime={minTime}
+            maxTime={maxTime}
           />
           <img
             src="/assets/meetingDownArrow.svg"
