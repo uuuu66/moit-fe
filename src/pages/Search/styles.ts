@@ -65,8 +65,12 @@ export const RecentTagBox = styled.div`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  height: 142px;
+  height: 116px;
   overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   button {
     height: 32px;

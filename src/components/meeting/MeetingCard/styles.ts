@@ -75,6 +75,10 @@ export const TagBox = styled.div`
   width: 100%;
   overflow: scroll;
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   div {
     display: flex;
     width: fit-content;

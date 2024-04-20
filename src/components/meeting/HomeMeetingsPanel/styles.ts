@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const HomeMeetingsPanelLayout = styled.div`
   width: 100%;
   border-radius: 20px 20px 0 0;
+  box-shadow: 0 -1px 4px -2px rgba(0, 0, 0, 0.8);
   background-color: ${({ theme }) => theme.color.bg2};
   position: absolute;
   bottom: 66px;
@@ -70,6 +71,10 @@ export const MeetingsBox = styled.div`
   padding: 16px 20px;
   background: ${({ theme }) => theme.color.bg3};
   position: relative;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 export const CardBox = styled.div`
