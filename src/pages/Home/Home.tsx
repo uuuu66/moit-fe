@@ -161,7 +161,8 @@ export default function Home(): JSX.Element {
   if (isError) return <ErrorPage />
   return (
     <HomeLayout>
-      {(isLoading || isLocateLoading) && <LoadingPage name="페이지를" isFade />}
+      {isLoading && <LoadingPage name="페이지를" isFade />}
+      {isLocateLoading && <LoadingPage name="내 위치를" isFade />}
       <FilterBox>
         <div className="scroll-box">
           <Region

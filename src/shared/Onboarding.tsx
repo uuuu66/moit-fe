@@ -17,7 +17,10 @@ function Onboarding({ handleClick }: { handleClick: () => void }): JSX.Element {
       <CommonButton
         size="large"
         handleClick={handleClick}
-        style={{ backgroundColor: `${theme.color.primary100}` }}
+        style={{
+          backgroundColor: `${theme.color.primary100}`,
+          margin: '0 2rem',
+        }}
       >
         시작하기
       </CommonButton>
@@ -29,11 +32,18 @@ export default Onboarding
 
 export const OnboardingContainer = styled.div`
   height: 100%;
+  min-height: 780px;
+  max-height: 932px;
+  width: 100%;
+  min-width: 360px;
+  max-width: 430px;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 4rem;
+  background-color: white;
 
   div {
     display: flex;
