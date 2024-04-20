@@ -9,6 +9,9 @@ interface Profile {
 interface MyMeeting {
   meetingId: number
   meetingName: string
+  meetingDate: string
+  meetingStartTime: string
+  meetingEndTime: string
 }
 
 interface User {

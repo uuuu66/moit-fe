@@ -3,15 +3,19 @@ import styled from 'styled-components'
 export const MypageLayout = styled.div`
   height: fit-content;
   min-height: 100%;
-  padding: 16px 20px;
+  padding: 16px 0;
+  width: 100%;
+  /* padding: 16px 20px; */
+
   background: ${({ theme }) => theme.color.bg1};
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 28px;
 `
 
 export const NavBox = styled.header`
   width: 100%;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,11 +31,12 @@ export const NavBox = styled.header`
 
   button {
     position: absolute;
-    left: 0;
+    left: 20px;
   }
 `
 
 export const ProfileBox = styled.div`
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -118,7 +123,15 @@ export const InfoCard = styled.div`
   }
 `
 
+export const SectionLine = styled.hr`
+  width: 100%;
+  height: 4px;
+  border: none;
+  background: ${({ theme }) => theme.color.black10};
+`
+
 export const MeetingsBox = styled.div`
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -142,6 +155,7 @@ export const ButtonBox = styled.div`
       font-size: ${theme.fontSize.small};
       font-weight: ${theme.fontWeight.normal};    
       `}
+      cursor: default;
     }
   }
 
@@ -170,17 +184,30 @@ export const MeetingCard = styled.div`
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  gap: 10px;
 
   &:hover {
     border: ${({ theme }) => `1px solid ${theme.color.primary100}`};
+  }
+
+  span {
+    ${({ theme }) => `
+    color: ${theme.color.primary100};
+    font-size: ${theme.fontSize.smaller};
+    font-weight: ${theme.fontWeight.normal};
+    `}
+  }
+
+  hr {
+    width: 100%;
+    margin: 0;
+    border: none;
+    border-bottom: ${({ theme }) => `1px dotted ${theme.color.black40}`};
   }
 `
 
 export const TitleBox = styled.div`
   width: 100%;
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-  border-bottom: ${({ theme }) => `1px dotted ${theme.color.black40}`};
   display: flex;
   justify-content: space-between;
 
@@ -194,6 +221,7 @@ export const TitleBox = styled.div`
 `
 
 export const EmptyTextBox = styled.div`
+  padding: 0 20px;
   width: 100%;
   height: 142px;
   display: flex;
@@ -216,11 +244,12 @@ export const EmptyTextBox = styled.div`
 `
 
 export const LogoutBox = styled.div`
+  padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 20px;
-  border-bottom: ${({ theme }) => `1px solid ${theme.color.line2}`};
+
   cursor: pointer;
 
   .logout-flex-box {
