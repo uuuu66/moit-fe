@@ -52,7 +52,8 @@ export const TextBox = styled.div`
 `
 
 export const CardIconText = styled.div`
-  display: flex;
+  display: inline-flex;
+  white-space: nowrap;
   align-items: center;
 
   p {
