@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ModalBtn } from '../FilterFrame/styles'
 import RegionModal from './RegionModal'
@@ -23,6 +23,9 @@ export default function Region({
     setIsShow(!isShow)
   }
 
+  const [regionName, setRegionName] = useState(
+    (getLocalStorageItem('regionName') as string) ?? '지역'
+  )
   const { data: firstRegions } = useQuery({
     queryKey: filterKeys.firstRegion,
     queryFn: async () => await getFirstRegions(),
@@ -38,33 +41,26 @@ export default function Region({
     enabled: !(selectedFirstRegion.length === 0),
   })
 
-  const getSelectedRegionName = (): string => {
-    const firstRegion = firstRegions?.find(
-      ({ regionFirstId }) => regionFirstId === Number(selectedFirstRegion)
-    )?.regionFirstName
-
-    const secondRegion = secondRegions?.find(
-      ({ regionSecondId }) => regionSecondId === selectedFilters[0]
-    )?.regionSecondName
-
-    if (firstRegion == null || secondRegion == null) return '지역'
-
-    return secondRegion.includes('전체')
-      ? secondRegion
-      : `${firstRegion.slice(0, 2)} ${secondRegion}`
-  }
-
-  const filterDisplayName = (): string => {
-    if (!(firstRegions != null && secondRegions != null)) return '지역'
-
-    return selectedFilters.length !== 0 ? getSelectedRegionName() : '지역'
-  }
+  useEffect(() => {
+    if (selectedFilters.length === 0) {
+      setRegionName('지역')
+    }
+  }, [selectedFilters])
 
   return (
     <>
-      <ModalBtn type="button" onClick={handleVisibleClick}>
-        {filterDisplayName()}
-        <img src="/assets/down.svg" alt="down" />
+      <ModalBtn
+        type="button"
+        onClick={handleVisibleClick}
+        $isShow={isShow}
+        className={selectedFilters.length !== 0 ? 'filter-btn-selected' : ''}
+      >
+        {regionName}
+        {selectedFilters.length !== 0 ? (
+          <img src="/assets/downSelected.svg" alt="down" />
+        ) : (
+          <img src="/assets/down.svg" alt="down" />
+        )}
       </ModalBtn>
       {isShow && (
         <RegionModal
@@ -76,6 +72,9 @@ export default function Region({
             setSelectedFirstRegion(name)
           }}
           handleSelectedFilters={handleSelectedFilters}
+          handleRegionName={(name: string) => {
+            setRegionName(name)
+          }}
           handleSetCenter={handleSetCenter}
           handleModalClose={() => {
             setIsShow(false)

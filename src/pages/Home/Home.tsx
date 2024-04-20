@@ -1,6 +1,7 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { throttle } from 'lodash'
 import useMap from '@/hooks/useMap'
 import {
   HomeLayout,
@@ -12,7 +13,6 @@ import {
 import { type GetMeeting, type Center } from '@/type/meeting'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
-import getUserLocation from '@/util/getUserLocation'
 import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
 import { type FiltersKey, type Filters } from '@/type/filter'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
@@ -22,6 +22,7 @@ import Region from '@/components/filter/Region/Region'
 import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
+import useUserLocation from '@/hooks/useUserLocation'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -38,13 +39,14 @@ export default function Home(): JSX.Element {
     region: getLocalStorageItem('region') ?? [],
   })
   const [mapElement, setMapElement] = useState<kakao.maps.Map>()
+  const { setUserLocation, isLoading: isLocateLoading } = useUserLocation()
 
   useEffect(() => {
     // 첫 접속 시: 유저 위치 조회 후 setCenter
     const locationValue = getLocalStorageItem('center')
     if (locationValue != null) return
-    getUserLocation(handleUserFirstLocation)
-  }, [])
+    setUserLocation(handleUserFirstLocation)
+  }, [setUserLocation])
 
   // 센터상태 변경 시 값을 로컬스토리지에 저장
   useEffect(() => {
@@ -79,9 +81,9 @@ export default function Home(): JSX.Element {
     return list
   }, [data])
 
-  const handleFetchPages = (): void => {
+  const handleFetchPages = throttle(() => {
     void fetchNextPage()
-  }
+  }, 3000)
 
   // 조회한 마커가 모두 보이도록 지도 위치 조정
   useEffect(() => {
@@ -122,6 +124,7 @@ export default function Home(): JSX.Element {
     mapElement.setCenter(
       new map.LatLng(position.coords.latitude, position.coords.longitude)
     )
+    mapElement.setLevel(4)
   }
 
   // 필터 선택 완료 시 필터 상태 저장
@@ -155,13 +158,21 @@ export default function Home(): JSX.Element {
     setSelectedMeeting(target[0])
   }
 
-  if (isLoading) return <LoadingPage name="페이지를" />
   if (isError) return <ErrorPage />
-
   return (
     <HomeLayout>
+      {(isLoading || isLocateLoading) && <LoadingPage name="페이지를" isFade />}
       <FilterBox>
         <div className="scroll-box">
+          <Region
+            selectedFilters={filters.region}
+            handleSelectedFilters={(num) => {
+              handleSetFilters('region', num)
+            }}
+            handleSetCenter={(currentCenter: Center) => {
+              setCenter(currentCenter)
+            }}
+          />
           <Career
             selectedFilters={filters.careers}
             handleSelectedFilters={(num) => {
@@ -174,22 +185,13 @@ export default function Home(): JSX.Element {
               handleSetFilters('techStacks', num)
             }}
           />
-          <Region
-            selectedFilters={filters.region}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('region', num)
-            }}
-            handleSetCenter={(currentCenter: Center) => {
-              setCenter(currentCenter)
-            }}
-          />
         </div>
       </FilterBox>
       <UserLocationButtonBox>
         <button
           type="button"
           onClick={() => {
-            getUserLocation(resetMaptoUserLocation)
+            setUserLocation(resetMaptoUserLocation)
           }}
         >
           <div>
@@ -198,7 +200,11 @@ export default function Home(): JSX.Element {
         </button>
       </UserLocationButtonBox>
       <ResetSearchBox>
-        <ResetSearchButton type="button" onClick={setCurrentCenter}>
+        <ResetSearchButton
+          type="button"
+          onClick={setCurrentCenter}
+          $isShow={false}
+        >
           <img src="/assets/reset.svg" alt="reset" />
           <p>현 지도에서 검색</p>
         </ResetSearchButton>

@@ -23,7 +23,6 @@ import {
 } from '@/apis/meeting'
 import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
 import CommonButton from '@/components/common/Button/CommonButton'
-import { theme } from '@/constants/theme'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import { getLocalStorageItem } from '@/util/localStorage'
@@ -185,15 +184,13 @@ function MeetingDetail(): JSX.Element {
       {decodedToken.sub !== data?.creatorEmail && (
         <DetailButtonContainer>
           {data?.join === true ? (
-            <CommonButton
-              size="large"
-              handleClick={withdrawMeetingClick}
-              style={{ backgroundColor: `${theme.color.primary100}` }}
-            >
+            <CommonButton size="large" handleClick={withdrawMeetingClick}>
               모임 탈퇴하기
             </CommonButton>
           ) : isFull ? (
-            <CommonButton size="large">모집이 마감되었습니다</CommonButton>
+            <CommonButton size="large" disabled>
+              모집이 마감되었습니다
+            </CommonButton>
           ) : (
             <JoinMeetingButton handleJoinMeeting={handleMeetingSubClick} />
           )}
