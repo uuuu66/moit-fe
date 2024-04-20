@@ -52,12 +52,13 @@ export const ToggleBox = styled.div`
   }
 `
 
-export const ToggleButton = styled.button`
+export const ToggleButton = styled.button<{ $isPointer: boolean }>`
   width: 100%;
   padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: ${({ $isPointer }) => ($isPointer ? 'pointer' : 'default')};
 `
 
 export const RecentTagBox = styled.div`
