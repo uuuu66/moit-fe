@@ -44,9 +44,18 @@ function TechStack({
 
   return (
     <>
-      <ModalBtn type="button" onClick={handleVisibleClick}>
+      <ModalBtn
+        type="button"
+        onClick={handleVisibleClick}
+        $isShow={isShow}
+        className={selectedFilters.length !== 0 ? 'filter-btn-selected' : ''}
+      >
         {filterDisplayName}
-        <img src="/assets/down.svg" alt="down" />
+        {selectedFilters.length !== 0 ? (
+          <img src="/assets/downSelected.svg" alt="down" />
+        ) : (
+          <img src="/assets/down.svg" alt="down" />
+        )}
       </ModalBtn>
       {isShow && (
         <TechStackModal

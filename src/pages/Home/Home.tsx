@@ -124,6 +124,7 @@ export default function Home(): JSX.Element {
     mapElement.setCenter(
       new map.LatLng(position.coords.latitude, position.coords.longitude)
     )
+    mapElement.setLevel(4)
   }
 
   // 필터 선택 완료 시 필터 상태 저장
@@ -163,6 +164,15 @@ export default function Home(): JSX.Element {
       {(isLoading || isLocateLoading) && <LoadingPage name="페이지를" isFade />}
       <FilterBox>
         <div className="scroll-box">
+          <Region
+            selectedFilters={filters.region}
+            handleSelectedFilters={(num) => {
+              handleSetFilters('region', num)
+            }}
+            handleSetCenter={(currentCenter: Center) => {
+              setCenter(currentCenter)
+            }}
+          />
           <Career
             selectedFilters={filters.careers}
             handleSelectedFilters={(num) => {
@@ -173,15 +183,6 @@ export default function Home(): JSX.Element {
             selectedFilters={filters.techStacks}
             handleSelectedFilters={(num) => {
               handleSetFilters('techStacks', num)
-            }}
-          />
-          <Region
-            selectedFilters={filters.region}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('region', num)
-            }}
-            handleSetCenter={(currentCenter: Center) => {
-              setCenter(currentCenter)
             }}
           />
         </div>
@@ -199,7 +200,11 @@ export default function Home(): JSX.Element {
         </button>
       </UserLocationButtonBox>
       <ResetSearchBox>
-        <ResetSearchButton type="button" onClick={setCurrentCenter}>
+        <ResetSearchButton
+          type="button"
+          onClick={setCurrentCenter}
+          $isShow={false}
+        >
           <img src="/assets/reset.svg" alt="reset" />
           <p>현 지도에서 검색</p>
         </ResetSearchButton>

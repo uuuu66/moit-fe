@@ -19,7 +19,7 @@ function FilterFrame(): JSX.Element {
 
   return (
     <>
-      <ModalBtn type="button" onClick={handleVisibleClick}>
+      <ModalBtn type="button" onClick={handleVisibleClick} $isShow={isShow}>
         이름
       </ModalBtn>
       <ModalPortal>

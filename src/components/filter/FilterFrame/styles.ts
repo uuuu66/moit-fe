@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const ModalBtn = styled.button`
+export const ModalBtn = styled.button<{ $isShow: boolean }>`
   margin-top: 2px;
   padding: 8px 16px;
   border-radius: 40px;
@@ -13,6 +13,17 @@ export const ModalBtn = styled.button`
   font-size: ${theme.fontSize.small};
   color: ${theme.color.black50};
     `}
+
+  img {
+    rotate: ${({ $isShow }) => ($isShow ? '180deg' : 'none')};
+  }
+
+  &.filter-btn-selected {
+    ${({ theme }) => `
+    border: 2px solid ${theme.color.primary100};
+    color: ${theme.color.primary100};
+    `}
+  }
 `
 
 export const Background = styled.div`
