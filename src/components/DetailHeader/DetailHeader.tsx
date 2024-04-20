@@ -91,52 +91,54 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
             chat
           </ToggleButton>
         </ToggleContainer>
-        <MenuButton
-          type="button"
-          aria-label="menu"
-          onClick={() => {
-            setIsOpen(!isOpen)
-          }}
-        >
-          <Icon src="/assets/menu.svg" alt="" className="menu" />
-        </MenuButton>
-      </div>
-      {isOpen &&
-        (decodedToken.sub === data?.creatorEmail ? (
-          <MenuContainer>
-            <div>
-              <span>수정하기</span>
-              <button
-                type="button"
-                aria-label="edit"
-                onClick={() => {
-                  navi(`/meetings/${meetingId}/modify`)
-                }}
-              >
-                <img src="/assets/edit.svg" alt="edit" />
-              </button>
-            </div>
-            <div>
-              <span>삭제하기</span>
-              <button
-                type="button"
-                aria-label="delete"
-                onClick={deleteMeetingClick}
-              >
-                <img src="/assets/delete.svg" alt="delete" />
-              </button>
-            </div>
-          </MenuContainer>
+        {isOpen && decodedToken.sub === data?.creatorEmail ? (
+          <MenuButton
+            type="button"
+            aria-label="menu"
+            onClick={() => {
+              setIsOpen(!isOpen)
+            }}
+          >
+            <Icon src="/assets/menu.svg" alt="" className="menu" />
+          </MenuButton>
         ) : (
-          <MenuContainer>
-            <div>
-              <span>아직 뭐 없어요</span>
-              {/* <button type="button" aria-label="report">
-                <img src="/assets/edit.svg" alt="report" />
-              </button> */}
-            </div>
-          </MenuContainer>
-        ))}
+          <MenuButton
+            type="button"
+            aria-label="menu"
+            onClick={() => {
+              window.alert('개발 중인 기능입니다!')
+            }}
+          >
+            <Icon src="/assets/menu.svg" alt="" className="menu" />
+          </MenuButton>
+        )}
+      </div>
+      {isOpen && decodedToken.sub === data?.creatorEmail && (
+        <MenuContainer>
+          <div>
+            <span>수정하기</span>
+            <button
+              type="button"
+              aria-label="edit"
+              onClick={() => {
+                navi(`/meetings/${meetingId}/modify`)
+              }}
+            >
+              <img src="/assets/edit.svg" alt="edit" />
+            </button>
+          </div>
+          <div>
+            <span>삭제하기</span>
+            <button
+              type="button"
+              aria-label="delete"
+              onClick={deleteMeetingClick}
+            >
+              <img src="/assets/delete.svg" alt="delete" />
+            </button>
+          </div>
+        </MenuContainer>
+      )}
     </DetailHeaderContainer>
   )
 }
