@@ -1,6 +1,7 @@
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
+import { addMonths } from 'date-fns'
 import { theme } from '@/constants/theme'
 
 interface Props {
@@ -20,6 +21,7 @@ function DateChoice({ meetingDate, handleDateChange }: Props): JSX.Element {
           handleDateChange(date)
         }}
         minDate={new Date()}
+        maxDate={addMonths(new Date(), 2)}
         placeholderText="YY-MM-DD"
       />
       <img
