@@ -116,7 +116,7 @@ export default function Search(): JSX.Element {
           <button
             type="button"
             onClick={() => {
-              navigate(-1)
+              navigate('/')
             }}
           >
             <img src="/assets/left.svg" alt="left" />

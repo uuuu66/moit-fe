@@ -112,9 +112,10 @@ const LayoutStyles = styled.div<{ $screenHeight: number }>`
   min-width: 360px;
   max-width: 430px;
   height: ${({ $screenHeight }) => `${$screenHeight}px`};
-  min-height: 780px;
+  /* min-height: 780px; */
   max-height: 932px;
   border-radius: 20px;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 1);
   background: #383737;
   position: relative;
   box-sizing: unset;
