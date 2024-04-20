@@ -28,8 +28,14 @@ interface RegionModalProps {
   selectedFilters: number[]
   setSelectedFirstRegion: (name: string) => void
   handleSelectedFilters: (selectedNums: number[]) => void
+  handleRegionName: (name: string) => void
   handleSetCenter: (value: Center) => void
   handleModalClose: () => void
+}
+
+interface SelectedSecondRegion {
+  name: string
+  id: number
 }
 
 export default function RegionModal({
@@ -39,17 +45,30 @@ export default function RegionModal({
   selectedFilters,
   setSelectedFirstRegion,
   handleSelectedFilters,
+  handleRegionName,
   handleSetCenter,
   handleModalClose,
 }: RegionModalProps): JSX.Element | null {
-  const [selectedSecondRegion, setSelectedSecondRegion] = useState<number[]>(
-    selectedFilters ?? []
+  const [selectedSecondRegion, setSelectedSecondRegion] = useState<
+    SelectedSecondRegion[]
+  >(
+    selectedFilters.length !== 0
+      ? [
+          {
+            name:
+              secondRegions?.find(
+                ({ regionSecondId }) => regionSecondId === selectedFilters[0]
+              )?.regionSecondName ?? '',
+            id: selectedFilters[0],
+          },
+        ]
+      : []
   )
 
-  const handleSecondRegionClick = (regionItem: number): void => {
+  const handleSecondRegionClick = (regionItem: SelectedSecondRegion): void => {
     setSelectedSecondRegion((prevRegion) => {
       if (prevRegion.includes(regionItem)) {
-        return prevRegion.filter((item) => item !== regionItem)
+        return prevRegion.filter(({ id }) => id !== regionItem.id)
       }
       return [regionItem]
     })
@@ -89,19 +108,23 @@ export default function RegionModal({
       <button
         type="button"
         onClick={() => {
-          handleSecondRegionClick(regionSecondId)
+          handleSecondRegionClick({
+            id: regionSecondId,
+            name: regionSecondName,
+          })
         }}
       >
         <span
           className={
-            selectedSecondRegion.includes(regionSecondId) ? 'selected' : ''
+            selectedSecondRegion.find(({ id }) => id === regionSecondId) != null
+              ? 'selected'
+              : ''
           }
         >
           {regionSecondName}
         </span>
-        {selectedSecondRegion.includes(regionSecondId) && (
-          <img src="/assets/check.svg" alt="selected" />
-        )}
+        {selectedSecondRegion.find(({ id }) => id === regionSecondId) !=
+          null && <img src="/assets/check.svg" alt="selected" />}
       </button>
     </li>
   )
@@ -113,13 +136,26 @@ export default function RegionModal({
 
   const handleDeleteRegionClick = (regionId: number): void => {
     setSelectedSecondRegion((prevRegion) =>
-      prevRegion.filter((item) => item !== regionId)
+      prevRegion.filter(({ id }) => id !== regionId)
     )
+  }
+
+  const getSelectedRegionName = (): string => {
+    const firstRegion = firstRegions?.find(
+      ({ regionFirstId }) => regionFirstId === Number(selectedFirstRegion)
+    )?.regionFirstName
+    const secondRegion = selectedSecondRegion[0]?.name
+
+    if (firstRegion == null || secondRegion == null) return '지역'
+
+    return secondRegion.includes('전체')
+      ? secondRegion
+      : `${firstRegion.slice(0, 2)} ${secondRegion}`
   }
 
   const handleSelectClick = (): void => {
     const currentValue = secondRegions?.find(
-      ({ regionSecondId }) => regionSecondId === selectedSecondRegion[0]
+      ({ regionSecondId }) => regionSecondId === selectedSecondRegion[0]?.id
     )
     if (currentValue != null) {
       const center: Center = {
@@ -128,8 +164,13 @@ export default function RegionModal({
       }
       handleSetCenter(center)
     }
-    handleSelectedFilters(selectedSecondRegion)
+    handleSelectedFilters(
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      selectedSecondRegion[0] ? [selectedSecondRegion[0].id] : []
+    )
     setLocalStorageItem('firstRegion', selectedFirstRegion)
+    handleRegionName(getSelectedRegionName())
+    setLocalStorageItem('regionName', getSelectedRegionName())
     handleModalClose()
   }
 
@@ -156,19 +197,13 @@ export default function RegionModal({
           <BottomBox>
             {selectedSecondRegion.length !== 0 && (
               <SelectedTagBox>
-                {selectedSecondRegion?.map((item) => (
-                  <div key={item}>
-                    <span>
-                      {
-                        secondRegions?.find(
-                          ({ regionSecondId }) => regionSecondId === item
-                        )?.regionSecondName
-                      }
-                    </span>
+                {selectedSecondRegion?.map(({ id, name }) => (
+                  <div key={`${id}_${name}`}>
+                    <span>{name}</span>
                     <button
                       type="button"
                       onClick={() => {
-                        handleDeleteRegionClick(item)
+                        handleDeleteRegionClick(id)
                       }}
                     >
                       <img src="/assets/cancel.svg" alt="cancel" />
