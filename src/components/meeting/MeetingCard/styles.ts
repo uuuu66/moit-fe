@@ -73,6 +73,31 @@ export const CardIconText = styled.div`
 `
 
 export const TagBox = styled.div`
+  position: relative;
+  overflow: hidden;
+`
+
+export const LeftShadowBox = styled.div<{ $isScrollLeft: boolean }>`
+  display: ${({ $isScrollLeft }) => ($isScrollLeft ? 'none' : 'unset')};
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 10px;
+  height: 32px;
+  box-shadow: 0 0 16px 24px rgba(255, 255, 255, 0.9);
+`
+
+export const RightShadowBox = styled.div<{ $isScrollRight: boolean }>`
+  display: ${({ $isScrollRight }) => ($isScrollRight ? 'none' : 'unset')};
+  position: absolute;
+  top: 0;
+  right: -10px;
+  width: 10px;
+  height: 32px;
+  box-shadow: 0 0 16px 24px rgba(255, 255, 255, 0.9);
+`
+
+export const ScrollBox = styled.div`
   width: 100%;
   overflow: scroll;
 
@@ -151,10 +176,16 @@ export const SelectedCardContentsBox = styled.div`
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
+    max-width: 360px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   strong {
-    /* min-width: 50px; */
     margin-right: 8px;
     font-weight: ${({ theme }) => theme.fontWeight.normal};
   }

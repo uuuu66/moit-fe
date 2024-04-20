@@ -2,9 +2,9 @@ import { type SkillList } from '@/type/meeting'
 import {
   CardIconText,
   HomeSelectedMeetingCardLayout,
+  ScrollBox,
   SelectedCardContentsBox,
   SelectedCardTitleBox,
-  TagBox,
 } from './styles'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { theme } from '@/constants/theme'
@@ -62,13 +62,13 @@ export default function HomeSelectedMeetingCard({
               {careerList}
             </p>
           </CardIconText>
-          <TagBox>
+          <ScrollBox>
             <div>
               {tags.map(({ id, skillName }) => (
                 <p key={`${id}_${skillName}`}>{skillName}</p>
               ))}
             </div>
-          </TagBox>
+          </ScrollBox>
         </div>
         <img src="/assets/right.svg" alt="right" />
       </SelectedCardContentsBox>
