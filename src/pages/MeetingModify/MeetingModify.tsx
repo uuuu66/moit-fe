@@ -135,7 +135,11 @@ function MeetingModify(): JSX.Element {
   }
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const budgetValue: number = parseInt(e.target.value, 10)
+    const inputValue = e.target.value
+    if (inputValue.includes('-')) {
+      return
+    }
+    const budgetValue: number = parseInt(inputValue, 10)
     setInfo((prevState) => ({
       ...prevState,
       budget: budgetValue,
@@ -187,7 +191,8 @@ function MeetingModify(): JSX.Element {
   }
 
   const isBlank =
-    info.meetingName === '' ||
+    info.meetingName?.trim() === '' ||
+    info.contents?.trim() === '' ||
     info.locationAddress === '' ||
     Number.isNaN(info.budget) ||
     info.skillIds.length === 0 ||
@@ -195,7 +200,7 @@ function MeetingModify(): JSX.Element {
 
   const handleMeetingModifySubmit = (): void => {
     if (isBlank) {
-      window.alert('빈 칸 채우세요')
+      window.alert('빈 칸을 채워주세요')
       return
     }
     editMutation.mutate()
@@ -331,6 +336,9 @@ function MeetingModify(): JSX.Element {
                   if (!regex.test(e.key)) {
                     e.preventDefault()
                   }
+                }}
+                onWheel={(e) => {
+                  ;(e.target as HTMLInputElement).blur()
                 }}
               />
               <label htmlFor="price">원</label>

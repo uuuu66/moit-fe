@@ -2,7 +2,6 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
 import { useState } from 'react'
-// import { getHours, getMinutes, isAfter, setHours, setMinutes } from 'date-fns'
 import { setHours, setMinutes } from 'date-fns'
 import { InputBox } from '../../../pages/Meeting/styles'
 import { theme } from '@/constants/theme'
@@ -23,25 +22,14 @@ function TimeChoice({
   const [isSelected, setIsSelected] = useState(false)
 
   const onSelect = (time: Date): void => {
+    handleEndTimeChange(null)
     handleStartTimeChange(time)
     setIsSelected(true)
   }
 
-  // const maxEndTime = setHours(startTime, getHours(startTime) + 6)
-
-  // // Check if the maxEndTime exceeds the current day
-  // const currentHour = getHours(new Date())
-  // const isMaxEndTimeAfterCurrentDay = isAfter(
-  //   maxEndTime,
-  //   setHours(new Date(), currentHour)
-  // )
-
-  // // Adjust max time accordingly
-  // const maxTime = isMaxEndTimeAfterCurrentDay
-  //   ? setHours(new Date(), currentHour)
-  //   : maxEndTime
   const minTime = startTime != null ? new Date(startTime) : new Date()
   const maxTime = setHours(setMinutes(new Date(), 30), 23)
+
   return (
     <div
       style={{

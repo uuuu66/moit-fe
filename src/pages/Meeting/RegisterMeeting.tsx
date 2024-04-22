@@ -97,7 +97,11 @@ function RegisterMeeting(): JSX.Element {
   }
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const budgetValue: number = parseInt(e.target.value, 10)
+    const inputValue = e.target.value
+    if (inputValue.includes('-')) {
+      return
+    }
+    const budgetValue: number = parseInt(inputValue, 10)
     setInfo((prevState) => ({
       ...prevState,
       budget: budgetValue,
@@ -157,7 +161,8 @@ function RegisterMeeting(): JSX.Element {
   })
 
   const isBlank =
-    info.meetingName === '' ||
+    info.meetingName.trim() === '' ||
+    info.contents.trim() === '' ||
     info.meetingDate === null ||
     info.meetingStartTime === null ||
     info.meetingEndTime === null ||
@@ -168,7 +173,7 @@ function RegisterMeeting(): JSX.Element {
 
   const handleMeetingSubmit = (): void => {
     if (isBlank) {
-      window.alert('빈 칸 채우세요')
+      window.alert('빈 칸을 채워주세요')
       return
     }
     const newMeetingData = {
@@ -293,6 +298,9 @@ function RegisterMeeting(): JSX.Element {
                   if (!regex.test(e.key)) {
                     e.preventDefault()
                   }
+                }}
+                onWheel={(e) => {
+                  ;(e.target as HTMLInputElement).blur()
                 }}
               />
               <label htmlFor="price">원</label>
