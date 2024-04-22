@@ -62,19 +62,21 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
     deleteMutation.mutate()
   }
 
+  const goback = (): void => {
+    if (location.pathname === `/meetings/${meetingId}/chats`) {
+      navi(`/meetings/${meetingId}`)
+    } else if (location.pathname === `/meetings/${meetingId}`) {
+      navi('/')
+    }
+  }
+
   const token: string = getLocalStorageItem('accessToken')
   const decodedToken = token != null ? jwtDecode(token) : ''
 
   return (
     <DetailHeaderContainer>
       <div>
-        <button
-          type="button"
-          onClick={() => {
-            navi(-1)
-          }}
-          aria-label="go back"
-        >
+        <button type="button" onClick={goback} aria-label="go back">
           <Icon src="/assets/arrowLeft.svg" alt="" />
         </button>
         <ChatUsers
