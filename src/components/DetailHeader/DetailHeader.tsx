@@ -91,7 +91,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
             chat
           </ToggleButton>
         </ToggleContainer>
-        {isOpen && decodedToken.sub === data?.creatorEmail ? (
+        {decodedToken.sub === data?.creatorEmail ? (
           <MenuButton
             type="button"
             aria-label="menu"
