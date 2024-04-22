@@ -190,3 +190,49 @@ export const SelectedCardContentsBox = styled.div`
     font-weight: ${({ theme }) => theme.fontWeight.normal};
   }
 `
+
+export const SearchMeetingCardLayout = styled.div`
+  border-radius: 12px;
+  background: ${({ theme }) => theme.color.white};
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  cursor: pointer;
+
+  &:hover {
+    border: ${({ theme }) => `1px solid ${theme.color.primary100}`};
+  }
+
+  .card-flex-box {
+    padding-right: 24px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  h2 {
+    padding: 16px 16px 0;
+    ${({ theme }) => `
+    color: ${theme.color.primary100};
+    font-size: ${theme.fontSize.medium};
+    font-weight: ${theme.fontWeight.bold};
+    `}
+  }
+
+  .right-icon-box {
+    /* width: fit-content;
+    background-color: red;
+    height: 100%;
+    display: inline-flex;
+    align-items: center; */
+  }
+`

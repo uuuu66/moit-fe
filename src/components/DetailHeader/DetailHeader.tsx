@@ -12,6 +12,7 @@ import {
 import { deleteMeeting, getMeetingDetail } from '@/apis/meeting'
 import { MenuButton, MenuContainer } from '@/pages/Chat/styles'
 import { getLocalStorageItem } from '@/util/localStorage'
+import LoginModal from '../modals/LoginModal'
 
 interface DetailHeaderProps {
   meetingId: number
@@ -22,6 +23,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
   const location = useLocation()
 
   const [isOpen, setIsOpen] = useState(false)
+  const [onLoginModal, setOnLoginModal] = useState(false)
 
   const { data } = useQuery({
     queryKey: ['chatroom'],
@@ -43,8 +45,17 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
   const handleHomeClick = (): void => {
     navi(`/meetings/${meetingId}`)
   }
+  console.log(data, 'test')
   const handleChatClick = (): void => {
-    navi(`/meetings/${meetingId}/chats`)
+    if (token !== null && token.length !== 0) {
+      if (!(data?.join ?? false)) {
+        window.alert('채팅에 참여하려면 모임 참여하기 버튼을 먼저 눌러주세요')
+        return
+      }
+      navi(`/meetings/${meetingId}/chats`)
+    } else {
+      setOnLoginModal(true)
+    }
   }
 
   const deleteMeetingClick = (): void => {
@@ -90,6 +101,13 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
           >
             chat
           </ToggleButton>
+          {onLoginModal && (
+            <LoginModal
+              handleCloseModal={() => {
+                setOnLoginModal(false)
+              }}
+            />
+          )}
         </ToggleContainer>
         {decodedToken.sub === data?.creatorEmail ? (
           <MenuButton

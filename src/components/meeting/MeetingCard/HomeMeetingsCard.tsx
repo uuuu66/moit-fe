@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import {
   CardIconText,
   ContentsBox,
@@ -10,6 +10,7 @@ import {
   TextBox,
   TitleBox,
 } from './styles'
+import useScrollPosition from '@/hooks/useScrollPosition'
 
 interface HomeMeetingsCardProps {
   title: string
@@ -30,27 +31,8 @@ export default function HomeMeetingsCard({
   tags,
   handleCardClick,
 }: HomeMeetingsCardProps): JSX.Element {
-  const [isScrollLeft, setIsScrollLeft] = useState(true)
-  const [isScrollRight, setIsScrollRight] = useState(false)
-
-  const handleScroll = (e: React.UIEvent<HTMLElement>): void => {
-    const boxWidth = e.currentTarget.clientWidth
-    const { scrollWidth } = e.currentTarget
-    const scrollPosition = e.currentTarget.scrollLeft
-
-    if (isScrollLeft && scrollPosition > 1) {
-      setIsScrollLeft(false)
-    }
-    if (!isScrollLeft && scrollPosition <= 1) {
-      setIsScrollLeft(true)
-    }
-    if (!isScrollRight && boxWidth + scrollPosition + 1 >= scrollWidth) {
-      setIsScrollRight(true)
-    }
-    if (isScrollRight && boxWidth + scrollPosition + 1 < scrollWidth) {
-      setIsScrollRight(false)
-    }
-  }
+  const scrollBoxRef = useRef<HTMLDivElement>(null)
+  const { isScrollLeft, isScrollRight } = useScrollPosition(scrollBoxRef)
 
   return (
     <HomeMeetingsCardLayout onClick={handleCardClick}>
@@ -78,8 +60,8 @@ export default function HomeMeetingsCard({
         <TagBox>
           <LeftShadowBox $isScrollLeft={isScrollLeft} />
           <RightShadowBox $isScrollRight={isScrollRight} />
-          <ScrollBox onScroll={handleScroll}>
-            <div className="tag-flex-box" onScroll={handleScroll}>
+          <ScrollBox ref={scrollBoxRef}>
+            <div>
               {tags.map(({ name, id }) => (
                 <p key={`${id}_${name}`}>{name}</p>
               ))}

@@ -1,13 +1,18 @@
+import { useRef } from 'react'
 import { type SkillList } from '@/type/meeting'
 import {
   CardIconText,
   HomeSelectedMeetingCardLayout,
+  LeftShadowBox,
+  RightShadowBox,
   ScrollBox,
   SelectedCardContentsBox,
   SelectedCardTitleBox,
+  TagBox,
 } from './styles'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { theme } from '@/constants/theme'
+import useScrollPosition from '@/hooks/useScrollPosition'
 
 interface HomeSelectedMeetingCardProps {
   title: string
@@ -30,6 +35,8 @@ export default function HomeSelectedMeetingCard({
   tags,
   handleCardClick,
 }: HomeSelectedMeetingCardProps): JSX.Element {
+  const scrollBoxRef = useRef<HTMLDivElement>(null)
+  const { isScrollLeft, isScrollRight } = useScrollPosition(scrollBoxRef)
   return (
     <HomeSelectedMeetingCardLayout>
       <SelectedCardTitleBox>
@@ -62,13 +69,17 @@ export default function HomeSelectedMeetingCard({
               {careerList}
             </p>
           </CardIconText>
-          <ScrollBox>
-            <div>
-              {tags.map(({ id, skillName }) => (
-                <p key={`${id}_${skillName}`}>{skillName}</p>
-              ))}
-            </div>
-          </ScrollBox>
+          <TagBox>
+            <LeftShadowBox $isScrollLeft={isScrollLeft} />
+            <RightShadowBox $isScrollRight={isScrollRight} />
+            <ScrollBox ref={scrollBoxRef}>
+              <div>
+                {tags.map(({ id, skillName }) => (
+                  <p key={`${id}_${skillName}`}>{skillName}</p>
+                ))}
+              </div>
+            </ScrollBox>
+          </TagBox>
         </div>
         <img src="/assets/right.svg" alt="right" />
       </SelectedCardContentsBox>
