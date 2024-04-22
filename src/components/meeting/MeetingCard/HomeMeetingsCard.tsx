@@ -1,11 +1,16 @@
+import { useRef } from 'react'
 import {
   CardIconText,
   ContentsBox,
   HomeMeetingsCardLayout,
+  LeftShadowBox,
+  RightShadowBox,
+  ScrollBox,
   TagBox,
   TextBox,
   TitleBox,
 } from './styles'
+import useScrollPosition from '@/hooks/useScrollPosition'
 
 interface HomeMeetingsCardProps {
   title: string
@@ -26,6 +31,9 @@ export default function HomeMeetingsCard({
   tags,
   handleCardClick,
 }: HomeMeetingsCardProps): JSX.Element {
+  const scrollBoxRef = useRef<HTMLDivElement>(null)
+  const { isScrollLeft, isScrollRight } = useScrollPosition(scrollBoxRef)
+
   return (
     <HomeMeetingsCardLayout onClick={handleCardClick}>
       <TitleBox>
@@ -50,11 +58,15 @@ export default function HomeMeetingsCard({
           </div>
         </TextBox>
         <TagBox>
-          <div>
-            {tags.map(({ name, id }) => (
-              <p key={`${id}_${name}`}>{name}</p>
-            ))}
-          </div>
+          <LeftShadowBox $isScrollLeft={isScrollLeft} />
+          <RightShadowBox $isScrollRight={isScrollRight} />
+          <ScrollBox ref={scrollBoxRef}>
+            <div>
+              {tags.map(({ name, id }) => (
+                <p key={`${id}_${name}`}>{name}</p>
+              ))}
+            </div>
+          </ScrollBox>
         </TagBox>
       </ContentsBox>
     </HomeMeetingsCardLayout>

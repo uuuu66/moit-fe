@@ -7,7 +7,6 @@ import {
   CardBox,
   EmptyTextBox,
   InputBox,
-  MeetingCard,
   SearchBox,
   SearchLayout,
   RecentTagBox,
@@ -16,15 +15,10 @@ import {
 } from './styles'
 import { type GetMeeting } from '@/type/meeting'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
-import {
-  CardIconText,
-  ContentsBox,
-  TextBox,
-  TagBox,
-} from '@/components/meeting/MeetingCard/styles'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import useScrollEnd from '@/hooks/useScrollEnd'
+import SearchMeetingsCard from '@/components/meeting/MeetingCard/SearchMeetingsCard'
 
 export default function Search(): JSX.Element {
   const [queries] = useSearchParams()
@@ -41,8 +35,10 @@ export default function Search(): JSX.Element {
   const hasRecents = recents.length !== 0
   const [onRecentsToggle, setOnRecentsToggle] = useState(true)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
-  const { handleScroll } = useScrollEnd()
+
   const navigate = useNavigate()
+
+  const { handleScroll } = useScrollEnd()
 
   const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: meetingKeys.search(keyword),
@@ -108,7 +104,6 @@ export default function Search(): JSX.Element {
 
   if (isLoading) return <LoadingPage name="페이지를" />
   if (isError) return <ErrorPage />
-
   return (
     <SearchLayout>
       <SearchBox>
@@ -159,11 +154,10 @@ export default function Search(): JSX.Element {
           </ToggleButton>
           {hasRecents && onRecentsToggle && (
             <RecentTagBox>
-              {recents.map((word, index) => (
+              {recents.map((word) => (
                 <button
                   type="button"
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={`${word}_${index}`}
+                  key={word}
                   value={word}
                   onClick={handleCickTag}
                 >
@@ -183,56 +177,12 @@ export default function Search(): JSX.Element {
             </EmptyTextBox>
           ) : (
             <>
-              {meetings.map(
-                ({
-                  meetingId,
-                  meetingName,
-                  locationAddress,
-                  meetingDate,
-                  meetingEndTime,
-                  meetingStartTime,
-                  registeredCount,
-                  totalCount,
-                  skillList,
-                }) => (
-                  <MeetingCard
-                    key={meetingId}
-                    onClick={() => {
-                      navigate(`/meetings/${meetingId}`)
-                    }}
-                  >
-                    <h2>{meetingName}</h2>
-                    <div className="card-flex-box">
-                      <ContentsBox>
-                        <TextBox>
-                          <CardIconText>
-                            <img src="/assets/time.svg" alt="time" />
-                            <p>{`${meetingDate} | ${meetingStartTime} - ${meetingEndTime}`}</p>
-                          </CardIconText>
-                          <div className="flex-box">
-                            <CardIconText>
-                              <img src="/assets/pin.svg" alt="pin" />
-                              <p>{`${locationAddress.split(' ')[0]} ${locationAddress.split(' ')[1]}`}</p>
-                            </CardIconText>
-                            <CardIconText>
-                              <img src="/assets/member.svg" alt="member" />
-                              <p>{`${registeredCount} / ${totalCount}`}</p>
-                            </CardIconText>
-                          </div>
-                        </TextBox>
-                        <TagBox>
-                          <div>
-                            {skillList.map(({ skillName, id }) => (
-                              <p key={`${id}_${skillName}`}>{skillName}</p>
-                            ))}
-                          </div>
-                        </TagBox>
-                      </ContentsBox>
-                      <img src="/assets/right.svg" alt="right" />
-                    </div>
-                  </MeetingCard>
-                )
-              )}
+              {meetings.map((meeting) => (
+                <SearchMeetingsCard
+                  key={`${meeting.meetingId}_${meeting.meetingName}`}
+                  meeting={meeting}
+                />
+              ))}
             </>
           )}
         </CardBox>

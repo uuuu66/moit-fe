@@ -73,6 +73,31 @@ export const CardIconText = styled.div`
 `
 
 export const TagBox = styled.div`
+  position: relative;
+  overflow: hidden;
+`
+
+export const LeftShadowBox = styled.div<{ $isScrollLeft: boolean }>`
+  display: ${({ $isScrollLeft }) => ($isScrollLeft ? 'none' : 'unset')};
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 10px;
+  height: 32px;
+  box-shadow: 0 0 16px 24px rgba(255, 255, 255, 0.9);
+`
+
+export const RightShadowBox = styled.div<{ $isScrollRight: boolean }>`
+  display: ${({ $isScrollRight }) => ($isScrollRight ? 'none' : 'unset')};
+  position: absolute;
+  top: 0;
+  right: -10px;
+  width: 10px;
+  height: 32px;
+  box-shadow: 0 0 16px 24px rgba(255, 255, 255, 0.9);
+`
+
+export const ScrollBox = styled.div`
   width: 100%;
   overflow: scroll;
 
@@ -151,11 +176,63 @@ export const SelectedCardContentsBox = styled.div`
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
+    max-width: 360px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   strong {
-    /* min-width: 50px; */
     margin-right: 8px;
     font-weight: ${({ theme }) => theme.fontWeight.normal};
+  }
+`
+
+export const SearchMeetingCardLayout = styled.div`
+  border-radius: 12px;
+  background: ${({ theme }) => theme.color.white};
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  cursor: pointer;
+
+  &:hover {
+    border: ${({ theme }) => `1px solid ${theme.color.primary100}`};
+  }
+
+  .card-flex-box {
+    padding-right: 24px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  h2 {
+    padding: 16px 16px 0;
+    ${({ theme }) => `
+    color: ${theme.color.primary100};
+    font-size: ${theme.fontSize.medium};
+    font-weight: ${theme.fontWeight.bold};
+    `}
+  }
+
+  .right-icon-box {
+    /* width: fit-content;
+    background-color: red;
+    height: 100%;
+    display: inline-flex;
+    align-items: center; */
   }
 `
