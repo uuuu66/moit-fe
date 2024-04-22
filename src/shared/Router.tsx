@@ -8,8 +8,13 @@ import MeetingDetail from '@/pages/MeetingDetail/MeetingDetail'
 import Chat from '@/pages/Chat/Chat'
 import Mypage from '@/pages/Mypage/Mypage'
 import MeetingModify from '@/pages/MeetingModify/MeetingModify'
+import { getLocalStorageItem } from '@/util/localStorage'
+import ErrorPage from './ErrorPage'
 
 function Router(): JSX.Element {
+  const token: string = getLocalStorageItem('accessToken')
+  const isAuthenticated = token != null && token.length !== 0
+
   return (
     <BrowserRouter>
       <Routes>
@@ -17,14 +22,23 @@ function Router(): JSX.Element {
           <Route path="/login/:service" element={<Login />} />
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/meetings" element={<RegisterMeeting />} />
+          <Route
+            path="/meetings"
+            element={isAuthenticated ? <RegisterMeeting /> : <ErrorPage />}
+          />
           <Route path="/meetings/:meetingId" element={<MeetingDetail />} />
           <Route
             path="/meetings/:meetingId/modify"
-            element={<MeetingModify />}
+            element={isAuthenticated ? <MeetingModify /> : <ErrorPage />}
           />
-          <Route path="/meetings/:meetingId/chats" element={<Chat />} />
-          <Route path="/mypage" element={<Mypage />} />
+          <Route
+            path="/meetings/:meetingId/chats"
+            element={isAuthenticated ? <Chat /> : <ErrorPage />}
+          />
+          <Route
+            path="/mypage"
+            element={isAuthenticated ? <Mypage /> : <ErrorPage />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
