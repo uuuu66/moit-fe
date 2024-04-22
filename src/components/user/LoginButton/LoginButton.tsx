@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import LoginModal from '@/components/modals/LoginModal'
 import { getLocalStorageItem } from '@/util/localStorage'
 import { logout } from '@/apis/user'
@@ -6,13 +7,16 @@ import { logout } from '@/apis/user'
 export default function LoginButton(): JSX.Element {
   const [onLoginModal, setOnLoginModal] = useState(false)
   const [isLogin, setIsLogin] = useState(false)
-  const token: string = getLocalStorageItem('accessToken')
+  const { pathname } = useLocation()
 
   useEffect(() => {
+    const token: string = getLocalStorageItem('accessToken')
     if (token !== null && token.length !== 0) {
       setIsLogin(true)
+    } else {
+      setIsLogin(false)
     }
-  }, [token])
+  }, [pathname])
 
   const handleClickButton = (): void => {
     if (isLogin) {
@@ -20,6 +24,7 @@ export default function LoginButton(): JSX.Element {
         .catch(() => {})
         .finally(() => {
           setIsLogin(false)
+          window.alert('로그아웃이 완료되었습니다.')
         })
     } else {
       setOnLoginModal(true)

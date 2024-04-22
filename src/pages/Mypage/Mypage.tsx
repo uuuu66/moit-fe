@@ -156,6 +156,7 @@ export default function Mypage(): JSX.Element {
             .catch(() => {})
             .finally(() => {
               navigate('/')
+              window.alert('로그아웃이 완료되었습니다.')
             })
         }}
       >
