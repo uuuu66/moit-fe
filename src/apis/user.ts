@@ -8,6 +8,7 @@ import { authInstance, instance } from './axios'
 import { type CommonResponse } from '@/type/response'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import setRequestTokenSchedule from '@/util/setRequestTokenSchedule'
+import { type MyMeetingsStatus } from '@/type/meeting'
 
 const login = async (code: string, service: Service): Promise<User> => {
   try {
@@ -64,10 +65,13 @@ const getProfile = async <T = Profile>(): Promise<T> => {
   }
 }
 
-const getMyMeetings = async <T = MyMeeting[]>(): Promise<T> => {
+const getMyMeetings = async <T = MyMeeting[]>(
+  status: MyMeetingsStatus
+): Promise<T> => {
   try {
-    const { data } =
-      await authInstance.get<CommonResponse<T>>('api/member/meeting')
+    const { data } = await authInstance.get<CommonResponse<T>>(
+      `api/member/meeting${status === 'complete' ? '/complete' : ''}`
+    )
     return data.data
   } catch (error) {
     console.log(error)

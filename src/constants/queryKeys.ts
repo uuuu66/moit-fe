@@ -1,4 +1,4 @@
-import { type Center } from '@/type/meeting'
+import { type MyMeetingsStatus, type Center } from '@/type/meeting'
 
 const filterKeys = {
   firstRegion: ['firstRegion'],
@@ -14,7 +14,7 @@ const meetingKeys = {
 
 const userKeys = {
   profile: ['profile'],
-  myMeetings: ['myMeetings'],
+  myMeetings: (status: MyMeetingsStatus) => ['myMeetings', { status }],
 }
 
 export { filterKeys, meetingKeys, userKeys }

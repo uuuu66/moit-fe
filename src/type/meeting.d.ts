@@ -27,3 +27,5 @@ export interface CareerList {
   careerName: string
   id: number
 }
+
+export type MyMeetingsTab = 'progress' | 'complete'

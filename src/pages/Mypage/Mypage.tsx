@@ -25,8 +25,10 @@ import { type MyMeeting } from '@/type/user'
 import { CardIconText } from '@/components/meeting/MeetingCard/styles'
 import LoadingPage from '../../shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
+import { type MyMeetingsStatus } from '@/type/meeting'
 
 export default function Mypage(): JSX.Element {
+  const [tab, setTab] = useState<MyMeetingsStatus>('progress')
   const [onTotalOpen, setOnTotalOpen] = useState(false)
   const navigate = useNavigate()
 
@@ -36,12 +38,13 @@ export default function Mypage(): JSX.Element {
   })
 
   const { data: meetings } = useQuery({
-    queryKey: userKeys.myMeetings,
-    queryFn: async () => await getMyMeetings(),
+    queryKey: userKeys.myMeetings(tab),
+    queryFn: async () => await getMyMeetings(tab),
   })
 
   if (profileInfo == null) return <LoadingPage name="페이지를" />
 
+  const isProgress = tab === 'progress'
   const getCurrentMeetings = (): MyMeeting[] => {
     if (meetings == null || meetings?.length === 0) return []
     return onTotalOpen ? meetings : meetings.slice(0, 2)
@@ -99,7 +102,24 @@ export default function Mypage(): JSX.Element {
       <MeetingsBox>
         <ButtonBox>
           <div className="button-flex-box">
-            <button type="button">참여 중인 모임</button>
+            <button
+              className={isProgress ? 'tab-active-button' : ''}
+              type="button"
+              onClick={() => {
+                setTab('progress')
+              }}
+            >
+              참여 중인 모임
+            </button>
+            <button
+              className={tab !== 'progress' ? 'tab-active-button' : ''}
+              type="button"
+              onClick={() => {
+                setTab('complete')
+              }}
+            >
+              참여 완료 모임
+            </button>
           </div>
           <button
             type="button"
@@ -123,12 +143,13 @@ export default function Mypage(): JSX.Element {
                 meetingEndTime,
               }) => (
                 <MeetingCard
+                  $isProgress={isProgress}
                   key={meetingId}
                   onClick={() => {
                     navigate(`/meetings/${meetingId}/chats`)
                   }}
                 >
-                  <span>참여중</span>
+                  <span>{isProgress ? '참여중' : '참여 완료'}</span>
                   <TitleBox>
                     <h2>{meetingName}</h2>
                     <img src="/assets/enter.svg" alt="enter" />
@@ -144,7 +165,9 @@ export default function Mypage(): JSX.Element {
           ) : (
             <EmptyTextBox>
               <img src="/assets/warning.svg" alt="warning" />
-              <p>참여 중인 모임이 없습니다</p>
+              <p>
+                {`${isProgress ? '참여 중인' : '참여 완료한'} 모임이 없습니다.`}
+              </p>
             </EmptyTextBox>
           )}
         </MeetingCardBox>

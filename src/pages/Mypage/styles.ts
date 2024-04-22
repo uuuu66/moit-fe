@@ -150,12 +150,18 @@ export const ButtonBox = styled.div`
       padding: 6px 12px;
       border-radius: 20px;
       ${({ theme }) => `
-      background:${theme.color.primary100};
-      color:${theme.color.white};
+      background:${theme.color.black20};
+      color:${theme.color.black60};
       font-size: ${theme.fontSize.small};
       font-weight: ${theme.fontWeight.normal};    
       `}
-      cursor: default;
+    }
+
+    .tab-active-button {
+      ${({ theme }) => `
+      background: ${theme.color.primary100};
+      color: ${theme.color.white};
+      }`}
     }
   }
 
@@ -175,7 +181,7 @@ export const MeetingCardBox = styled.div`
   gap: 12px;
 `
 
-export const MeetingCard = styled.div`
+export const MeetingCard = styled.div<{ $isProgress: boolean }>`
   padding: 20px;
   margin: 2px;
   border-radius: 8px;
@@ -191,8 +197,8 @@ export const MeetingCard = styled.div`
   }
 
   span {
-    ${({ theme }) => `
-    color: ${theme.color.primary100};
+    ${({ theme, $isProgress }) => `
+    color: ${$isProgress ? theme.color.primary100 : theme.color.black40};
     font-size: ${theme.fontSize.smaller};
     font-weight: ${theme.fontWeight.normal};
     `}
