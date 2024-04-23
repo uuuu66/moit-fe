@@ -217,6 +217,7 @@ function RegisterMeeting(): JSX.Element {
           <img src="/assets/meetingLeftArrow.svg" alt="go back" />
         </button>
         <h2>모임 생성하기</h2>
+        <div />
       </InfoHeader>
       <RegisterTitle>
         <h1>모임을 소개해 주세요!</h1>
