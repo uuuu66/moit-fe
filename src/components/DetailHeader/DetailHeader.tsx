@@ -13,6 +13,9 @@ import { deleteMeeting, getMeetingDetail } from '@/apis/meeting'
 import { MenuButton, MenuContainer } from '@/pages/Chat/styles'
 import { getLocalStorageItem } from '@/util/localStorage'
 import LoginModal from '../modals/LoginModal'
+import { notify } from '../Toast'
+import 'react-toastify/dist/ReactToastify.css'
+import AlertModal from '../modals/AlertModal'
 
 interface DetailHeaderProps {
   meetingId: number
@@ -24,6 +27,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
 
   const [isOpen, setIsOpen] = useState(false)
   const [onLoginModal, setOnLoginModal] = useState(false)
+  const [onDeleteModal, setOnDeleteModal] = useState(false)
 
   const { data } = useQuery({
     queryKey: ['chatroom'],
@@ -35,6 +39,10 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
       await deleteMeeting(Number(meetingId))
     },
     onSuccess: () => {
+      notify({
+        type: 'default',
+        text: '모임이 삭제 되었습니다.',
+      })
       navi('/')
     },
     onError: (error) => {
@@ -45,7 +53,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
   const handleHomeClick = (): void => {
     navi(`/meetings/${meetingId}`)
   }
-  console.log(data, 'test')
+
   const handleChatClick = (): void => {
     if (token !== null && token.length !== 0) {
       if (!(data?.join ?? false)) {
@@ -152,11 +160,22 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
             <button
               type="button"
               aria-label="delete"
-              onClick={deleteMeetingClick}
+              onClick={() => {
+                setOnDeleteModal(!onDeleteModal)
+              }}
             >
               <img src="/assets/delete.svg" alt="delete" />
             </button>
           </div>
+          {onDeleteModal && (
+            <AlertModal
+              message="모임을 삭제하시겠습니까?"
+              onClose={() => {
+                setOnDeleteModal(!onDeleteModal)
+              }}
+              handleClick={deleteMeetingClick}
+            />
+          )}
         </MenuContainer>
       )}
     </DetailHeaderContainer>
