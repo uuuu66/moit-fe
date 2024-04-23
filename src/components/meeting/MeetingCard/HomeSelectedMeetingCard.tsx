@@ -89,7 +89,7 @@ export default function HomeSelectedMeetingCard({
         style={{ width: '100%', background: theme.color.primary100 }}
         handleClick={handleCardClick}
       >
-        바로 참여하기
+        모임 상세보기
       </CommonButton>
     </HomeSelectedMeetingCardLayout>
   )

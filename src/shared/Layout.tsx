@@ -5,6 +5,7 @@ import Footer from '@/components/Footer/Footer'
 import Header from '@/components/Header/Header'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import Onboarding from './Onboarding'
+import { theme } from '@/constants/theme'
 
 export default function Layout(): JSX.Element {
   const [screenHeight, setScreenHeight] = useState(window.innerHeight)
@@ -28,6 +29,7 @@ export default function Layout(): JSX.Element {
 
   return (
     <ScreenStyles $screenHeight={screenHeight}>
+      {/* <LayoutBorder> */}
       {isFirstState ? (
         <Onboarding
           handleClick={() => {
@@ -36,14 +38,6 @@ export default function Layout(): JSX.Element {
           }}
         />
       ) : (
-        // <div
-        //   style={{
-        //     padding: '20px',
-        //     backgroundColor: '#383737',
-        //     border: '1px solid #626262',
-        //     borderRadius: '20px',
-        //   }}
-        // >
         <LayoutStyles $screenHeight={screenHeight}>
           <ContentsStyles>
             <Header />
@@ -54,11 +48,16 @@ export default function Layout(): JSX.Element {
           <Footer />
           <div id="modal" />
         </LayoutStyles>
-        // </div>
       )}
-      <TextBox>
+      {/* </LayoutBorder> */}
+      <IntroduceBox>
         <img src="/assets/introduce.svg" alt="" />
-      </TextBox>
+        <div>
+          <span>HANGHAE99</span>
+          <span>hanghae99_1903@gmail.com</span>
+          <span>서비스 사용 중 문제가 있다면, 이메일로 연락부탁드립니다.</span>
+        </div>
+      </IntroduceBox>
     </ScreenStyles>
   )
 }
@@ -68,10 +67,7 @@ const ScreenStyles = styled.div<{ $screenHeight: number }>`
   height: ${({ $screenHeight }) => `${$screenHeight}px`};
   display: flex;
   align-items: center;
-  /* background-image: url('/assets/mainBackground.svg'); */
-  /* background-image: url('/assets/website.svg'); */
   background-image: url('/assets/website.jpg');
-  /* background-image: url('/assets/logo.svg'); */
   background-size: cover;
   justify-content: center;
 
@@ -81,32 +77,39 @@ const ScreenStyles = styled.div<{ $screenHeight: number }>`
   }
 `
 
-const TextBox = styled.div`
+const IntroduceBox = styled.div`
   display: none;
-  h1 {
-    font-size: 24px;
-    font-weight: 500;
-    font-family: serif;
+  div {
+    display: flex;
+    flex-direction: column;
+    font-size: ${theme.fontSize.larger2};
+    font-weight: ${theme.fontWeight.normal};
+    color: ${theme.color.black40};
+    margin-top: 26rem;
+    :first-child {
+      font-weight: ${theme.fontWeight.bold};
+    }
   }
-  h3 {
-    font-size: 24px;
-    font-weight: 500;
-  }
-  h4 {
-    font-size: 24px;
-    font-weight: 600;
-  }
-  h5 {
-    font-size: 24px;
-    font-weight: 700;
-  }
-
   @media screen and (min-width: 1235px) {
     display: unset;
-    /* width: 500px;
-    height: 500px; */
   }
 `
+
+// const LayoutBorder = styled.div`
+//   width: 100%;
+//   min-width: 400px;
+//   max-width: 470px;
+//   padding: 20px;
+//   background-color: #383737;
+//   border: 1px solid #626262;
+//   border-radius: 50px;
+//   /* display: block; */
+
+//   /* @media screen and (max-width: 1235px) {
+//     display: none;
+//   } */
+// `
+
 const LayoutStyles = styled.div<{ $screenHeight: number }>`
   width: 100%;
   min-width: 360px;
@@ -116,7 +119,7 @@ const LayoutStyles = styled.div<{ $screenHeight: number }>`
   max-height: 932px;
   border-radius: 20px;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 1);
-  background: #383737;
+  background: ${theme.color.primary10};
   position: relative;
   box-sizing: unset;
   overflow: hidden;
