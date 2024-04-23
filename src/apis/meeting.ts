@@ -162,6 +162,36 @@ const getChatMsg = async <T = ChatMessage[]>({
   }
 }
 
+const postBookMark = async (meetingId: number): Promise<void> => {
+  try {
+    await authInstance.post(`/api/bookmark/add`, { meetingId })
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const deleteBookMark = async (meetingId: number): Promise<void> => {
+  try {
+    await authInstance.delete(`/api/bookmark/remove`, { data: { meetingId } })
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const getConfirmBookMarked = async (meetingId: number): Promise<boolean> => {
+  try {
+    const { data } = await authInstance.get<boolean>(
+      `api/bookmark/check?meetingId=${meetingId}`
+    )
+    return data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
 export {
   getMeetings,
   getMeetingsBySearch,
@@ -172,4 +202,7 @@ export {
   editMeeting,
   deleteMeetingWithdraw,
   getChatMsg,
+  postBookMark,
+  deleteBookMark,
+  getConfirmBookMarked,
 }

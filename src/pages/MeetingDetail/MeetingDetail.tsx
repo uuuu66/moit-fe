@@ -26,6 +26,7 @@ import CommonButton from '@/components/common/Button/CommonButton'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import { getLocalStorageItem } from '@/util/localStorage'
+import BookMark from '@/components/meeting/Bookmark/BookMark'
 
 function MeetingDetail(): JSX.Element {
   useMap()
@@ -94,6 +95,7 @@ function MeetingDetail(): JSX.Element {
           <div className="userInfo">
             <img src="/assets/userProfile.svg" alt="userProfile" />
             <div>{data?.creatorName}</div>
+            {data != null && <BookMark meetingId={data.meetingId} />}
           </div>
           <div className="tagbox">
             {data?.careerNameList.map((e: string) => (
@@ -183,7 +185,7 @@ function MeetingDetail(): JSX.Element {
       </DetailInfoContainer>
       {decodedToken.sub !== data?.creatorEmail && (
         <DetailButtonContainer>
-          {data?.join === true ? (
+          {data?.join ?? false ? (
             <CommonButton size="large" handleClick={withdrawMeetingClick}>
               모임 탈퇴하기
             </CommonButton>
