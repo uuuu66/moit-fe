@@ -3,6 +3,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
 import { useState } from 'react'
 import { setHours, setMinutes } from 'date-fns'
+import { ko } from 'date-fns/locale'
 import { InputBox } from '../../../pages/Meeting/styles'
 import { theme } from '@/constants/theme'
 
@@ -48,12 +49,13 @@ function TimeChoice({
         <label htmlFor="datepick1">
           <input type="text" id="datepick1" style={{ display: 'none' }} />
           <StDatePicker
+            locale={ko}
             selected={startTime}
             shouldCloseOnSelect
             showTimeSelect
             showTimeSelectOnly
             timeCaption="시작 시간"
-            dateFormat="h시 mm분"
+            dateFormat="H시 mm분"
             onChange={onSelect}
             placeholderText="00시 00분"
           />
@@ -72,13 +74,14 @@ function TimeChoice({
         <label htmlFor="datepick1">
           <input type="text" id="datepick1" style={{ display: 'none' }} />
           <StDatePicker
+            locale={ko}
             selected={endTime}
             shouldCloseOnSelect
             onChange={handleEndTimeChange}
             showTimeSelect
             showTimeSelectOnly
             timeCaption="종료 시간"
-            dateFormat="h시 mm분"
+            dateFormat="HH시 mm분"
             placeholderText="00시 00분"
             disabled={!isSelected}
             minTime={minTime}
