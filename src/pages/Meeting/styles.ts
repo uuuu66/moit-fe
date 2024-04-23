@@ -17,18 +17,22 @@ export const WholeContainer = styled.div`
 
 export const InfoHeader = styled.header`
   width: 100%;
-  display: grid;
+  display: flex;
   align-items: center;
-  grid-template-columns: 1fr 2fr;
+  justify-content: space-between;
   padding: 18.5px 20px;
 
   button {
     text-align: left;
     font-size: large;
+    height: 20px;
   }
   h2 {
     font-size: ${theme.fontSize.medium};
     color: ${theme.color.black60};
+  }
+  div {
+    width: 3rem;
   }
 `
 
@@ -147,7 +151,6 @@ export const InfoTitle = styled.h3`
 `
 
 export const MemberCount = styled.div`
-  /* width: 12.5rem; */
   margin: 3rem 0;
   display: flex;
   align-items: center;
