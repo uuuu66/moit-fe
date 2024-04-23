@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { type GetMeeting } from '@/type/meeting'
 import {
   CardBox,
@@ -21,7 +21,6 @@ export default function HomeMeetingsPanel({
   meetings,
   handleScrollEnd,
 }: HomeMeetingsPanelProps): JSX.Element {
-  const [onListOpen, setOnListOpen] = useState(false)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const { screenHeight } = useScreenSize()
@@ -37,13 +36,16 @@ export default function HomeMeetingsPanel({
     return () => {
       scrollBox?.removeEventListener('scroll', handleScrollEvent)
     }
-  }, [onListOpen, handleScroll, handleScrollEnd])
-
+  }, [handleScroll, handleScrollEnd])
+  const navi = useNavigate()
+  const [queries] = useSearchParams()
+  const isPanelOpen = queries.get('list') === 'true' ?? false
   return (
     <HomeMeetingsPanelLayout>
       <ToggleBox
         onClick={() => {
-          setOnListOpen(!onListOpen)
+          // setOnListOpen(!onListOpen)
+          !isPanelOpen ? navi(`/?list=true`) : navi(`/?list=false`)
         }}
       >
         <hr />
@@ -52,11 +54,12 @@ export default function HomeMeetingsPanel({
           <p>내 주위 모각코</p>
         </div>
       </ToggleBox>
-      {onListOpen && (
+      {isPanelOpen && (
         <>
           <MeetingsBackground
             onClick={() => {
-              setOnListOpen(!onListOpen)
+              // setOnListOpen(!onListOpen)
+              navi(`/?list=false`)
             }}
           />
           <MeetingsBox $isSmall={screenHeight < 800} ref={scrollBoxRef}>
