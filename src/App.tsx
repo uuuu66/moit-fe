@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import Router from './shared/Router'
 import useResetToken from './hooks/useResetToken'
 import { theme } from './constants/theme'
+import Toast from './components/Toast'
 
 function App(): JSX.Element {
   const queryClient = new QueryClient()
@@ -15,6 +16,7 @@ function App(): JSX.Element {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Router />
+          <Toast />
         </BrowserRouter>
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
