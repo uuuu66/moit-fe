@@ -4,10 +4,13 @@ import { Background } from '../filter/FilterFrame/styles'
 import CommonButton from '../common/Button/CommonButton'
 import { theme } from '@/constants/theme'
 
-interface AlertModalProps {
+export interface AlertModalProps {
   onClose: () => void
   handleClick: () => void
   message: string
+  firstSubMessage?: string
+  secondSubMessage?: string
+  buttonName: string
 }
 
 // 사용할 땐 오픈여부를 묻는 함수와 함께 사용해야 함, 더 좋은 방법있으면 수정 예정!
@@ -15,36 +18,59 @@ function AlertModal({
   onClose,
   handleClick,
   message,
+  firstSubMessage,
+  secondSubMessage,
+  buttonName,
 }: AlertModalProps): JSX.Element {
   return (
     <ModalPortal>
       <AlertBackground onClick={onClose}>
         <Content>
-          <div>{message}</div>
+          <div className="mainInfo">
+            <span>모임을</span>
+            <div>
+              <span className="emphasis">{message}</span>
+              <span>하시겠습니까?</span>
+            </div>
+          </div>
+          <div className="subContainer">
+            <span className="sub">{firstSubMessage}</span>
+            <span className="sub">{secondSubMessage}</span>
+          </div>
           <div className="buttonBox">
             <CommonButton
               size="small"
               handleClick={onClose}
               style={{
-                width: '12rem',
-                color: `${theme.color.black50}`,
+                width: '15rem',
+                color: `${theme.color.black40}`,
                 backgroundColor: `${theme.color.black20}`,
+                borderRadius: '8px',
               }}
             >
-              닫기
+              취소
             </CommonButton>
             <CommonButton
               size="small"
               handleClick={handleClick}
-              style={{ width: '12rem' }}
+              style={{
+                width: '15rem',
+                color: `${theme.color.white}`,
+                borderRadius: '8px',
+              }}
             >
-              확인
+              {buttonName}
             </CommonButton>
           </div>
         </Content>
       </AlertBackground>
     </ModalPortal>
   )
+}
+
+AlertModal.defaultProps = {
+  firstSubMessage: undefined,
+  secondSubMessage: undefined,
 }
 
 export default AlertModal
@@ -55,19 +81,43 @@ export const AlertBackground = styled(Background)`
   align-items: center;
 `
 export const Content = styled.div`
-  width: 36rem;
-  height: 20rem;
-  font-size: ${theme.fontSize.larger};
-  border-radius: 2rem;
+  width: 34.6rem;
+  padding: 2.8rem 0;
+  font-size: ${theme.fontSize.large};
+  font-weight: ${theme.fontWeight.normal};
+  border-radius: 12px;
   background-color: ${theme.color.white};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 2rem;
 
+  img {
+    padding: 1rem 0;
+  }
   .buttonBox {
     display: flex;
-    gap: 2rem;
+    gap: 1.2rem;
+  }
+  .subContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    color: red;
+  }
+  .sub {
+    font-size: ${theme.fontSize.medium};
+    font-weight: ${theme.fontWeight.light};
+    color: ${theme.color.black40};
+  }
+  .mainInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .emphasis {
+    color: ${theme.color.primary100};
   }
 `
