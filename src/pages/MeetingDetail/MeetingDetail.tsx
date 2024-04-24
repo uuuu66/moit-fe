@@ -69,7 +69,7 @@ function MeetingDetail(): JSX.Element {
         type: 'default',
         text: '모임에서 탈퇴하였습니다.',
       })
-      navi(`/meetings/${meetingId}`, { replace: true })
+      navi(`/`, { replace: true })
       void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
     },
     onError: (error) => {
@@ -200,6 +200,7 @@ function MeetingDetail(): JSX.Element {
           {data?.join === true ? (
             <CommonButton
               size="large"
+              style={{ backgroundColor: '#FA7070' }}
               handleClick={() => {
                 setOnWithdrawModal(!onWithdrawModal)
               }}
@@ -217,11 +218,14 @@ function MeetingDetail(): JSX.Element {
       )}
       {onWithdrawModal && (
         <AlertModal
-          message="정말 모임을 탈퇴하시겠습니까?"
+          message="탈퇴"
+          firstSubMessage="탈퇴하실 경우, 현재 진행 중인"
+          secondSubMessage="모임에서의 기록이 취소됩니다."
           handleClick={withdrawMeetingClick}
           onClose={() => {
             setOnWithdrawModal(!onWithdrawModal)
           }}
+          buttonName="탈퇴하기"
         />
       )}
     </DetailWholeContainer>

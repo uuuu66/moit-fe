@@ -169,11 +169,14 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
           </div>
           {onDeleteModal && (
             <AlertModal
-              message="모임을 삭제하시겠습니까?"
+              message="삭제"
+              firstSubMessage="모임을 삭제하면"
+              secondSubMessage="관련 데이터가 모두 지워집니다."
               onClose={() => {
                 setOnDeleteModal(!onDeleteModal)
               }}
               handleClick={deleteMeetingClick}
+              buttonName="삭제하기"
             />
           )}
         </MenuContainer>
