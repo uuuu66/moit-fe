@@ -39,12 +39,11 @@ export default function HomeMeetingsPanel({
   }, [handleScroll, handleScrollEnd])
   const navi = useNavigate()
   const [queries] = useSearchParams()
-  const isPanelOpen = queries.get('list') === 'true' ?? false
+  const isPanelOpen = queries.get('list') === 'true'
   return (
     <HomeMeetingsPanelLayout>
       <ToggleBox
         onClick={() => {
-          // setOnListOpen(!onListOpen)
           !isPanelOpen ? navi(`/?list=true`) : navi(`/?list=false`)
         }}
       >
@@ -58,7 +57,6 @@ export default function HomeMeetingsPanel({
         <>
           <MeetingsBackground
             onClick={() => {
-              // setOnListOpen(!onListOpen)
               navi(`/?list=false`)
             }}
           />
