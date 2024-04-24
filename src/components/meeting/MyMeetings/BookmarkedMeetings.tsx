@@ -37,7 +37,7 @@ export default function BookmarkedMeetings(): JSX.Element {
       <MypageMeetingList
         meetings={getCurrentMeetings()}
         meetingsStatus="bookmarked"
-        emptyText="북마크 한"
+        emptyText="북마크한"
       />
     </BookmarkedMeetingsLayout>
   )

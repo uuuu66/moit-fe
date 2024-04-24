@@ -7,13 +7,27 @@ import { getMyMeetings } from '@/apis/user'
 import { type MyMeeting } from '@/type/user'
 import MypageMeetingList from '../MypageMeetingList/MypageMeetingList'
 
+interface StatusDisplayName {
+  status: MyMeetingsStatus
+  name: string
+}
+
+const STATUS_DISPLAYNAME: StatusDisplayName[] = [
+  { status: 'progress', name: '참여 중' },
+  { status: 'complete', name: '참여 완료' },
+  { status: 'held', name: '개최한' },
+]
+
 export default function MyMeetings(): JSX.Element {
-  const [tab, setTab] = useState<MyMeetingsStatus>('progress')
+  const [tab, setTab] = useState<StatusDisplayName>({
+    status: 'progress',
+    name: '참여 중인',
+  })
   const [onTotalOpen, setOnTotalOpen] = useState(false)
 
   const { data: meetings } = useQuery({
-    queryKey: meetingKeys.myMeetings(tab),
-    queryFn: async () => await getMyMeetings(tab),
+    queryKey: meetingKeys.myMeetings(tab.status),
+    queryFn: async () => await getMyMeetings(tab.status),
   })
 
   const getCurrentMeetings = (): MyMeeting[] => {
@@ -21,36 +35,22 @@ export default function MyMeetings(): JSX.Element {
     return onTotalOpen ? meetings : meetings.slice(0, 2)
   }
 
-  const isProgress = tab === 'progress'
-  const emptyText = (): string => {
-    if (tab === 'progress') return '참여 중인'
-    if (tab === 'complete') return '참여 완료한'
-    if (tab === 'held') return '개최한'
-    return ''
-  }
-
   return (
     <MyMeetingsLayout>
       <ButtonBox>
         <div className="button-flex-box">
-          <button
-            className={isProgress ? 'tab-active-button' : ''}
-            type="button"
-            onClick={() => {
-              setTab('progress')
-            }}
-          >
-            참여 중인 모임
-          </button>
-          <button
-            className={tab !== 'progress' ? 'tab-active-button' : ''}
-            type="button"
-            onClick={() => {
-              setTab('complete')
-            }}
-          >
-            참여 완료 모임
-          </button>
+          {STATUS_DISPLAYNAME.map(({ status, name }) => (
+            <button
+              key={status}
+              className={tab.status === status ? 'tab-active-button' : ''}
+              type="button"
+              onClick={() => {
+                setTab({ status, name })
+              }}
+            >
+              {`${name} 모임`}
+            </button>
+          ))}
         </div>
         <button
           type="button"
@@ -65,8 +65,8 @@ export default function MyMeetings(): JSX.Element {
       </ButtonBox>
       <MypageMeetingList
         meetings={getCurrentMeetings()}
-        meetingsStatus={tab}
-        emptyText={emptyText()}
+        meetingsStatus={tab.status}
+        emptyText={tab.name}
       />
     </MyMeetingsLayout>
   )
