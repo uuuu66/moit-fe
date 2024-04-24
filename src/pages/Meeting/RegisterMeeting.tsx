@@ -82,6 +82,8 @@ function RegisterMeeting(): JSX.Element {
     setInfo((prevState) => ({
       ...prevState,
       meetingDate: date,
+      meetingStartTime: null,
+      meetingEndTime: null,
     }))
   }
 
@@ -159,9 +161,14 @@ function RegisterMeeting(): JSX.Element {
       await postMeetingData(newMeetingData)
     },
     onSuccess: () => {
+      notify({
+        type: 'default',
+        text: '모임 등록이 완료되었습니다.',
+      })
       navi('/')
     },
     onError: (error) => {
+      window.alert('등록에 실패하였습니다')
       console.log('error', error)
     },
   })
@@ -199,10 +206,6 @@ function RegisterMeeting(): JSX.Element {
       careerIds: info.careerIds,
     }
     postMutation.mutate(newMeetingData)
-    notify({
-      type: 'default',
-      text: '모임 등록이 완료되었습니다.',
-    })
   }
 
   return (
@@ -268,6 +271,7 @@ function RegisterMeeting(): JSX.Element {
             endTime={info.meetingEndTime}
             handleStartTimeChange={handleStartTimeChange}
             handleEndTimeChange={handleEndTimeChange}
+            meetingDate={info.meetingDate}
           />
         </InfoContainer>
         {/* 위치 찾기 */}
