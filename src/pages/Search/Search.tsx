@@ -58,6 +58,7 @@ export default function Search(): JSX.Element {
       void fetchNextPage()
     }
     const scrollBox = scrollBoxRef?.current
+
     const handleScrollEvent = (): void => {
       handleScroll(scrollBox, handleFetchPages)
     }
@@ -66,6 +67,15 @@ export default function Search(): JSX.Element {
       scrollBox?.removeEventListener('scroll', handleScrollEvent)
     }
   }, [fetchNextPage, handleScroll])
+
+  useEffect(() => {
+    const storageScrollPosition = sessionStorage.getItem('searchScrollPosition')
+
+    if (scrollBoxRef.current !== null && storageScrollPosition !== null) {
+      scrollBoxRef.current.scrollTo({ top: Number(storageScrollPosition) })
+      sessionStorage.removeItem('scrollPosition')
+    }
+  }, [])
 
   const meetings = useMemo(() => {
     let list: GetMeeting[] = []
@@ -100,6 +110,12 @@ export default function Search(): JSX.Element {
   const handleCickTag = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const targetValue = e.currentTarget.value
     navigate(`?keyword=${targetValue}`)
+  }
+
+  const handleCardClick = (meetingId: number): void => {
+    const scrollBox = scrollBoxRef?.current
+    sessionStorage.setItem('searchScrollPosition', String(scrollBox?.scrollTop))
+    navigate(`/meetings/${meetingId}`)
   }
 
   if (isLoading) return <LoadingPage name="페이지를" />
@@ -181,6 +197,7 @@ export default function Search(): JSX.Element {
                 <SearchMeetingsCard
                   key={`${meeting.meetingId}_${meeting.meetingName}`}
                   meeting={meeting}
+                  handleCardClick={handleCardClick}
                 />
               ))}
             </>

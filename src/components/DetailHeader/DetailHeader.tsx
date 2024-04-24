@@ -51,7 +51,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
   })
 
   const handleHomeClick = (): void => {
-    navi(`/meetings/${meetingId}`)
+    navi(`/meetings/${meetingId}`, { replace: true })
   }
 
   const handleChatClick = (): void => {
@@ -60,7 +60,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
         window.alert('채팅에 참여하려면 모임 참여하기 버튼을 먼저 눌러주세요')
         return
       }
-      navi(`/meetings/${meetingId}/chats`)
+      navi(`/meetings/${meetingId}/chats`, { replace: true })
     } else {
       setOnLoginModal(true)
     }
@@ -72,9 +72,9 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
 
   const goback = (): void => {
     if (location.pathname === `/meetings/${meetingId}/chats`) {
-      navi(`/meetings/${meetingId}`)
+      navi(`/meetings/${meetingId}`, { replace: true })
     } else if (location.pathname === `/meetings/${meetingId}`) {
-      navi('/')
+      navi(-1)
     }
   }
 

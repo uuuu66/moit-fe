@@ -46,6 +46,7 @@ export default function HomeSelectedMeetingPanel({
         tags={skillList}
         handleCardClick={() => {
           navigate(`/meetings/${meetingId}`)
+          sessionStorage.setItem('selectedMeetingId', String(meetingId))
         }}
       />
     </HomeMeetingsPanelLayout>

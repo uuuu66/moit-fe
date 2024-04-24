@@ -21,11 +21,10 @@ export default function HomeMeetingsPanel({
   meetings,
   handleScrollEnd,
 }: HomeMeetingsPanelProps): JSX.Element {
-  const [onListOpen, setOnListOpen] = useState(false)
+  const [isPanelOpen, setIsPanelOpen] = useState(false)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const { screenHeight } = useScreenSize()
-
   const { handleScroll } = useScrollEnd()
 
   useEffect(() => {
@@ -37,13 +36,35 @@ export default function HomeMeetingsPanel({
     return () => {
       scrollBox?.removeEventListener('scroll', handleScrollEvent)
     }
-  }, [onListOpen, handleScroll, handleScrollEnd])
+  }, [handleScroll, handleScrollEnd])
+
+  useEffect(() => {
+    const storageScrollPosition = sessionStorage.getItem('scrollPosition')
+
+    const scrollBox = scrollBoxRef.current
+    if (storageScrollPosition !== null) {
+      setIsPanelOpen(true)
+    }
+    if (scrollBox !== null && storageScrollPosition !== null) {
+      scrollBox.scrollTo({ top: Number(storageScrollPosition) })
+      sessionStorage.removeItem('scrollPosition')
+    }
+  }, [isPanelOpen])
+
+  const handleCardClick = (meetingId: number): void => {
+    navigate(`/meetings/${meetingId}
+      `)
+    const scrollBox = scrollBoxRef.current
+    if (scrollBox !== null) {
+      sessionStorage.setItem('scrollPosition', String(scrollBox.scrollTop))
+    }
+  }
 
   return (
     <HomeMeetingsPanelLayout>
       <ToggleBox
         onClick={() => {
-          setOnListOpen(!onListOpen)
+          setIsPanelOpen(!isPanelOpen)
         }}
       >
         <hr />
@@ -52,11 +73,11 @@ export default function HomeMeetingsPanel({
           <p>내 주위 모각코</p>
         </div>
       </ToggleBox>
-      {onListOpen && (
+      {isPanelOpen && (
         <>
           <MeetingsBackground
             onClick={() => {
-              setOnListOpen(!onListOpen)
+              setIsPanelOpen(!isPanelOpen)
             }}
           />
           <MeetingsBox $isSmall={screenHeight < 800} ref={scrollBoxRef}>
@@ -92,7 +113,7 @@ export default function HomeMeetingsPanel({
                       })),
                     ]}
                     handleCardClick={() => {
-                      navigate(`/meetings/${meetingId}`)
+                      handleCardClick(meetingId)
                     }}
                   />
                 )

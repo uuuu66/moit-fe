@@ -52,7 +52,7 @@ function MeetingDetail(): JSX.Element {
         type: 'success',
         text: '모임 참여가 완료되었습니다.',
       })
-      navi(`/meetings/${meetingId}/chats`)
+      navi(`/meetings/${meetingId}/chats`, { replace: true })
       void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
     },
     onError: (error) => {
@@ -69,7 +69,7 @@ function MeetingDetail(): JSX.Element {
         type: 'default',
         text: '모임에서 탈퇴하였습니다.',
       })
-      navi(`/meetings/${meetingId}`)
+      navi(`/meetings/${meetingId}`, { replace: true })
       void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
     },
     onError: (error) => {
