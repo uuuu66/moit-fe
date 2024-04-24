@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
 import { useState } from 'react'
-import { setHours, setMinutes } from 'date-fns'
+import { addMinutes, isToday, setHours, setMinutes } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { InputBox } from '../../../pages/Meeting/styles'
 import { theme } from '@/constants/theme'
@@ -12,6 +13,7 @@ interface TimeChoiceProps {
   endTime: Date | null | undefined
   handleStartTimeChange: (time: Date | null) => void
   handleEndTimeChange: (time: Date | null) => void
+  meetingDate: Date | null | undefined
 }
 
 function TimeChoice({
@@ -19,8 +21,11 @@ function TimeChoice({
   endTime,
   handleStartTimeChange,
   handleEndTimeChange,
+  meetingDate,
 }: TimeChoiceProps): JSX.Element {
   const [isSelected, setIsSelected] = useState(false)
+  const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false)
+  const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false)
 
   const onSelect = (time: Date): void => {
     handleEndTimeChange(null)
@@ -28,7 +33,24 @@ function TimeChoice({
     setIsSelected(true)
   }
 
-  const minTime = startTime != null ? new Date(startTime) : new Date()
+  const currentDate = new Date()
+
+  let minTime
+
+  if (startTime != null && meetingDate != null && isToday(meetingDate)) {
+    // 오늘이면 현재 시간 30분 후부터
+    minTime = addMinutes(currentDate, 30)
+  } else if (meetingDate != null && isToday(meetingDate)) {
+    // 오늘이지만 시작 시간은 선택하지 않은 경우
+    minTime = currentDate
+  } else {
+    // 오늘이 아닌 경우 00:00부터
+    minTime = setHours(setMinutes(new Date(), 0), 0)
+  }
+
+  const minEndTime =
+    startTime != null ? addMinutes(new Date(startTime), 30) : new Date()
+
   const maxTime = setHours(setMinutes(new Date(), 30), 23)
 
   return (
@@ -46,8 +68,7 @@ function TimeChoice({
           <img src="/assets/meetingClock.svg" alt="clock" />
           <span>시작 시간</span>
         </div>
-        <label htmlFor="datepick1">
-          <input type="text" id="datepick1" style={{ display: 'none' }} />
+        <label style={{ display: 'flex', justifyContent: 'space-between' }}>
           <StDatePicker
             locale={ko}
             selected={startTime}
@@ -58,11 +79,20 @@ function TimeChoice({
             dateFormat="H시 mm분"
             onChange={onSelect}
             placeholderText="00시 00분"
+            onClickOutside={() => {
+              setIsStartDatePickerOpen(false)
+            }}
+            onFocus={() => {
+              setIsStartDatePickerOpen(true)
+            }}
+            open={isStartDatePickerOpen}
+            minTime={minTime}
+            maxTime={maxTime}
           />
           <img
             src="/assets/meetingDownArrow.svg"
             alt="downArrow"
-            className="arrow"
+            className={`arrow ${isStartDatePickerOpen ? 'open' : ''}`}
           />
         </label>
       </TimeBox>
@@ -71,8 +101,7 @@ function TimeChoice({
           <img src="/assets/meetingClock.svg" alt="clock" />
           <span>종료 시간</span>
         </div>
-        <label htmlFor="datepick1">
-          <input type="text" id="datepick1" style={{ display: 'none' }} />
+        <label style={{ display: 'flex', justifyContent: 'space-between' }}>
           <StDatePicker
             locale={ko}
             selected={endTime}
@@ -84,13 +113,20 @@ function TimeChoice({
             dateFormat="HH시 mm분"
             placeholderText="00시 00분"
             disabled={!isSelected}
-            minTime={minTime}
+            minTime={minEndTime}
             maxTime={maxTime}
+            onClickOutside={() => {
+              setIsEndDatePickerOpen(false)
+            }}
+            onFocus={() => {
+              setIsEndDatePickerOpen(true)
+            }}
+            open={isEndDatePickerOpen}
           />
           <img
             src="/assets/meetingDownArrow.svg"
             alt="downArrow"
-            className="arrow"
+            className={`arrow ${isEndDatePickerOpen ? 'open' : ''}`}
           />
         </label>
         {/* <span>시작 시간을 선택해 주세요</span> */}
@@ -118,14 +154,16 @@ export const TimeBox = styled(InputBox)`
     /* z-index: 1; */
   }
   .arrow {
-    /* background-color: wheat; */
-    position: absolute;
-    top: 0;
-    right: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+  }
+  .arrow.open {
+    transform: rotate(180deg);
   }
 `
 
 export const StDatePicker = styled(DatePicker)`
+  width: 100%;
   &::placeholder {
     font-size: 1.6rem;
   }
