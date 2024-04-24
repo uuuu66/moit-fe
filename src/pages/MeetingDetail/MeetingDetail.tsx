@@ -109,7 +109,6 @@ function MeetingDetail(): JSX.Element {
           <div className="userInfo">
             <img src="/assets/userProfile.svg" alt="userProfile" />
             <div>{data?.creatorName}</div>
-            {data != null && <BookMark meetingId={data.meetingId} />}
           </div>
           <div className="tagbox">
             {data?.careerNameList.map((e: string) => (
@@ -199,6 +198,7 @@ function MeetingDetail(): JSX.Element {
       </DetailInfoContainer>
       {decodedToken.sub !== data?.creatorEmail && (
         <DetailButtonContainer>
+          {data != null && <BookMark meetingId={data.meetingId} />}
           {data?.join === true ? (
             <CommonButton
               size="large"

@@ -10,11 +10,11 @@ const meetingKeys = {
   lists: (center: Center) => ['meetings', 'list', { center }],
   search: (search: string) => ['meetings', 'list', { search }],
   filter: (filter: object) => ['meetings', 'list', { ...filter }],
+  myMeetings: (status: MyMeetingsStatus) => ['meetings', 'list', { status }],
 }
 
 const userKeys = {
   profile: ['profile'],
-  myMeetings: (status: MyMeetingsStatus) => ['myMeetings', { status }],
 }
 
 export { filterKeys, meetingKeys, userKeys }

@@ -113,5 +113,6 @@ export const DetailButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.6rem 0;
+  padding: 1.6rem 20px;
+  gap: 20px;
 `

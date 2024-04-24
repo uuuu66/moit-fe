@@ -1,10 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import React from 'react'
 import {
   deleteBookMark,
   getConfirmBookMarked,
   postBookMark,
 } from '@/apis/meeting'
 import { getLocalStorageItem } from '@/util/localStorage'
+import { meetingKeys } from '@/constants/queryKeys'
 
 interface BookMarkProps {
   meetingId: number
@@ -16,24 +18,33 @@ export default function BookMark({ meetingId }: BookMarkProps): JSX.Element {
     queryFn: () => getConfirmBookMarked(meetingId),
   })
   const queryClient = useQueryClient()
-  const handleClickButton = (): void => {
+  const handleClickButton = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    e.stopPropagation()
     const token: string = getLocalStorageItem('accessToken')
     if (token === null) {
       window.alert('로그인 후 북마크 기능을 사용할 수 있습니다.')
       return
     }
+
     ;(bookMarked ? deleteBookMark(meetingId) : postBookMark(meetingId))
       .then(async () => {
         await queryClient.setQueryData(
           ['bookmark', { meetingId }],
-          (status) => !status
+          (status: boolean) => !status
         )
+        await queryClient.invalidateQueries({
+          queryKey: meetingKeys.myMeetings('bookmarked'),
+        })
       })
       .catch(() => {})
   }
   return (
     <button type="button" onClick={handleClickButton}>
-      {bookMarked ? <p>북마크 취소</p> : <p>북마크 하기</p>}
+      {bookMarked ? (
+        <img src="/assets/bookmarkSelected.svg" alt="bookmark" />
+      ) : (
+        <img src="/assets/bookmark.svg" alt="bookmark" />
+      )}
     </button>
   )
 }

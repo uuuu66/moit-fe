@@ -70,7 +70,7 @@ const getMyMeetings = async <T = MyMeeting[]>(
 ): Promise<T> => {
   try {
     const { data } = await authInstance.get<CommonResponse<T>>(
-      `api/member/meeting${status === 'complete' ? '/complete' : ''}`
+      `api/member/meeting${status === 'progress' ? '' : `/${status}`}`
     )
     return data.data
   } catch (error) {
