@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { type GetMeeting } from '@/type/meeting'
 import {
   CardBox,
@@ -11,6 +11,7 @@ import {
 import HomeMeetingsCard from '../MeetingCard/HomeMeetingsCard'
 import useScrollEnd from '@/hooks/useScrollEnd'
 import useScreenSize from '@/hooks/useScreenSize'
+import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 
 interface HomeMeetingsPanelProps {
   meetings: GetMeeting[]
@@ -21,10 +22,10 @@ export default function HomeMeetingsPanel({
   meetings,
   handleScrollEnd,
 }: HomeMeetingsPanelProps): JSX.Element {
+  const [isPanelOpen, setIsPanelOpen] = useState(false)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const { screenHeight } = useScreenSize()
-
   const { handleScroll } = useScrollEnd()
 
   useEffect(() => {
@@ -37,14 +38,33 @@ export default function HomeMeetingsPanel({
       scrollBox?.removeEventListener('scroll', handleScrollEvent)
     }
   }, [handleScroll, handleScrollEnd])
-  const navi = useNavigate()
-  const [queries] = useSearchParams()
-  const isPanelOpen = queries.get('list') === 'true'
+
+  useEffect(() => {
+    const storageScrollPosition: number = getLocalStorageItem('scrollPosition')
+    const scrollBox = scrollBoxRef.current
+    if (storageScrollPosition !== null) {
+      setIsPanelOpen(true)
+    }
+    if (scrollBox !== null && storageScrollPosition !== null) {
+      scrollBox.scrollTo({ top: storageScrollPosition })
+      localStorage.removeItem('scrollPosition')
+    }
+  }, [isPanelOpen])
+
+  const handleCardClick = (meetingId: number): void => {
+    navigate(`/meetings/${meetingId}
+      `)
+    const scrollBox = scrollBoxRef.current
+    if (scrollBox !== null) {
+      setLocalStorageItem('scrollPosition', scrollBox.scrollTop)
+    }
+  }
+
   return (
     <HomeMeetingsPanelLayout>
       <ToggleBox
         onClick={() => {
-          !isPanelOpen ? navi(`/?list=true`) : navi(`/?list=false`)
+          setIsPanelOpen(!isPanelOpen)
         }}
       >
         <hr />
@@ -57,7 +77,7 @@ export default function HomeMeetingsPanel({
         <>
           <MeetingsBackground
             onClick={() => {
-              navi(`/?list=false`)
+              setIsPanelOpen(!isPanelOpen)
             }}
           />
           <MeetingsBox $isSmall={screenHeight < 800} ref={scrollBoxRef}>
@@ -93,7 +113,7 @@ export default function HomeMeetingsPanel({
                       })),
                     ]}
                     handleCardClick={() => {
-                      navigate(`/meetings/${meetingId}`)
+                      handleCardClick(meetingId)
                     }}
                   />
                 )

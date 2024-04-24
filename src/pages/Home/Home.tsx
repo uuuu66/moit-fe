@@ -107,6 +107,14 @@ export default function Home(): JSX.Element {
     resetMapwithFilteredMarkers(meetings)
   }, [meetings, mapElement, map])
 
+  useEffect(() => {
+    const storageMeetingId = getLocalStorageItem('selectedMeetingId')
+    if (storageMeetingId !== null) {
+      handleSelectedMeeting(Number(storageMeetingId))
+      localStorage.removeItem('selectedMeetingId')
+    }
+  })
+
   // 현 위치 setCenter
   const setCurrentCenter = (): void => {
     const currentCenter = mapElement?.getCenter()
@@ -155,7 +163,6 @@ export default function Home(): JSX.Element {
   const handleSelectedMeeting = (id: number): void => {
     const target = meetings.filter(({ meetingId }) => meetingId === Number(id))
     setSelectedMeeting(target[0])
-    setLocalStorageItem('selectedMeetingId', id)
 
     if (mapElement != null && map != null) {
       mapElement?.setCenter(
@@ -168,13 +175,6 @@ export default function Home(): JSX.Element {
     const selectedId = e.getTitle()
     handleSelectedMeeting(Number(selectedId))
   }
-
-  useEffect(() => {
-    const storageMeetingId = getLocalStorageItem('selectedMeetingId')
-    if (storageMeetingId !== null) {
-      handleSelectedMeeting(Number(storageMeetingId))
-    }
-  })
 
   if (isError) return <ErrorPage />
   return (
@@ -273,7 +273,6 @@ export default function Home(): JSX.Element {
           meeting={selectedMeeting}
           handleClosePanel={() => {
             setSelectedMeeting(null)
-            localStorage.removeItem('selectedMeetingId')
           }}
         />
       )}
