@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
 import { useState } from 'react'
-import { addMinutes, setHours, setMinutes } from 'date-fns'
+import { addMinutes, isToday, setHours, setMinutes } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { InputBox } from '../../../pages/Meeting/styles'
 import { theme } from '@/constants/theme'
@@ -13,6 +13,7 @@ interface TimeChoiceProps {
   endTime: Date | null | undefined
   handleStartTimeChange: (time: Date | null) => void
   handleEndTimeChange: (time: Date | null) => void
+  meetingDate: Date | null | undefined
 }
 
 function TimeChoice({
@@ -20,6 +21,7 @@ function TimeChoice({
   endTime,
   handleStartTimeChange,
   handleEndTimeChange,
+  meetingDate,
 }: TimeChoiceProps): JSX.Element {
   const [isSelected, setIsSelected] = useState(false)
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false)
@@ -31,8 +33,24 @@ function TimeChoice({
     setIsSelected(true)
   }
 
-  const minTime =
+  const currentDate = new Date()
+
+  let minTime
+
+  if (startTime != null && meetingDate != null && isToday(meetingDate)) {
+    // 오늘이면 현재 시간 30분 후부터
+    minTime = addMinutes(currentDate, 30)
+  } else if (meetingDate != null && isToday(meetingDate)) {
+    // 오늘이지만 시작 시간은 선택하지 않은 경우
+    minTime = currentDate
+  } else {
+    // 오늘이 아닌 경우 00:00부터
+    minTime = setHours(setMinutes(new Date(), 0), 0)
+  }
+
+  const minEndTime =
     startTime != null ? addMinutes(new Date(startTime), 30) : new Date()
+
   const maxTime = setHours(setMinutes(new Date(), 30), 23)
 
   return (
@@ -68,6 +86,8 @@ function TimeChoice({
               setIsStartDatePickerOpen(true)
             }}
             open={isStartDatePickerOpen}
+            minTime={minTime}
+            maxTime={maxTime}
           />
           <img
             src="/assets/meetingDownArrow.svg"
@@ -93,7 +113,7 @@ function TimeChoice({
             dateFormat="HH시 mm분"
             placeholderText="00시 00분"
             disabled={!isSelected}
-            minTime={minTime}
+            minTime={minEndTime}
             maxTime={maxTime}
             onClickOutside={() => {
               setIsEndDatePickerOpen(false)
