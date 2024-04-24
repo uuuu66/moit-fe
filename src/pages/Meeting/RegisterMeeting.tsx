@@ -22,6 +22,8 @@ import { careerData, type Career } from '@/constants/careerData'
 import { postMeetingData } from '@/apis/meeting'
 import { DetailButtonContainer } from '../MeetingDetail/styles'
 import MeetingTechStack from '@/components/filter/TechStack/MeetingTechStack'
+import { notify } from '@/components/Toast'
+import AlertModal from '@/components/modals/AlertModal'
 
 export interface Info {
   meetingName: string
@@ -58,6 +60,7 @@ function RegisterMeeting(): JSX.Element {
     skillIds: [],
     careerIds: [],
   })
+  const [onRegisterModal, setOnRegisterModal] = useState(false)
   const dateFormat = dayjs(info.meetingDate).format('YYYY-MM-DD')
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -79,6 +82,8 @@ function RegisterMeeting(): JSX.Element {
     setInfo((prevState) => ({
       ...prevState,
       meetingDate: date,
+      meetingStartTime: null,
+      meetingEndTime: null,
     }))
   }
 
@@ -101,7 +106,10 @@ function RegisterMeeting(): JSX.Element {
     if (inputValue.includes('-')) {
       return
     }
-    const budgetValue: number = parseInt(inputValue, 10)
+    let budgetValue: number = parseInt(inputValue, 10)
+    if (budgetValue > 1000000) {
+      budgetValue = 1000000
+    }
     setInfo((prevState) => ({
       ...prevState,
       budget: budgetValue,
@@ -153,9 +161,14 @@ function RegisterMeeting(): JSX.Element {
       await postMeetingData(newMeetingData)
     },
     onSuccess: () => {
+      notify({
+        type: 'default',
+        text: '모임 등록이 완료되었습니다.',
+      })
       navi('/')
     },
     onError: (error) => {
+      window.alert('등록에 실패하였습니다')
       console.log('error', error)
     },
   })
@@ -207,6 +220,7 @@ function RegisterMeeting(): JSX.Element {
           <img src="/assets/meetingLeftArrow.svg" alt="go back" />
         </button>
         <h2>모임 생성하기</h2>
+        <div />
       </InfoHeader>
       <RegisterTitle>
         <h1>모임을 소개해 주세요!</h1>
@@ -257,6 +271,7 @@ function RegisterMeeting(): JSX.Element {
             endTime={info.meetingEndTime}
             handleStartTimeChange={handleStartTimeChange}
             handleEndTimeChange={handleEndTimeChange}
+            meetingDate={info.meetingDate}
           />
         </InfoContainer>
         {/* 위치 찾기 */}
@@ -340,9 +355,23 @@ function RegisterMeeting(): JSX.Element {
             생성하기
           </CommonButton>
         ) : (
-          <CommonButton size="large" handleClick={handleMeetingSubmit}>
+          <CommonButton
+            size="large"
+            handleClick={() => {
+              setOnRegisterModal(!onRegisterModal)
+            }}
+          >
             생성하기
           </CommonButton>
+        )}
+        {onRegisterModal && (
+          <AlertModal
+            message="모임을 생성하시겠습니까?"
+            onClose={() => {
+              setOnRegisterModal(!onRegisterModal)
+            }}
+            handleClick={handleMeetingSubmit}
+          />
         )}
       </DetailButtonContainer>
     </WholeContainer>

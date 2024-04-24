@@ -1,5 +1,4 @@
 import { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { type GetMeeting } from '@/type/meeting'
 import {
   LeftShadowBox,
@@ -15,14 +14,15 @@ import useScrollPosition from '@/hooks/useScrollPosition'
 
 interface SearchMeetingsCardProps {
   meeting: GetMeeting
+  handleCardClick: (meeting: number) => void
 }
 
 export default function SearchMeetingsCard({
   meeting,
+  handleCardClick,
 }: SearchMeetingsCardProps): JSX.Element {
   const tagBoxRef = useRef<HTMLDivElement>(null)
   const { isScrollLeft, isScrollRight } = useScrollPosition(tagBoxRef)
-  const navigate = useNavigate()
 
   const {
     meetingId,
@@ -39,7 +39,7 @@ export default function SearchMeetingsCard({
   return (
     <SearchMeetingCardLayout
       onClick={() => {
-        navigate(`/meetings/${meetingId}`)
+        handleCardClick(meetingId)
       }}
     >
       <h2>{meetingName}</h2>

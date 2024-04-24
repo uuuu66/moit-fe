@@ -4,6 +4,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
+import { useState } from 'react'
 import useMap from '@/hooks/useMap'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
 import {
@@ -27,12 +28,16 @@ import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import { getLocalStorageItem } from '@/util/localStorage'
 import BookMark from '@/components/meeting/Bookmark/BookMark'
+import { notify } from '@/components/Toast'
+import AlertModal from '@/components/modals/AlertModal'
 
 function MeetingDetail(): JSX.Element {
   useMap()
   const queryClient = useQueryClient()
   const navi = useNavigate()
   const { meetingId } = useParams()
+
+  const [onWithdrawModal, setOnWithdrawModal] = useState(false)
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['meetingListDetail', meetingId],
@@ -44,7 +49,11 @@ function MeetingDetail(): JSX.Element {
       await postMeetingSub(Number(meetingId))
     },
     onSuccess: () => {
-      navi(`/meetings/${meetingId}/chats`)
+      notify({
+        type: 'success',
+        text: '모임 참여가 완료되었습니다.',
+      })
+      navi(`/meetings/${meetingId}/chats`, { replace: true })
       void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
     },
     onError: (error) => {
@@ -57,7 +66,11 @@ function MeetingDetail(): JSX.Element {
       await deleteMeetingWithdraw(Number(meetingId))
     },
     onSuccess: () => {
-      navi(`/meetings/${meetingId}`)
+      notify({
+        type: 'default',
+        text: '모임에서 탈퇴하였습니다.',
+      })
+      navi(`/meetings/${meetingId}`, { replace: true })
       void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
     },
     onError: (error) => {
@@ -83,6 +96,7 @@ function MeetingDetail(): JSX.Element {
 
   return (
     <DetailWholeContainer>
+      {/* <Toast /> */}
       {/* 헤더 */}
       <DetailHeader meetingId={Number(meetingId)} />
       <DetailInfoContainer>
@@ -185,8 +199,13 @@ function MeetingDetail(): JSX.Element {
       </DetailInfoContainer>
       {decodedToken.sub !== data?.creatorEmail && (
         <DetailButtonContainer>
-          {data?.join ?? false ? (
-            <CommonButton size="large" handleClick={withdrawMeetingClick}>
+          {data?.join === true ? (
+            <CommonButton
+              size="large"
+              handleClick={() => {
+                setOnWithdrawModal(!onWithdrawModal)
+              }}
+            >
               모임 탈퇴하기
             </CommonButton>
           ) : isFull ? (
@@ -197,6 +216,15 @@ function MeetingDetail(): JSX.Element {
             <JoinMeetingButton handleJoinMeeting={handleMeetingSubClick} />
           )}
         </DetailButtonContainer>
+      )}
+      {onWithdrawModal && (
+        <AlertModal
+          message="정말 모임을 탈퇴하시겠습니까?"
+          handleClick={withdrawMeetingClick}
+          onClose={() => {
+            setOnWithdrawModal(!onWithdrawModal)
+          }}
+        />
       )}
     </DetailWholeContainer>
   )

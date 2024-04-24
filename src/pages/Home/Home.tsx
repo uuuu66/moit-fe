@@ -107,6 +107,14 @@ export default function Home(): JSX.Element {
     resetMapwithFilteredMarkers(meetings)
   }, [meetings, mapElement, map])
 
+  useEffect(() => {
+    const storageMeetingId = sessionStorage.getItem('selectedMeetingId')
+    if (storageMeetingId !== null) {
+      handleSelectedMeeting(Number(storageMeetingId))
+      sessionStorage.removeItem('selectedMeetingId')
+    }
+  })
+
   // 현 위치 setCenter
   const setCurrentCenter = (): void => {
     const currentCenter = mapElement?.getCenter()
@@ -152,12 +160,20 @@ export default function Home(): JSX.Element {
     null
   )
 
-  const handleSelectMarker = (e: kakao.maps.Marker): void => {
-    const selectedTitle = e.getTitle()
-    const target = meetings.filter(
-      ({ meetingName }) => meetingName === selectedTitle
-    )
+  const handleSelectedMeeting = (id: number): void => {
+    const target = meetings.filter(({ meetingId }) => meetingId === Number(id))
     setSelectedMeeting(target[0])
+
+    if (mapElement != null && map != null) {
+      mapElement?.setCenter(
+        new map.LatLng(target[0].locationLat, target[0].locationLng)
+      )
+    }
+  }
+
+  const handleSelectMarker = (e: kakao.maps.Marker): void => {
+    const selectedId = e.getTitle()
+    handleSelectedMeeting(Number(selectedId))
   }
 
   if (isError) return <ErrorPage />
@@ -227,26 +243,24 @@ export default function Home(): JSX.Element {
           setMapElement(maps)
         }}
       >
-        {meetings?.map(
-          ({ meetingName, meetingId, locationLat, locationLng }) => (
-            <MapMarker
-              key={meetingId}
-              title={meetingName}
-              onClick={handleSelectMarker}
-              image={{
-                src:
-                  meetingId === selectedMeeting?.meetingId
-                    ? '/assets/markerSelected.svg'
-                    : '/assets/marker.svg',
-                size: {
-                  width: meetingId === selectedMeeting?.meetingId ? 48 : 40,
-                  height: meetingId === selectedMeeting?.meetingId ? 48 : 40,
-                },
-              }}
-              position={{ lat: locationLat, lng: locationLng }}
-            />
-          )
-        )}
+        {meetings?.map(({ meetingId, locationLat, locationLng }) => (
+          <MapMarker
+            key={meetingId}
+            title={String(meetingId)}
+            onClick={handleSelectMarker}
+            image={{
+              src:
+                meetingId === selectedMeeting?.meetingId
+                  ? '/assets/markerSelected.svg'
+                  : '/assets/marker.svg',
+              size: {
+                width: meetingId === selectedMeeting?.meetingId ? 48 : 40,
+                height: meetingId === selectedMeeting?.meetingId ? 48 : 40,
+              },
+            }}
+            position={{ lat: locationLat, lng: locationLng }}
+          />
+        ))}
       </Map>
       {meetings != null && (
         <HomeMeetingsPanel

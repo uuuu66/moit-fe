@@ -55,6 +55,7 @@ export const ChatBubble = styled.div<{ $isMe: boolean }>`
   border-radius: ${(props) =>
     props.$isMe ? '1rem 1rem 0 1rem' : '0 1rem 1rem 1rem'};
   padding: 10px;
+  word-break: break-all;
 `
 
 export const SendTime = styled.span`
@@ -77,6 +78,8 @@ export const MsgInputBox = styled.div`
 
   input {
     width: 100%;
+    padding-right: 1rem;
+    color: ${theme.color.black70};
   }
 `
 

@@ -30,6 +30,7 @@ import {
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import { getLocalStorageItem } from '@/util/localStorage'
+import { notify } from '@/components/Toast'
 
 function MeetingModify(): JSX.Element {
   useMap()
@@ -112,6 +113,10 @@ function MeetingModify(): JSX.Element {
       await editMeeting(Number(meetingId), info)
     },
     onSuccess: () => {
+      notify({
+        type: 'default',
+        text: '모임 수정이 완료되었습니다.',
+      })
       navi(`/meetings/${meetingId}`)
     },
     onError: (err) => {
@@ -139,7 +144,10 @@ function MeetingModify(): JSX.Element {
     if (inputValue.includes('-')) {
       return
     }
-    const budgetValue: number = parseInt(inputValue, 10)
+    let budgetValue: number = parseInt(inputValue, 10)
+    if (budgetValue > 1000000) {
+      budgetValue = 1000000
+    }
     setInfo((prevState) => ({
       ...prevState,
       budget: budgetValue,
@@ -219,9 +227,10 @@ function MeetingModify(): JSX.Element {
             navi(-1)
           }}
         >
-          &#60;
+          <img src="/assets/meetingLeftArrow.svg" alt="go back" />
         </button>
-        <h2>모임 생성하기</h2>
+        <h2>모임 수정하기</h2>
+        <div />
       </InfoHeader>
       <RegisterTitle>
         <h1>모임을 소개해 주세요!</h1>
