@@ -366,11 +366,12 @@ function RegisterMeeting(): JSX.Element {
         )}
         {onRegisterModal && (
           <AlertModal
-            message="모임을 생성하시겠습니까?"
+            message="등록"
             onClose={() => {
               setOnRegisterModal(!onRegisterModal)
             }}
             handleClick={handleMeetingSubmit}
+            buttonName="등록하기"
           />
         )}
       </DetailButtonContainer>
