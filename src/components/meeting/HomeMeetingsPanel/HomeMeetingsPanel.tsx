@@ -11,7 +11,6 @@ import {
 import HomeMeetingsCard from '../MeetingCard/HomeMeetingsCard'
 import useScrollEnd from '@/hooks/useScrollEnd'
 import useScreenSize from '@/hooks/useScreenSize'
-import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 
 interface HomeMeetingsPanelProps {
   meetings: GetMeeting[]
@@ -40,14 +39,15 @@ export default function HomeMeetingsPanel({
   }, [handleScroll, handleScrollEnd])
 
   useEffect(() => {
-    const storageScrollPosition: number = getLocalStorageItem('scrollPosition')
+    const storageScrollPosition = sessionStorage.getItem('scrollPosition')
+
     const scrollBox = scrollBoxRef.current
     if (storageScrollPosition !== null) {
       setIsPanelOpen(true)
     }
     if (scrollBox !== null && storageScrollPosition !== null) {
-      scrollBox.scrollTo({ top: storageScrollPosition })
-      localStorage.removeItem('scrollPosition')
+      scrollBox.scrollTo({ top: Number(storageScrollPosition) })
+      sessionStorage.removeItem('scrollPosition')
     }
   }, [isPanelOpen])
 
@@ -56,7 +56,7 @@ export default function HomeMeetingsPanel({
       `)
     const scrollBox = scrollBoxRef.current
     if (scrollBox !== null) {
-      setLocalStorageItem('scrollPosition', scrollBox.scrollTop)
+      sessionStorage.setItem('scrollPosition', String(scrollBox.scrollTop))
     }
   }
 

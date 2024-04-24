@@ -108,10 +108,10 @@ export default function Home(): JSX.Element {
   }, [meetings, mapElement, map])
 
   useEffect(() => {
-    const storageMeetingId = getLocalStorageItem('selectedMeetingId')
+    const storageMeetingId = sessionStorage.getItem('selectedMeetingId')
     if (storageMeetingId !== null) {
       handleSelectedMeeting(Number(storageMeetingId))
-      localStorage.removeItem('selectedMeetingId')
+      sessionStorage.removeItem('selectedMeetingId')
     }
   })
 

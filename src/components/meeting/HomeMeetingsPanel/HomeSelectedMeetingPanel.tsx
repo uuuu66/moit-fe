@@ -6,7 +6,6 @@ import {
   SelectedCardToggleBox,
 } from './styles'
 import HomeSelectedMeetingCard from '../MeetingCard/HomeSelectedMeetingCard'
-import { setLocalStorageItem } from '@/util/localStorage'
 
 interface HomeSelectedMeetingPanelProps {
   meeting: GetMeeting
@@ -47,7 +46,7 @@ export default function HomeSelectedMeetingPanel({
         tags={skillList}
         handleCardClick={() => {
           navigate(`/meetings/${meetingId}`)
-          setLocalStorageItem('selectedMeetingId', meetingId)
+          sessionStorage.setItem('selectedMeetingId', String(meetingId))
         }}
       />
     </HomeMeetingsPanelLayout>
