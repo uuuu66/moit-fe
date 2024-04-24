@@ -12,6 +12,7 @@ interface MyMeeting {
   meetingDate: string
   meetingStartTime: string
   meetingEndTime: string
+  status: 'OPEN' | 'FULL' | 'COMPLETE'
 }
 
 interface User {

@@ -13,8 +13,10 @@ import {
 import CommonButton from '@/components/common/Button/CommonButton'
 import { theme } from '@/constants/theme'
 import useScrollPosition from '@/hooks/useScrollPosition'
+import BookMark from '../Bookmark/BookMark'
 
 interface HomeSelectedMeetingCardProps {
+  meetingId: number
   title: string
   date: string
   time: string
@@ -26,6 +28,7 @@ interface HomeSelectedMeetingCardProps {
 }
 
 export default function HomeSelectedMeetingCard({
+  meetingId,
   title,
   date,
   time,
@@ -41,6 +44,7 @@ export default function HomeSelectedMeetingCard({
     <HomeSelectedMeetingCardLayout>
       <SelectedCardTitleBox>
         <h3>{title}</h3>
+        <BookMark meetingId={meetingId} />
         <div className="title-flex-box">
           <CardIconText>
             <img src="/assets/pin.svg" alt="pin" />

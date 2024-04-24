@@ -27,6 +27,7 @@ import CommonButton from '@/components/common/Button/CommonButton'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import { getLocalStorageItem } from '@/util/localStorage'
+import BookMark from '@/components/meeting/Bookmark/BookMark'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
 
@@ -197,6 +198,7 @@ function MeetingDetail(): JSX.Element {
       </DetailInfoContainer>
       {decodedToken.sub !== data?.creatorEmail && (
         <DetailButtonContainer>
+          {data != null && <BookMark meetingId={data.meetingId} />}
           {data?.join === true ? (
             <CommonButton
               size="large"

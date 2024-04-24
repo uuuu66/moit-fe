@@ -1,35 +1,30 @@
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import {
-  ButtonBox,
   ImageBox,
   InfoCard,
   InfoCardBox,
-  MeetingCard,
-  MeetingCardBox,
-  MeetingsBox,
   MypageLayout,
   NavBox,
   ProfileBox,
-  TitleBox,
-  EmptyTextBox,
   LogoutBox,
   SectionLine,
 } from './styles'
 import { userKeys } from '@/constants/queryKeys'
-import { getMyMeetings, getProfile, logout } from '@/apis/user'
+import { getProfile, logout } from '@/apis/user'
 import { getLocalStorageItem } from '@/util/localStorage'
-import { type MyMeeting } from '@/type/user'
-import { CardIconText } from '@/components/meeting/MeetingCard/styles'
+
 import LoadingPage from '../../shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
+import MyMeetings from '@/components/meeting/MyMeetings/MyMeetings'
+import BookmarkedMeetings from '@/components/meeting/MyMeetings/BookmarkedMeetings'
+
 import { notify } from '@/components/Toast'
 import AuthAlertModal from '@/components/modals/AuthAlertModal'
 
 export default function Mypage(): JSX.Element {
-  const [onTotalOpen, setOnTotalOpen] = useState(false)
   const [onLogoutModal, setOnLogoutModal] = useState(false)
   const navigate = useNavigate()
 
@@ -38,17 +33,8 @@ export default function Mypage(): JSX.Element {
     queryFn: async () => await getProfile(),
   })
 
-  const { data: meetings } = useQuery({
-    queryKey: userKeys.myMeetings,
-    queryFn: async () => await getMyMeetings(),
-  })
-
   if (profileInfo == null) return <LoadingPage name="페이지를" />
 
-  const getCurrentMeetings = (): MyMeeting[] => {
-    if (meetings == null || meetings?.length === 0) return []
-    return onTotalOpen ? meetings : meetings.slice(0, 2)
-  }
   const token: string = getLocalStorageItem('accessToken')
   const { enterMeeting, studyTime, heldMeeting } = profileInfo
 
@@ -98,60 +84,10 @@ export default function Mypage(): JSX.Element {
           </InfoCard>
         </InfoCardBox>
       </ProfileBox>
-      <SectionLine />
-      <MeetingsBox>
-        <ButtonBox>
-          <div className="button-flex-box">
-            <button type="button">참여 중인 모임</button>
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              setOnTotalOpen(!onTotalOpen)
-            }}
-          >
-            {meetings != null && meetings.length > 2 && (
-              <span>{onTotalOpen ? '목록 접기' : '더보기'}</span>
-            )}
-          </button>
-        </ButtonBox>
-        <MeetingCardBox>
-          {getCurrentMeetings().length !== 0 ? (
-            getCurrentMeetings().map(
-              ({
-                meetingId,
-                meetingName,
-                meetingDate,
-                meetingStartTime,
-                meetingEndTime,
-              }) => (
-                <MeetingCard
-                  key={meetingId}
-                  onClick={() => {
-                    navigate(`/meetings/${meetingId}/chats`)
-                  }}
-                >
-                  <span>참여중</span>
-                  <TitleBox>
-                    <h2>{meetingName}</h2>
-                    <img src="/assets/enter.svg" alt="enter" />
-                  </TitleBox>
-                  <hr />
-                  <CardIconText>
-                    <img src="/assets/calendar.svg" alt="calendar" />
-                    <p>{`${meetingDate} | ${meetingStartTime} - ${meetingEndTime}`}</p>
-                  </CardIconText>
-                </MeetingCard>
-              )
-            )
-          ) : (
-            <EmptyTextBox>
-              <img src="/assets/warning.svg" alt="warning" />
-              <p>참여 중인 모임이 없습니다</p>
-            </EmptyTextBox>
-          )}
-        </MeetingCardBox>
-      </MeetingsBox>
+      <div>
+        <MyMeetings />
+        <BookmarkedMeetings />
+      </div>
       <SectionLine />
       <LogoutBox
         onClick={() => {

@@ -119,5 +119,7 @@ export const Content = styled.div`
   }
   .emphasis {
     color: ${theme.color.primary100};
+    font-size: ${theme.fontSize.large};
+    font-weight: ${theme.fontWeight.normal};
   }
 `
