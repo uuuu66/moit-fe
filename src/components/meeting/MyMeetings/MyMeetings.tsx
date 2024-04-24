@@ -59,7 +59,9 @@ export default function MyMeetings(): JSX.Element {
           }}
         >
           {meetings != null && meetings.length > 2 && (
-            <span>{onTotalOpen ? '목록 접기' : '더보기'}</span>
+            <span className="tab-toggle-button">
+              {onTotalOpen ? '목록 접기' : '더보기'}
+            </span>
           )}
         </button>
       </ButtonBox>

@@ -30,6 +30,7 @@ export default function MypageMeetingList({
             meetingDate,
             meetingStartTime,
             meetingEndTime,
+            status,
           }) => (
             <MeetingCard
               $isProgress={isProgress}
@@ -38,7 +39,9 @@ export default function MypageMeetingList({
                 navigate(`/meetings/${meetingId}/chats`)
               }}
             >
-              <span>{isProgress ? '참여중' : '참여 완료'}</span>
+              <span>
+                {status === 'COMPLETE' ? '모임 종료' : '모임 진행 중'}
+              </span>
               <TitleBox>
                 <h2>{meetingName}</h2>
                 {meetingsStatus === 'bookmarked' ? (

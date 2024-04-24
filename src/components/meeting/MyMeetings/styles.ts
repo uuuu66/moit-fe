@@ -41,7 +41,7 @@ export const ButtonBox = styled.div`
     }
   }
 
-  span {
+  .tab-toggle-button {
     ${({ theme }) => `
     color:${theme.color.black40};
     font-size: ${theme.fontSize.small};

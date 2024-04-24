@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import {
   ImageBox,
   InfoCard,
@@ -20,7 +21,11 @@ import ErrorPage from '@/shared/ErrorPage'
 import MyMeetings from '@/components/meeting/MyMeetings/MyMeetings'
 import BookmarkedMeetings from '@/components/meeting/MyMeetings/BookmarkedMeetings'
 
+import { notify } from '@/components/Toast'
+import AuthAlertModal from '@/components/modals/AuthAlertModal'
+
 export default function Mypage(): JSX.Element {
+  const [onLogoutModal, setOnLogoutModal] = useState(false)
   const navigate = useNavigate()
 
   const { data: profileInfo, isError } = useQuery({
@@ -85,13 +90,8 @@ export default function Mypage(): JSX.Element {
       </div>
       <SectionLine />
       <LogoutBox
-        onClick={(): void => {
-          logout()
-            .catch(() => {})
-            .finally(() => {
-              navigate('/')
-              window.alert('로그아웃이 완료되었습니다.')
-            })
+        onClick={() => {
+          setOnLogoutModal(!onLogoutModal)
         }}
       >
         <div className="logout-flex-box">
@@ -100,6 +100,28 @@ export default function Mypage(): JSX.Element {
         </div>
         <img src="/assets/right.svg" alt="right" />
       </LogoutBox>
+      {onLogoutModal && (
+        <AuthAlertModal
+          message="로그아웃"
+          firstSubMessage="이전과 동일한 계정으로 인증하면,"
+          secondSubMessage="같은 계정으로 이어서 이용 가능합니다"
+          onClose={() => {
+            setOnLogoutModal(!onLogoutModal)
+          }}
+          handleClick={(): void => {
+            logout()
+              .catch(() => {})
+              .finally(() => {
+                navigate('/')
+                notify({
+                  type: 'default',
+                  text: '로그아웃 되었습니다.',
+                })
+              })
+          }}
+          buttonName="로그아웃"
+        />
+      )}
     </MypageLayout>
   )
 }
