@@ -5,7 +5,6 @@ export const MypageLayout = styled.div`
   min-height: 100%;
   padding: 16px 0;
   width: 100%;
-  /* padding: 16px 20px; */
 
   background: ${({ theme }) => theme.color.bg1};
   display: flex;

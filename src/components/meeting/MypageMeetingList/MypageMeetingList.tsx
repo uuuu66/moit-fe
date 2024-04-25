@@ -18,8 +18,6 @@ export default function MypageMeetingList({
 }: MypageMeetingListProps): JSX.Element {
   const navigate = useNavigate()
 
-  const isProgress = meetingsStatus === 'progress'
-
   return (
     <MeetingCardBox>
       {meetings.length !== 0 ? (
@@ -33,7 +31,7 @@ export default function MypageMeetingList({
             status,
           }) => (
             <MeetingCard
-              $isProgress={isProgress}
+              $isProgress={status !== 'COMPLETE'}
               key={meetingId}
               onClick={() => {
                 navigate(`/meetings/${meetingId}/chats`)

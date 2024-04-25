@@ -15,7 +15,7 @@ interface BookMarkProps {
 export default function BookMark({ meetingId }: BookMarkProps): JSX.Element {
   const { data: bookMarked } = useQuery({
     queryKey: ['bookmark', { meetingId }],
-    queryFn: () => getConfirmBookMarked(meetingId),
+    queryFn: async () => await getConfirmBookMarked(meetingId),
   })
   const queryClient = useQueryClient()
   const handleClickButton = (e: React.MouseEvent<HTMLButtonElement>): void => {

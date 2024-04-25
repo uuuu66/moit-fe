@@ -4,6 +4,7 @@ import {
   type MeetingDetailInfo,
   type PaginationReturn,
   type PaginationResponse,
+  type CommonResponse,
 } from '@/type/response'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type Filters } from '@/type/filter'
@@ -70,6 +71,17 @@ const getMeetingsBySearch = async <T = GetMeeting[]>({
       nextPage: pageParam + 1,
       isLast: data.last,
     }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const getPopularMeetings = async <T = GetMeeting[]>(): Promise<T> => {
+  try {
+    const res = await instance.get<CommonResponse<T>>(`api/meetings/popular`)
+    console.log(res.data.data)
+    return res.data.data
   } catch (error) {
     console.log(error)
     throw error
@@ -195,6 +207,7 @@ const getConfirmBookMarked = async (meetingId: number): Promise<boolean> => {
 export {
   getMeetings,
   getMeetingsBySearch,
+  getPopularMeetings,
   postMeetingData,
   getMeetingDetail,
   postMeetingSub,
