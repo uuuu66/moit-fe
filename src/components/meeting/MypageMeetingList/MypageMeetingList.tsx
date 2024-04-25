@@ -18,8 +18,6 @@ export default function MypageMeetingList({
 }: MypageMeetingListProps): JSX.Element {
   const navigate = useNavigate()
 
-  const isProgress = meetingsStatus === 'progress'
-
   return (
     <MeetingCardBox>
       {meetings.length !== 0 ? (
@@ -30,13 +28,16 @@ export default function MypageMeetingList({
             meetingDate,
             meetingStartTime,
             meetingEndTime,
+            bookmarked,
             status,
           }) => (
             <MeetingCard
-              $isProgress={isProgress}
+              $isProgress={status !== 'COMPLETE'}
               key={meetingId}
               onClick={() => {
-                navigate(`/meetings/${meetingId}/chats`)
+                meetingsStatus === 'bookmarked'
+                  ? navigate(`/meetings/${meetingId}`)
+                  : navigate(`/meetings/${meetingId}/chats`)
               }}
             >
               <span>
@@ -45,7 +46,7 @@ export default function MypageMeetingList({
               <TitleBox>
                 <h2>{meetingName}</h2>
                 {meetingsStatus === 'bookmarked' ? (
-                  <BookMark meetingId={meetingId} />
+                  <BookMark meetingId={meetingId} prevBookmarked={bookmarked} />
                 ) : (
                   <img src="/assets/enter.svg" alt="enter" />
                 )}

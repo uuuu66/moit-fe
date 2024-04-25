@@ -222,7 +222,12 @@ function MeetingDetail(): JSX.Element {
       {decodedToken.sub !== data?.creatorEmail ? (
         // 일반 유저
         <DetailButtonContainer>
-          {data != null && <BookMark meetingId={data.meetingId} />}
+          {data != null && (
+            <BookMark
+              meetingId={data.meetingId}
+              prevBookmarked={data.bookmarked}
+            />
+          )}
           {data?.status === 'COMPLETE' ? (
             // 모집이 COMPLETE
             <CommonButton size="large" disabled>

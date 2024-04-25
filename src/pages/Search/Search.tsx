@@ -1,8 +1,8 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { meetingKeys } from '@/constants/queryKeys'
-import { getMeetingsBySearch } from '@/apis/meeting'
+import { getMeetingsBySearch, getPopularMeetings } from '@/apis/meeting'
 import {
   CardBox,
   EmptyTextBox,
@@ -12,6 +12,10 @@ import {
   RecentTagBox,
   ToggleBox,
   ToggleButton,
+  PopularMeetingsBox,
+  PopularMeetingCard,
+  PopularMeetingCardBox,
+  PopularCardTextBox,
 } from './styles'
 import { type GetMeeting } from '@/type/meeting'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
@@ -21,7 +25,15 @@ import useScrollEnd from '@/hooks/useScrollEnd'
 import SearchMeetingsCard from '@/components/meeting/MeetingCard/SearchMeetingsCard'
 
 export default function Search(): JSX.Element {
+  const [onRecentsToggle, setOnRecentsToggle] = useState(true)
+  const [recents, setRecents] = useState<string[]>(
+    (getLocalStorageItem('recents') as string[]) ?? []
+  )
+  const scrollBoxRef = useRef<HTMLDivElement>(null)
   const [queries] = useSearchParams()
+  const navigate = useNavigate()
+  const { handleScroll } = useScrollEnd()
+
   const keyword = queries.get('keyword') ?? ''
   const [inputText, setInputText] = useState(keyword ?? '')
 
@@ -29,16 +41,12 @@ export default function Search(): JSX.Element {
     setInputText(keyword)
   }, [keyword])
 
-  const [recents, setRecents] = useState<string[]>(
-    (getLocalStorageItem('recents') as string[]) ?? []
-  )
   const hasRecents = recents.length !== 0
-  const [onRecentsToggle, setOnRecentsToggle] = useState(true)
-  const scrollBoxRef = useRef<HTMLDivElement>(null)
 
-  const navigate = useNavigate()
-
-  const { handleScroll } = useScrollEnd()
+  const { data: popularMeetings } = useQuery({
+    queryKey: ['test'],
+    queryFn: async () => await getPopularMeetings(),
+  })
 
   const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: meetingKeys.search(keyword),
@@ -79,10 +87,15 @@ export default function Search(): JSX.Element {
 
   const meetings = useMemo(() => {
     let list: GetMeeting[] = []
-    data != null &&
-      data.pages.forEach(({ result }) => (list = [...list, ...result]))
+    data?.pages.forEach(({ result }) => (list = [...list, ...result]))
     return list
   }, [data])
+
+  useEffect(() => {
+    if (meetings.length !== 0) {
+      setOnRecentsToggle(false)
+    }
+  }, [meetings])
 
   const handleSearch = (): void => {
     if (inputText.trim().length === 0) {
@@ -189,7 +202,7 @@ export default function Search(): JSX.Element {
           {meetings.length === 0 ? (
             <EmptyTextBox>
               <img src="/assets/warning.svg" alt="warning" />
-              <p>조회된 내용이 없습니다</p>
+              <p>조회된 모임이 없습니다</p>
             </EmptyTextBox>
           ) : (
             <>
@@ -203,6 +216,59 @@ export default function Search(): JSX.Element {
             </>
           )}
         </CardBox>
+      )}
+      {meetings.length === 0 && (
+        <PopularMeetingsBox>
+          <h1>
+            <img src="/assets/fire.svg" alt="fire" />
+            현재 MOIT에서 인기있는 모임
+          </h1>
+          <PopularMeetingCardBox>
+            <div className="popular-card-flex-box">
+              {popularMeetings?.map(
+                (
+                  {
+                    meetingId,
+                    meetingName,
+                    meetingDate,
+                    meetingStartTime,
+                    meetingEndTime,
+                    locationAddress,
+                  },
+                  index
+                ) => (
+                  <PopularMeetingCard key={meetingId}>
+                    <span>{`${`0${index + 1}`}`}</span>
+                    <h2>{meetingName}</h2>
+                    <PopularCardTextBox>
+                      <div className="card-icon-text">
+                        <img src="/assets/timeSearch.svg" alt="time" />
+                        <div>
+                          <p>{meetingDate}</p>
+                          <p>{`${meetingStartTime} - ${meetingEndTime}`}</p>
+                        </div>
+                      </div>
+                      <div className="card-icon-text">
+                        <img src="/assets/pinSearch.svg" alt="time" />
+                        <div>
+                          <p>{locationAddress}</p>
+                        </div>
+                      </div>
+                    </PopularCardTextBox>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigate(`/meetings/${meetingId}`)
+                      }}
+                    >
+                      모임 상세보기
+                    </button>
+                  </PopularMeetingCard>
+                )
+              )}
+            </div>
+          </PopularMeetingCardBox>
+        </PopularMeetingsBox>
       )}
     </SearchLayout>
   )

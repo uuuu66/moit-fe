@@ -1,50 +1,76 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import React from 'react'
-import {
-  deleteBookMark,
-  getConfirmBookMarked,
-  postBookMark,
-} from '@/apis/meeting'
+import { useQueryClient } from '@tanstack/react-query'
+import React, { useEffect, useRef, useState } from 'react'
+import { deleteBookMark, postBookMark } from '@/apis/meeting'
 import { getLocalStorageItem } from '@/util/localStorage'
+import LoginModal from '@/components/modals/LoginModal'
 import { meetingKeys } from '@/constants/queryKeys'
+import { type MeetingDetailInfo } from '@/type/response'
 
 interface BookMarkProps {
   meetingId: number
+  prevBookmarked: boolean
 }
 
-export default function BookMark({ meetingId }: BookMarkProps): JSX.Element {
-  const { data: bookMarked } = useQuery({
-    queryKey: ['bookmark', { meetingId }],
-    queryFn: () => getConfirmBookMarked(meetingId),
-  })
+export default function BookMark({
+  meetingId,
+  prevBookmarked,
+}: BookMarkProps): JSX.Element {
+  const [bookmarked, setBookmarked] = useState(prevBookmarked)
+  const [onLoginModal, setOnLoginModal] = useState(false)
   const queryClient = useQueryClient()
+  const ref = useRef(false)
+
+  useEffect(() => {
+    ref.current = bookmarked
+  }, [bookmarked])
+
+  useEffect(() => {
+    return () => {
+      if (ref.current !== prevBookmarked) {
+        ;(prevBookmarked ? deleteBookMark(meetingId) : postBookMark(meetingId))
+          .then(
+            async () =>
+              await Promise.all([
+                queryClient.invalidateQueries({ queryKey: meetingKeys.all }),
+                queryClient.setQueryData(
+                  ['meetingListDetail', String(meetingId)],
+                  (data: MeetingDetailInfo) => {
+                    return { ...data, bookmarked: !data.bookmarked }
+                  }
+                ),
+              ])
+          )
+          .catch(() => {})
+      }
+    }
+  }, [prevBookmarked, meetingId, queryClient])
+
   const handleClickButton = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation()
     const token: string = getLocalStorageItem('accessToken')
     if (token === null) {
-      window.alert('로그인 후 북마크 기능을 사용할 수 있습니다.')
+      setOnLoginModal(true)
       return
     }
-
-    ;(bookMarked ? deleteBookMark(meetingId) : postBookMark(meetingId))
-      .then(async () => {
-        await queryClient.setQueryData(
-          ['bookmark', { meetingId }],
-          (status: boolean) => !status
-        )
-        await queryClient.invalidateQueries({
-          queryKey: meetingKeys.myMeetings('bookmarked'),
-        })
-      })
-      .catch(() => {})
+    setBookmarked(!bookmarked)
   }
+
   return (
-    <button type="button" onClick={handleClickButton}>
-      {bookMarked ? (
-        <img src="/assets/bookmarkSelected.svg" alt="bookmark" />
-      ) : (
-        <img src="/assets/bookmark.svg" alt="bookmark" />
+    <>
+      <button type="button" onClick={handleClickButton}>
+        {bookmarked ? (
+          <img src="/assets/bookmarkSelected.svg" alt="bookmark" />
+        ) : (
+          <img src="/assets/bookmark.svg" alt="bookmark" />
+        )}
+      </button>
+      {onLoginModal && (
+        <LoginModal
+          handleCloseModal={() => {
+            setOnLoginModal(false)
+          }}
+        />
       )}
-    </button>
+    </>
   )
 }

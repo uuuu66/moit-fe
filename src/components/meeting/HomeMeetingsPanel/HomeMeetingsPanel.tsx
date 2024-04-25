@@ -94,9 +94,11 @@ export default function HomeMeetingsPanel({
                   meetingEndTime,
                   skillList,
                   careerList,
+                  bookmarked,
                 }) => (
                   <HomeMeetingsCard
                     key={meetingId}
+                    meetingId={meetingId}
                     title={meetingName}
                     date={meetingDate}
                     time={`${meetingStartTime} - ${meetingEndTime}`}
@@ -112,6 +114,7 @@ export default function HomeMeetingsPanel({
                         id,
                       })),
                     ]}
+                    bookmarked={bookmarked}
                     handleCardClick={() => {
                       handleCardClick(meetingId)
                     }}

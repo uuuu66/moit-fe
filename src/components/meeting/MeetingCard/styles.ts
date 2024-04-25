@@ -17,12 +17,20 @@ export const TitleBox = styled.div`
   justify-content: space-between;
   background: ${({ theme }) => theme.color.primary10};
 
-  h3 {
-    width: 186px;
+  .title-text-box {
+    width: 200px;
     height: 54px;
     overflow: hidden;
     display: flex;
     align-items: center;
+  }
+
+  h3 {
+    white-space: normal;
+    word-break: keep-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     ${({ theme }) => `
     color: ${theme.color.black70};
     font-size: ${theme.fontSize.larger2};
