@@ -47,6 +47,13 @@ export interface PaginationReturn<T> {
   isLast: boolean
 }
 
+export interface ChatPaginationReturn<T> {
+  result: T
+  nextPage: number
+  isLast: boolean
+  meetingStatusEnum: string
+}
+
 export interface MeetingDetailInfo {
   budget: number
   careerNameList: string[]
