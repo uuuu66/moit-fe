@@ -16,6 +16,7 @@ export interface GetMeeting {
   meetingEndTime: string
   skillList: SkillList[]
   careerList: CareerList[]
+  bookmarked: boolean
 }
 
 export interface SkillList {

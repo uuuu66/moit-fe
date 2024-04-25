@@ -11,24 +11,29 @@ import {
   TitleBox,
 } from './styles'
 import useScrollPosition from '@/hooks/useScrollPosition'
+import BookMark from '../Bookmark/BookMark'
 
 interface HomeMeetingsCardProps {
+  meetingId: number
   title: string
   date: string
   time: string
   address: string
   memberCount: string
   tags: Array<{ name: string; id: number }>
+  bookmarked: boolean
   handleCardClick: () => void
 }
 
 export default function HomeMeetingsCard({
+  meetingId,
   title,
   date,
   time,
   address,
   memberCount,
   tags,
+  bookmarked,
   handleCardClick,
 }: HomeMeetingsCardProps): JSX.Element {
   const scrollBoxRef = useRef<HTMLDivElement>(null)
@@ -37,8 +42,15 @@ export default function HomeMeetingsCard({
   return (
     <HomeMeetingsCardLayout onClick={handleCardClick}>
       <TitleBox>
-        <h3>{title}</h3>
-        <img src="/assets/right.svg" alt="right" />
+        <div className="title-text-box">
+          <h3>{title}</h3>
+        </div>
+        <div className="title-button-box">
+          <BookMark meetingId={meetingId} bookmarked={bookmarked} />
+          <div className="title-img-box">
+            <img src="/assets/right.svg" alt="right" />
+          </div>
+        </div>
       </TitleBox>
       <ContentsBox>
         <TextBox>

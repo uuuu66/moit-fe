@@ -1,50 +1,54 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import React from 'react'
-import {
-  deleteBookMark,
-  getConfirmBookMarked,
-  postBookMark,
-} from '@/apis/meeting'
+import { useQueryClient } from '@tanstack/react-query'
+import React, { useState } from 'react'
+import { deleteBookMark, postBookMark } from '@/apis/meeting'
 import { getLocalStorageItem } from '@/util/localStorage'
-import { meetingKeys } from '@/constants/queryKeys'
+import LoginModal from '@/components/modals/LoginModal'
 
 interface BookMarkProps {
   meetingId: number
+  bookmarked: boolean
 }
 
-export default function BookMark({ meetingId }: BookMarkProps): JSX.Element {
-  const { data: bookMarked } = useQuery({
-    queryKey: ['bookmark', { meetingId }],
-    queryFn: async () => await getConfirmBookMarked(meetingId),
-  })
+export default function BookMark({
+  meetingId,
+  bookmarked,
+}: BookMarkProps): JSX.Element {
   const queryClient = useQueryClient()
+  const [onLoginModal, setOnLoginModal] = useState(false)
+
   const handleClickButton = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation()
     const token: string = getLocalStorageItem('accessToken')
     if (token === null) {
-      window.alert('로그인 후 북마크 기능을 사용할 수 있습니다.')
+      setOnLoginModal(true)
       return
     }
 
-    ;(bookMarked ? deleteBookMark(meetingId) : postBookMark(meetingId))
+    ;(bookmarked ? deleteBookMark(meetingId) : postBookMark(meetingId))
       .then(async () => {
-        await queryClient.setQueryData(
-          ['bookmark', { meetingId }],
-          (status: boolean) => !status
-        )
-        await queryClient.invalidateQueries({
-          queryKey: meetingKeys.myMeetings('bookmarked'),
-        })
+        // await queryClient.setQueryData(
+        //   userKeys.bookmark(meetingId),
+        //   (status: boolean) => !status
+        // )
       })
       .catch(() => {})
   }
   return (
-    <button type="button" onClick={handleClickButton}>
-      {bookMarked ? (
-        <img src="/assets/bookmarkSelected.svg" alt="bookmark" />
-      ) : (
-        <img src="/assets/bookmark.svg" alt="bookmark" />
+    <>
+      <button type="button" onClick={handleClickButton}>
+        {bookmarked ? (
+          <img src="/assets/bookmarkSelected.svg" alt="bookmark" />
+        ) : (
+          <img src="/assets/bookmark.svg" alt="bookmark" />
+        )}
+      </button>
+      {onLoginModal && (
+        <LoginModal
+          handleCloseModal={() => {
+            setOnLoginModal(false)
+          }}
+        />
       )}
-    </button>
+    </>
   )
 }

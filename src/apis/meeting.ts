@@ -97,11 +97,11 @@ const postMeetingData = async (newMeetingData: Info): Promise<void> => {
   }
 }
 
-const token: boolean = getLocalStorageItem('accessToken')
 // 상세조회
 const getMeetingDetail = async (
   meetingId: number
 ): Promise<MeetingDetailInfo> => {
+  const token: boolean = getLocalStorageItem('accessToken')
   try {
     // 토큰 유무 분리
     const { data } = token
@@ -192,18 +192,6 @@ const deleteBookMark = async (meetingId: number): Promise<void> => {
   }
 }
 
-const getConfirmBookMarked = async (meetingId: number): Promise<boolean> => {
-  try {
-    const { data } = await authInstance.get<boolean>(
-      `api/bookmark/check?meetingId=${meetingId}`
-    )
-    return data
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
-
 export {
   getMeetings,
   getMeetingsBySearch,
@@ -217,5 +205,4 @@ export {
   getChatMsg,
   postBookMark,
   deleteBookMark,
-  getConfirmBookMarked,
 }

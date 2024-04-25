@@ -28,6 +28,7 @@ export default function MypageMeetingList({
             meetingDate,
             meetingStartTime,
             meetingEndTime,
+            bookmarked,
             status,
           }) => (
             <MeetingCard
@@ -43,7 +44,7 @@ export default function MypageMeetingList({
               <TitleBox>
                 <h2>{meetingName}</h2>
                 {meetingsStatus === 'bookmarked' ? (
-                  <BookMark meetingId={meetingId} />
+                  <BookMark meetingId={meetingId} bookmarked={bookmarked} />
                 ) : (
                   <img src="/assets/enter.svg" alt="enter" />
                 )}

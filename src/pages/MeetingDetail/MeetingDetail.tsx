@@ -198,7 +198,9 @@ function MeetingDetail(): JSX.Element {
       </DetailInfoContainer>
       {decodedToken.sub !== data?.creatorEmail && (
         <DetailButtonContainer>
-          {data != null && <BookMark meetingId={data.meetingId} />}
+          {data != null && (
+            <BookMark meetingId={data.meetingId} bookmarked={data.bookmarked} />
+          )}
           {data?.join === true ? (
             <CommonButton
               size="large"

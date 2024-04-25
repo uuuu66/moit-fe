@@ -54,6 +54,7 @@ export interface MeetingDetailInfo {
   creatorEmail: string
   creatorName: string
   join: boolean
+  bookmarked: boolean
   locationAddress: string
   locationLat: number
   locationLng: number

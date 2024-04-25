@@ -219,7 +219,7 @@ export const CardBox = styled.div`
   min-height: 160px;
   padding: 20px;
   margin-top: 20px;
-  background: ${theme.color.pg1};
+  background: ${theme.color.white};
   display: flex;
   flex-direction: column;
   gap: 20px;

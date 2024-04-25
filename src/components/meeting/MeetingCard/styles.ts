@@ -17,17 +17,45 @@ export const TitleBox = styled.div`
   justify-content: space-between;
   background: ${({ theme }) => theme.color.primary10};
 
-  h3 {
-    width: 186px;
+  .title-text-box {
+    width: 200px;
     height: 54px;
     overflow: hidden;
     display: flex;
     align-items: center;
+  }
+
+  h3 {
+    white-space: normal;
+    word-break: keep-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     ${({ theme }) => `
     color: ${theme.color.black70};
     font-size: ${theme.fontSize.larger2};
     font-weight: ${theme.fontWeight.bold};
     `}
+  }
+
+  .title-button-box {
+    display: flex;
+    gap: 12px;
+  }
+
+  .title-img-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 30px;
+    background: ${({ theme }) => theme.color.white};
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      height: 16px;
+    }
   }
 `
 
