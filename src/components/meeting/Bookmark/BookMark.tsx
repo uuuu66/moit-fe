@@ -1,20 +1,49 @@
 import { useQueryClient } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { deleteBookMark, postBookMark } from '@/apis/meeting'
 import { getLocalStorageItem } from '@/util/localStorage'
 import LoginModal from '@/components/modals/LoginModal'
+import { meetingKeys } from '@/constants/queryKeys'
+import { type MeetingDetailInfo } from '@/type/response'
 
 interface BookMarkProps {
   meetingId: number
-  bookmarked: boolean
+  prevBookmarked: boolean
 }
 
 export default function BookMark({
   meetingId,
-  bookmarked,
+  prevBookmarked,
 }: BookMarkProps): JSX.Element {
-  const queryClient = useQueryClient()
+  const [bookmarked, setBookmarked] = useState(prevBookmarked)
   const [onLoginModal, setOnLoginModal] = useState(false)
+  const queryClient = useQueryClient()
+  const ref = useRef(false)
+
+  useEffect(() => {
+    ref.current = bookmarked
+  }, [bookmarked])
+
+  useEffect(() => {
+    return () => {
+      if (ref.current !== prevBookmarked) {
+        ;(prevBookmarked ? deleteBookMark(meetingId) : postBookMark(meetingId))
+          .then(
+            async () =>
+              await Promise.all([
+                queryClient.invalidateQueries({ queryKey: meetingKeys.all }),
+                queryClient.setQueryData(
+                  ['meetingListDetail', String(meetingId)],
+                  (data: MeetingDetailInfo) => {
+                    return { ...data, bookmarked: !data.bookmarked }
+                  }
+                ),
+              ])
+          )
+          .catch(() => {})
+      }
+    }
+  }, [prevBookmarked, meetingId, queryClient])
 
   const handleClickButton = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation()
@@ -23,16 +52,9 @@ export default function BookMark({
       setOnLoginModal(true)
       return
     }
-
-    ;(bookmarked ? deleteBookMark(meetingId) : postBookMark(meetingId))
-      .then(async () => {
-        // await queryClient.setQueryData(
-        //   userKeys.bookmark(meetingId),
-        //   (status: boolean) => !status
-        // )
-      })
-      .catch(() => {})
+    setBookmarked(!bookmarked)
   }
+
   return (
     <>
       <button type="button" onClick={handleClickButton}>

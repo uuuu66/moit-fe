@@ -37,26 +37,6 @@ export const TitleBox = styled.div`
     font-weight: ${theme.fontWeight.bold};
     `}
   }
-
-  .title-button-box {
-    display: flex;
-    gap: 12px;
-  }
-
-  .title-img-box {
-    width: 38px;
-    height: 38px;
-    border-radius: 30px;
-    background: ${({ theme }) => theme.color.white};
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-      height: 16px;
-    }
-  }
 `
 
 export const ContentsBox = styled.div`

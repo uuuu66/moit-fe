@@ -24,7 +24,12 @@ export default function LoginModal({
 
   return (
     <ModalPortal>
-      <Background onClick={handleCloseModal}>
+      <Background
+        onClick={(e) => {
+          e.stopPropagation()
+          handleCloseModal()
+        }}
+      >
         <LoginModalLayout
           onClick={(e) => {
             e.stopPropagation()

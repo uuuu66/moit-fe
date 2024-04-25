@@ -35,7 +35,9 @@ export default function MypageMeetingList({
               $isProgress={status !== 'COMPLETE'}
               key={meetingId}
               onClick={() => {
-                navigate(`/meetings/${meetingId}/chats`)
+                meetingsStatus === 'bookmarked'
+                  ? navigate(`/meetings/${meetingId}`)
+                  : navigate(`/meetings/${meetingId}/chats`)
               }}
             >
               <span>
@@ -44,7 +46,7 @@ export default function MypageMeetingList({
               <TitleBox>
                 <h2>{meetingName}</h2>
                 {meetingsStatus === 'bookmarked' ? (
-                  <BookMark meetingId={meetingId} bookmarked={bookmarked} />
+                  <BookMark meetingId={meetingId} prevBookmarked={bookmarked} />
                 ) : (
                   <img src="/assets/enter.svg" alt="enter" />
                 )}

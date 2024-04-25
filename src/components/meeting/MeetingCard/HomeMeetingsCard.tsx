@@ -45,12 +45,7 @@ export default function HomeMeetingsCard({
         <div className="title-text-box">
           <h3>{title}</h3>
         </div>
-        <div className="title-button-box">
-          <BookMark meetingId={meetingId} bookmarked={bookmarked} />
-          <div className="title-img-box">
-            <img src="/assets/right.svg" alt="right" />
-          </div>
-        </div>
+        <BookMark meetingId={meetingId} prevBookmarked={bookmarked ?? false} />
       </TitleBox>
       <ContentsBox>
         <TextBox>
