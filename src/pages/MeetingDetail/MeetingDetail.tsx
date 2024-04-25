@@ -18,6 +18,7 @@ import {
   DetailWholeContainer,
 } from './styles'
 import {
+  deleteMeeting,
   deleteMeetingWithdraw,
   getMeetingDetail,
   postMeetingSub,
@@ -30,6 +31,7 @@ import { getLocalStorageItem } from '@/util/localStorage'
 import BookMark from '@/components/meeting/Bookmark/BookMark'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
+import { theme } from '@/constants/theme'
 
 function MeetingDetail(): JSX.Element {
   useMap()
@@ -38,6 +40,7 @@ function MeetingDetail(): JSX.Element {
   const { meetingId } = useParams()
 
   const [onWithdrawModal, setOnWithdrawModal] = useState(false)
+  const [onDeleteModal, setOnDeleteModal] = useState(false)
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['meetingListDetail', meetingId],
@@ -78,12 +81,32 @@ function MeetingDetail(): JSX.Element {
     },
   })
 
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      await deleteMeeting(Number(meetingId))
+    },
+    onSuccess: () => {
+      notify({
+        type: 'default',
+        text: '모임이 삭제 되었습니다.',
+      })
+      navi('/')
+    },
+    onError: (error) => {
+      console.log('error', error)
+    },
+  })
+
   const handleMeetingSubClick = (): void => {
     postSubMutation.mutate()
   }
 
   const withdrawMeetingClick = (): void => {
     withdrawMutation.mutate()
+  }
+
+  const deleteMeetingClick = (): void => {
+    deleteMutation.mutate()
   }
 
   const isFull = data?.totalCount === data?.registeredCount
@@ -196,10 +219,17 @@ function MeetingDetail(): JSX.Element {
         </Box1>
         {/* 5 */}
       </DetailInfoContainer>
-      {decodedToken.sub !== data?.creatorEmail && (
+      {decodedToken.sub !== data?.creatorEmail ? (
+        // 일반 유저
         <DetailButtonContainer>
           {data != null && <BookMark meetingId={data.meetingId} />}
-          {data?.join === true ? (
+          {data?.status === 'COMPLETE' ? (
+            // 모집이 COMPLETE
+            <CommonButton size="large" disabled>
+              모집이 종료되었습니다
+            </CommonButton>
+          ) : data?.join === true ? (
+            // 참여 했나요?
             <CommonButton
               size="large"
               style={{ backgroundColor: '#FA7070' }}
@@ -210,12 +240,39 @@ function MeetingDetail(): JSX.Element {
               모임 탈퇴하기
             </CommonButton>
           ) : isFull ? (
+            // 인원이 꽉 찼나요?
             <CommonButton size="large" disabled>
               모집이 마감되었습니다
             </CommonButton>
           ) : (
+            // 참여하기
             <JoinMeetingButton handleJoinMeeting={handleMeetingSubClick} />
           )}
+        </DetailButtonContainer>
+      ) : (
+        // 작성자
+        <DetailButtonContainer>
+          <CommonButton
+            size="small"
+            style={{
+              backgroundColor: `${theme.color.white}`,
+              color: `${theme.color.primary100}`,
+              border: `1px solid ${theme.color.primary100}`,
+            }}
+            handleClick={() => {
+              setOnDeleteModal(!onDeleteModal)
+            }}
+          >
+            삭제하기
+          </CommonButton>
+          <CommonButton
+            size="small"
+            handleClick={() => {
+              navi(`/meetings/${meetingId}/modify`)
+            }}
+          >
+            수정하기
+          </CommonButton>
         </DetailButtonContainer>
       )}
       {onWithdrawModal && (
@@ -228,6 +285,18 @@ function MeetingDetail(): JSX.Element {
             setOnWithdrawModal(!onWithdrawModal)
           }}
           buttonName="탈퇴하기"
+        />
+      )}
+      {onDeleteModal && (
+        <AlertModal
+          message="삭제"
+          firstSubMessage="모임을 삭제하면"
+          secondSubMessage="관련 데이터가 모두 지워집니다."
+          onClose={() => {
+            setOnDeleteModal(!onDeleteModal)
+          }}
+          handleClick={deleteMeetingClick}
+          buttonName="삭제하기"
         />
       )}
     </DetailWholeContainer>
