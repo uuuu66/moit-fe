@@ -11,6 +11,7 @@ import {
   BubbleContainer,
   ChatBubble,
   ChatContainer,
+  ChatDate,
   MessageContainer,
   MsgInputBox,
   SendButton,
@@ -155,6 +156,8 @@ function Chat(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatDatas])
 
+  // console.log('stompClient', stompClient)
+  // console.log('data', data?.pages.meetingStatusEnum)
   if (isLoading) return <LoadingPage name="페이지를" />
   if (isError) return <ErrorPage />
 
@@ -163,21 +166,34 @@ function Chat(): JSX.Element {
       <DetailHeader meetingId={Number(meetingId)} />
       <MessageContainer id="messageContainer" ref={scrollBoxRef}>
         <BubbleContainer>
-          {chatDatas.map((e: ChatMessage) => (
-            <BubbleBox
-              key={e.chatId}
-              $isMe={e.sender.memberEmail === decodedToken.sub}
-            >
-              <Username $isMe={e.sender.memberEmail === decodedToken.sub}>
-                {e.sender.memberName}
-              </Username>
-              <div className="msg">
-                <ChatBubble $isMe={e.sender.memberEmail === decodedToken.sub}>
-                  {e.content}
-                </ChatBubble>
-                <SendTime>{e.createdAt.slice(11, 16)}</SendTime>
-              </div>
-            </BubbleBox>
+          {chatDatas.map((e: ChatMessage, index: number) => (
+            <React.Fragment key={e.chatId}>
+              {/* 이전 메시지와 날짜가 다르다면 날짜를 표시 */}
+              <ChatDate>
+                {index === 0 ||
+                new Date(e.createdAt).getDate() !==
+                  new Date(chatDatas[index - 1].createdAt).getDate() ? (
+                  <div className="date">
+                    {/* 오늘인지 확인하고 표시 */}
+                    {new Date(e.createdAt).toDateString() ===
+                    new Date().toDateString()
+                      ? 'Today'
+                      : new Date(e.createdAt).toLocaleDateString().slice(0, -1)}
+                  </div>
+                ) : null}
+              </ChatDate>
+              <BubbleBox $isMe={e.sender.memberEmail === decodedToken.sub}>
+                <Username $isMe={e.sender.memberEmail === decodedToken.sub}>
+                  {e.sender.memberName}
+                </Username>
+                <div className="msg">
+                  <ChatBubble $isMe={e.sender.memberEmail === decodedToken.sub}>
+                    {e.content}
+                  </ChatBubble>
+                  <SendTime>{e.createdAt.slice(11, 16)}</SendTime>
+                </div>
+              </BubbleBox>
+            </React.Fragment>
           ))}
         </BubbleContainer>
       </MessageContainer>
@@ -189,6 +205,7 @@ function Chat(): JSX.Element {
             handleKeyEnter(e)
           }}
           placeholder="메세지를 입력해 주세요"
+          // disabled={stompClient.current === null}
         />
         <SendButton onClick={sendChatMessage}>
           <img src="/assets/send.svg" alt="" />

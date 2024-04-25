@@ -66,6 +66,7 @@ export interface MeetingDetailInfo {
   registeredCount: number
   totalCount: number
   skillNameList: string[]
+  status: string
 }
 
 export interface ChatDataResponse {

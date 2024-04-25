@@ -26,6 +26,14 @@ export const BubbleContainer = styled.div`
   gap: 1rem;
 `
 
+export const ChatDate = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: ${theme.fontSize.medium};
+  color: ${theme.color.black40};
+`
+
 export const BubbleBox = styled.div<{ $isMe: boolean }>`
   display: flex;
   flex-direction: column;
