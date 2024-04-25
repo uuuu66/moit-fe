@@ -56,6 +56,8 @@ function Chat(): JSX.Element {
     initialPageParam: 1,
   })
 
+  const meetingStatus = data?.pages[0].meetingStatusEnum
+
   // TODO
   const handleFetchPages = (): void => {
     setPrevScrollHeight(scrollBoxRef.current?.scrollHeight ?? null)
@@ -156,8 +158,6 @@ function Chat(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatDatas])
 
-  // console.log('stompClient', stompClient)
-  // console.log('data', data?.pages.meetingStatusEnum)
   if (isLoading) return <LoadingPage name="페이지를" />
   if (isError) return <ErrorPage />
 
@@ -205,7 +205,7 @@ function Chat(): JSX.Element {
             handleKeyEnter(e)
           }}
           placeholder="메세지를 입력해 주세요"
-          // disabled={stompClient.current === null}
+          disabled={meetingStatus === 'COMPLETE'}
         />
         <SendButton onClick={sendChatMessage}>
           <img src="/assets/send.svg" alt="" />
