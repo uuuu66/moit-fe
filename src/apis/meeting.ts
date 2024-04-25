@@ -5,6 +5,7 @@ import {
   type PaginationReturn,
   type PaginationResponse,
   type CommonResponse,
+  type ChatPaginationReturn,
 } from '@/type/response'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type Filters } from '@/type/filter'
@@ -156,7 +157,7 @@ const deleteMeetingWithdraw = async (meetingId: number): Promise<void> => {
 const getChatMsg = async <T = ChatMessage[]>({
   meetingId,
   pageParam,
-}: GetChatsParams): Promise<PaginationReturn<T>> => {
+}: GetChatsParams): Promise<ChatPaginationReturn<T>> => {
   try {
     const res = await authInstance.get(
       `api/meetings/${meetingId}/chats?page=${pageParam}`
@@ -167,6 +168,7 @@ const getChatMsg = async <T = ChatMessage[]>({
       result: chats.content,
       nextPage: pageParam + 1,
       isLast: chats.last,
+      meetingStatusEnum: data?.meetingStatusEnum,
     }
   } catch (error) {
     console.log(error)
