@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { format } from 'date-fns/format'
 import {
   ChatUsers,
   DetailHeaderContainer,
@@ -32,19 +33,21 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
   }
 
   const handleChatClick = (): void => {
+    const enterTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
+
     if (token !== null && token.length !== 0) {
       if (!(data?.join ?? false)) {
         window.alert('채팅에 참여하려면 모임 참여하기 버튼을 먼저 눌러주세요')
         return
       }
-      navi(`/meetings/${meetingId}/chats`, { replace: true })
+      navi(`/meetings/${meetingId}/chats/${enterTime}`, { replace: true })
     } else {
       setOnLoginModal(true)
     }
   }
 
   const goback = (): void => {
-    if (location.pathname === `/meetings/${meetingId}/chats`) {
+    if (location.pathname.includes('chats')) {
       navi(`/meetings/${meetingId}`, { replace: true })
     } else if (location.pathname === `/meetings/${meetingId}`) {
       navi(-1)
@@ -59,9 +62,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
         <button type="button" onClick={goback} aria-label="go back">
           <Icon src="/assets/arrowLeft.svg" alt="" />
         </button>
-        <ChatUsers
-          $isActive={location.pathname === `/meetings/${meetingId}/chats`}
-        >
+        <ChatUsers $isActive={location.pathname.includes('chats')}>
           <h4>그룹 채팅</h4>
           <Icon src="/assets/users.svg" className="users" />
           <span>{data?.registeredCount}</span>
@@ -79,7 +80,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
           <ToggleButton
             type="button"
             onClick={handleChatClick}
-            $isActive={location.pathname === `/meetings/${meetingId}/chats`}
+            $isActive={location.pathname.includes('chats')}
           >
             chat
           </ToggleButton>

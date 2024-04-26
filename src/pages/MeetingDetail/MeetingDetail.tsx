@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import { useState } from 'react'
+import { format } from 'date-fns/format'
 import useMap from '@/hooks/useMap'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
 import {
@@ -52,11 +53,13 @@ function MeetingDetail(): JSX.Element {
       await postMeetingSub(Number(meetingId))
     },
     onSuccess: () => {
+      const enterTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
+
       notify({
         type: 'success',
         text: '모임 참여가 완료되었습니다.',
       })
-      navi(`/meetings/${meetingId}/chats`, { replace: true })
+      navi(`/meetings/${meetingId}/chats/${enterTime}`, { replace: true })
       void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
     },
     onError: (error) => {

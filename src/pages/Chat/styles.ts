@@ -12,18 +12,21 @@ export const ChatContainer = styled.div`
 export const MessageContainer = styled.div`
   background-color: ${theme.color.white};
   width: 100%;
-  padding: 2rem;
   /* height: calc(100% - 10rem); Adjusted height */
   height: 100%;
   overflow-y: auto;
   border-radius: 0 0 20px 20px;
+
+  .message-padding-box {
+    padding: 0 2rem;
+  }
 `
 
 export const BubbleContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
-  gap: 1rem;
+  gap: 2rem;
 `
 
 export const ChatDate = styled.div`

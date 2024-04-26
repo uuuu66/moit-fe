@@ -21,6 +21,7 @@ interface GetMeetingParams {
 interface GetChatsParams {
   meetingId: number
   pageParam: number
+  enterTime: string
 }
 
 const getMeetings = async <T = GetMeeting[]>({
@@ -157,7 +158,9 @@ const deleteMeetingWithdraw = async (meetingId: number): Promise<void> => {
 const getChatMsg = async <T = ChatMessage[]>({
   meetingId,
   pageParam,
+  enterTime,
 }: GetChatsParams): Promise<ChatPaginationReturn<T>> => {
+  console.log(enterTime)
   try {
     const res = await authInstance.get(
       `api/meetings/${meetingId}/chats?page=${pageParam}`
