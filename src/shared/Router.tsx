@@ -38,7 +38,7 @@ function Router(): JSX.Element {
           element={!isLogin ? <ErrorPage /> : <MeetingModify />}
         />
         <Route
-          path="/meetings/:meetingId/chats"
+          path="/meetings/:meetingId/chats/:enterTime"
           element={!isLogin ? <ErrorPage /> : <Chat />}
         />
         <Route path="/mypage" element={!isLogin ? <ErrorPage /> : <Mypage />} />
