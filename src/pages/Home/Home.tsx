@@ -88,25 +88,19 @@ export default function Home(): JSX.Element {
     void fetchNextPage()
   }, 3000)
 
-  // 조회한 마커가 모두 보이도록 지도 위치 조정
+  // 조회 후 맵 중심 변경
   useEffect(() => {
-    if (map === null || mapElement === null) return
-    const resetMapwithFilteredMarkers = (list: GetMeeting[] = []): void => {
-      // Todo: list가 없을 때의 정책 필요
-      if (list.length === 0) return
-      const points = list.map(
-        ({ locationLat, locationLng }) =>
-          new map.LatLng(locationLat, locationLng)
-      )
-      const bounds = new map.LatLngBounds()
-      points.forEach((point) => {
-        bounds.extend(point)
-      })
-      mapElement?.setBounds(bounds)
-    }
+    if (map === null || mapElement === null || data == null) return
 
-    resetMapwithFilteredMarkers(meetings)
-  }, [meetings, mapElement, map])
+    if (meetings.length === 0) {
+      notify({
+        type: 'warning',
+        text: '해당 지역에 생성된 모임이 없습니다',
+      })
+    }
+    mapElement?.setCenter(new map.LatLng(center.lat, center.lng))
+    mapElement?.setLevel(7)
+  }, [meetings, data, center, map, mapElement])
 
   useEffect(() => {
     const storageMeetingId = sessionStorage.getItem('selectedMeetingId')
