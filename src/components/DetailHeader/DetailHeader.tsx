@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { format } from 'date-fns/format'
 import {
   ChatUsers,
   DetailHeaderContainer,
@@ -12,6 +11,7 @@ import {
 import { getMeetingDetail } from '@/apis/meeting'
 import { getLocalStorageItem } from '@/util/localStorage'
 import LoginModal from '../modals/LoginModal'
+import { notify } from '../Toast'
 
 interface DetailHeaderProps {
   meetingId: number
@@ -33,14 +33,15 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
   }
 
   const handleChatClick = (): void => {
-    const enterTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
-
     if (token !== null && token.length !== 0) {
       if (!(data?.join ?? false)) {
-        window.alert('채팅에 참여하려면 모임 참여하기 버튼을 먼저 눌러주세요')
+        notify({
+          type: 'warning',
+          text: '채팅에 참여하려면 [ 모임 참여하기 ] 버튼을 먼저 눌러주세요',
+        })
         return
       }
-      navi(`/meetings/${meetingId}/chats/${enterTime}`, { replace: true })
+      navi(`/meetings/${meetingId}/chats`, { replace: true })
     } else {
       setOnLoginModal(true)
     }

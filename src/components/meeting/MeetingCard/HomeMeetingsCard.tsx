@@ -21,7 +21,6 @@ interface HomeMeetingsCardProps {
   address: string
   memberCount: string
   tags: Array<{ name: string; id: number }>
-  bookmarked: boolean
   handleCardClick: () => void
 }
 
@@ -33,7 +32,6 @@ export default function HomeMeetingsCard({
   address,
   memberCount,
   tags,
-  bookmarked,
   handleCardClick,
 }: HomeMeetingsCardProps): JSX.Element {
   const scrollBoxRef = useRef<HTMLDivElement>(null)

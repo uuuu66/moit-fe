@@ -85,6 +85,12 @@ export const RecentTagBox = styled.div`
     color: ${theme.color.primary100};
     font-size: ${theme.fontSize.small};
     font-weight: ${theme.fontWeight.normal};
+
+    &:hover {
+      background: ${theme.color.bg4};
+      border: 1px solid ${theme.color.primary100};
+      transition: 0.1s ease-in-out;
+    }
   }
 `
 
@@ -185,8 +191,13 @@ export const PopularMeetingCard = styled.div`
     width: 100%;
     height: 40px;
     border-radius: 12px;
-    background: ${theme.color.primary40};
+    background: ${theme.color.primary30};
     color: ${theme.color.primary100};
+
+    &:hover {
+      background: ${theme.color.primary70};
+      transition: 0.1s ease-in-out;
+    }
   }
 `
 

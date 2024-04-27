@@ -168,7 +168,10 @@ function RegisterMeeting(): JSX.Element {
       navi('/')
     },
     onError: (error) => {
-      window.alert('등록에 실패하였습니다')
+      notify({
+        type: 'error',
+        text: '등록에 실패하였습니다',
+      })
       console.log('error', error)
     },
   })
@@ -186,7 +189,10 @@ function RegisterMeeting(): JSX.Element {
 
   const handleMeetingSubmit = (): void => {
     if (isBlank) {
-      window.alert('빈 칸을 채워주세요')
+      notify({
+        type: 'warning',
+        text: '빈 칸을 채워주세요',
+      })
       return
     }
     const newMeetingData = {

@@ -23,6 +23,7 @@ import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import useScrollEnd from '@/hooks/useScrollEnd'
 import SearchMeetingsCard from '@/components/meeting/MeetingCard/SearchMeetingsCard'
+import { notify } from '@/components/Toast'
 
 export default function Search(): JSX.Element {
   const [onRecentsToggle, setOnRecentsToggle] = useState(true)
@@ -99,7 +100,7 @@ export default function Search(): JSX.Element {
 
   const handleSearch = (): void => {
     if (inputText.trim().length === 0) {
-      window.alert('검색어를 입력해 주세요.')
+      notify({ type: 'warning', text: '검색어를 입력해 주세요.' })
       return
     }
     handleRecents(inputText)

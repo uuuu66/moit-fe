@@ -208,7 +208,10 @@ function MeetingModify(): JSX.Element {
 
   const handleMeetingModifySubmit = (): void => {
     if (isBlank) {
-      window.alert('빈 칸을 채워주세요')
+      notify({
+        type: 'warning',
+        text: '빈 칸을 채워주세요',
+      })
       return
     }
     editMutation.mutate()

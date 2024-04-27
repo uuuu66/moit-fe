@@ -45,6 +45,7 @@ export default function Home(): JSX.Element {
   const { screenHeight } = useScreenSize()
 
   useEffect(() => {
+    console.log(1)
     // 첫 접속 시: 유저 위치 조회 후 setCenter
     const locationValue = getLocalStorageItem('center')
     if (locationValue != null) return
@@ -53,6 +54,8 @@ export default function Home(): JSX.Element {
 
   // 센터상태 변경 시 값을 로컬스토리지에 저장
   useEffect(() => {
+    console.log(2)
+
     setLocalStorageItem('center', center)
   }, [center])
 
@@ -99,10 +102,12 @@ export default function Home(): JSX.Element {
       })
     }
     mapElement?.setCenter(new map.LatLng(center.lat, center.lng))
-    mapElement?.setLevel(7)
+    // mapElement?.setLevel(7)
   }, [meetings, data, center, map, mapElement])
 
   useEffect(() => {
+    console.log(4)
+
     const storageMeetingId = sessionStorage.getItem('selectedMeetingId')
     if (storageMeetingId !== null) {
       handleSelectedMeeting(Number(storageMeetingId))
@@ -173,6 +178,7 @@ export default function Home(): JSX.Element {
     const selectedId = e.getTitle()
     handleSelectedMeeting(Number(selectedId))
   }
+  console.log('render', center)
 
   if (isError) return <ErrorPage />
   return (
@@ -236,7 +242,7 @@ export default function Home(): JSX.Element {
           height: screenHeight < 932 ? `${screenHeight - 114}px` : '820px',
         }}
         maxLevel={3}
-        minLevel={13}
+        minLevel={7}
         onCreate={(maps) => {
           setMapElement(maps)
         }}

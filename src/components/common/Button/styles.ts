@@ -56,6 +56,9 @@ export const Btn = styled.button<ButtonProps>`
       case 'yellow':
         return css`
           background-color: ${theme.color.yellow};
+          color: ${theme.color.black80};
+          width: 100%;
+
           &:hover {
             background-color: ${theme.color.hoverYellow};
             transition: 0.1s ease-in-out;
@@ -64,6 +67,8 @@ export const Btn = styled.button<ButtonProps>`
       case 'green':
         return css`
           background-color: ${theme.color.green};
+          width: 100%;
+
           &:hover {
             background-color: ${theme.color.hoverGreen};
             transition: 0.1s ease-in-out;

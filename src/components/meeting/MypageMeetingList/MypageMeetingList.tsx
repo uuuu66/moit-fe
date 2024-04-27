@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { format } from 'date-fns/format'
 import { CardIconText } from '../MeetingCard/styles'
 import { EmptyTextBox, MeetingCard, MeetingCardBox, TitleBox } from './styles'
 import { type MyMeeting } from '@/type/user'
@@ -18,7 +17,6 @@ export default function MypageMeetingList({
   emptyText,
 }: MypageMeetingListProps): JSX.Element {
   const navigate = useNavigate()
-  const enterTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
 
   return (
     <MeetingCardBox>
@@ -30,7 +28,6 @@ export default function MypageMeetingList({
             meetingDate,
             meetingStartTime,
             meetingEndTime,
-            bookmarked,
             status,
           }) => (
             <MeetingCard
@@ -39,7 +36,7 @@ export default function MypageMeetingList({
               onClick={() => {
                 meetingsStatus === 'bookmarked'
                   ? navigate(`/meetings/${meetingId}`)
-                  : navigate(`/meetings/${meetingId}/chats/${enterTime}`)
+                  : navigate(`/meetings/${meetingId}/chats`)
               }}
             >
               <span>
