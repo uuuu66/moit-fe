@@ -2,6 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import { throttle } from 'lodash'
+import { format } from 'date-fns/format'
 import { getChatMsg } from '@/apis/meeting'
 import { type ChatMessage } from '@/type/chat'
 import LoadingPage from '@/shared/LoadingPage'
@@ -13,8 +14,11 @@ interface PrevChatsProps {
 }
 
 export default function PrevChats({ scrollBox }: PrevChatsProps): JSX.Element {
-  const { meetingId, enterTime } = useParams()
+  const { meetingId } = useParams()
   const [prevScrollHeight, setPrevScrollHeight] = useState<number>(0)
+  const [enterTime] = useState(
+    format(new Date(), `yyyy-MM-dd'T'HH:mm:ss.SSSSSS`)
+  )
 
   useEffect(() => {
     if (scrollBox !== null) {

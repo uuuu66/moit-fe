@@ -94,7 +94,6 @@ export default function HomeMeetingsPanel({
                   meetingEndTime,
                   skillList,
                   careerList,
-                  bookmarked,
                 }) => (
                   <HomeMeetingsCard
                     key={meetingId}
@@ -114,7 +113,6 @@ export default function HomeMeetingsPanel({
                         id,
                       })),
                     ]}
-                    bookmarked={bookmarked}
                     handleCardClick={() => {
                       handleCardClick(meetingId)
                     }}

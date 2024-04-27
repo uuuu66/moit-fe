@@ -45,6 +45,7 @@ export default function Home(): JSX.Element {
   const { screenHeight } = useScreenSize()
 
   useEffect(() => {
+    console.log(1)
     // 첫 접속 시: 유저 위치 조회 후 setCenter
     const locationValue = getLocalStorageItem('center')
     if (locationValue != null) return
@@ -53,6 +54,8 @@ export default function Home(): JSX.Element {
 
   // 센터상태 변경 시 값을 로컬스토리지에 저장
   useEffect(() => {
+    console.log(2)
+
     setLocalStorageItem('center', center)
   }, [center])
 
@@ -90,6 +93,8 @@ export default function Home(): JSX.Element {
 
   // 조회한 마커가 모두 보이도록 지도 위치 조정
   useEffect(() => {
+    console.log(3)
+
     if (map === null || mapElement === null) return
     const resetMapwithFilteredMarkers = (list: GetMeeting[] = []): void => {
       // Todo: list가 없을 때의 정책 필요
@@ -109,6 +114,8 @@ export default function Home(): JSX.Element {
   }, [meetings, mapElement, map])
 
   useEffect(() => {
+    console.log(4)
+
     const storageMeetingId = sessionStorage.getItem('selectedMeetingId')
     if (storageMeetingId !== null) {
       handleSelectedMeeting(Number(storageMeetingId))
@@ -179,6 +186,7 @@ export default function Home(): JSX.Element {
     const selectedId = e.getTitle()
     handleSelectedMeeting(Number(selectedId))
   }
+  console.log('render', center)
 
   if (isError) return <ErrorPage />
   return (
@@ -242,7 +250,7 @@ export default function Home(): JSX.Element {
           height: screenHeight < 932 ? `${screenHeight - 114}px` : '820px',
         }}
         maxLevel={3}
-        minLevel={13}
+        minLevel={7}
         onCreate={(maps) => {
           setMapElement(maps)
         }}
