@@ -44,7 +44,7 @@ export default function Search(): JSX.Element {
   const hasRecents = recents.length !== 0
 
   const { data: popularMeetings } = useQuery({
-    queryKey: ['test'],
+    queryKey: meetingKeys.popular,
     queryFn: async () => await getPopularMeetings(),
   })
 

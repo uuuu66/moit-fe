@@ -16,9 +16,15 @@ interface MyMeeting {
   bookmarked: boolean
 }
 
+interface MyBookmarks {
+  bookmarkedMeetingIds: BookmarkIds
+}
+
+type BookmarkIds = number[]
+
 interface User {
   username: string
   accessToken: string
   refreshToken: string
 }
-export type { Service, Profile, MyMeeting, User }
+export type { Service, Profile, MyMeeting, MyBookmarks, BookmarkIds, User }

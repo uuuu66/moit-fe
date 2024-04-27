@@ -179,24 +179,6 @@ const getChatMsg = async <T = ChatMessage[]>({
   }
 }
 
-const postBookMark = async (meetingId: number): Promise<void> => {
-  try {
-    await authInstance.post(`/api/bookmark/add`, { meetingId })
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
-
-const deleteBookMark = async (meetingId: number): Promise<void> => {
-  try {
-    await authInstance.delete(`/api/bookmark/remove`, { data: { meetingId } })
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
-
 export {
   getMeetings,
   getMeetingsBySearch,
@@ -208,6 +190,4 @@ export {
   editMeeting,
   deleteMeetingWithdraw,
   getChatMsg,
-  postBookMark,
-  deleteBookMark,
 }

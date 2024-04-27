@@ -147,6 +147,7 @@ export const HomeSelectedMeetingCardLayout = styled.div`
 
   hr {
     width: 100%;
+    margin: 0;
     border: 1px solid ${({ theme }) => theme.color.black10};
   }
 `
@@ -182,7 +183,6 @@ export const SelectedCardContentsBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
 
   .contents-flex-box {
     display: flex;
@@ -201,6 +201,11 @@ export const SelectedCardContentsBox = styled.div`
     margin-right: 8px;
     font-weight: ${({ theme }) => theme.fontWeight.normal};
   }
+`
+
+export const SelectedCardCButtonBox = styled.div`
+  display: flex;
+  gap: 20px;
 `
 
 export const SearchMeetingCardLayout = styled.div`
