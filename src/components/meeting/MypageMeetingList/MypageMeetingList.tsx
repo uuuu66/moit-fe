@@ -48,7 +48,7 @@ export default function MypageMeetingList({
               <TitleBox>
                 <h2>{meetingName}</h2>
                 {meetingsStatus === 'bookmarked' ? (
-                  <BookMark meetingId={meetingId} prevBookmarked={bookmarked} />
+                  <BookMark meetingId={meetingId} />
                 ) : (
                   <img src="/assets/enter.svg" alt="enter" />
                 )}

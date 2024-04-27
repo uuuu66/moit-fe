@@ -45,7 +45,7 @@ export default function HomeMeetingsCard({
         <div className="title-text-box">
           <h3>{title}</h3>
         </div>
-        <BookMark meetingId={meetingId} prevBookmarked={bookmarked ?? false} />
+        <BookMark meetingId={meetingId} />
       </TitleBox>
       <ContentsBox>
         <TextBox>

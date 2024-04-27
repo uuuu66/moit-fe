@@ -3,6 +3,7 @@ import {
   type Service,
   type Profile,
   type MyMeeting,
+  type MyBookmarks,
 } from '@/type/user'
 import { authInstance, instance } from './axios'
 import { type CommonResponse } from '@/type/response'
@@ -79,4 +80,43 @@ const getMyMeetings = async <T = MyMeeting[]>(
   }
 }
 
-export { login, resetAccessToken, logout, getProfile, getMyMeetings }
+const getBookmarks = async <T = MyBookmarks>(): Promise<T> => {
+  try {
+    const { data } = await authInstance.get<CommonResponse<T>>(
+      `/api/bookmark/checkByMemberId`
+    )
+    return data.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const addBookMark = async (meetingId: number): Promise<void> => {
+  try {
+    await authInstance.post(`/api/bookmark/add`, { meetingId })
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const deleteBookMark = async (meetingId: number): Promise<void> => {
+  try {
+    await authInstance.delete(`/api/bookmark/remove`, { data: { meetingId } })
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export {
+  login,
+  resetAccessToken,
+  logout,
+  getProfile,
+  getMyMeetings,
+  getBookmarks,
+  addBookMark,
+  deleteBookMark,
+}

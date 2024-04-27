@@ -37,6 +37,7 @@ export default function HomeSelectedMeetingPanel({
       </SelectedCardToggleBox>
       <MeetingsBackground onClick={handleClosePanel} />
       <HomeSelectedMeetingCard
+        meetingId={meetingId}
         title={meetingName}
         date={meetingDate}
         time={`${meetingStartTime} - ${meetingEndTime}`}

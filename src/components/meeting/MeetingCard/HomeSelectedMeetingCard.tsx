@@ -6,14 +6,17 @@ import {
   LeftShadowBox,
   RightShadowBox,
   ScrollBox,
+  SelectedCardCButtonBox,
   SelectedCardContentsBox,
   SelectedCardTitleBox,
   TagBox,
 } from './styles'
 import CommonButton from '@/components/common/Button/CommonButton'
 import useScrollPosition from '@/hooks/useScrollPosition'
+import BookMark from '../Bookmark/BookMark'
 
 interface HomeSelectedMeetingCardProps {
+  meetingId: number
   title: string
   date: string
   time: string
@@ -25,6 +28,7 @@ interface HomeSelectedMeetingCardProps {
 }
 
 export default function HomeSelectedMeetingCard({
+  meetingId,
   title,
   date,
   time,
@@ -52,7 +56,7 @@ export default function HomeSelectedMeetingCard({
         </div>
       </SelectedCardTitleBox>
       <hr />
-      <SelectedCardContentsBox onClick={handleCardClick}>
+      <SelectedCardContentsBox>
         <div className="contents-flex-box">
           <CardIconText>
             <img src="/assets/time.svg" alt="time" />
@@ -80,17 +84,19 @@ export default function HomeSelectedMeetingCard({
             </ScrollBox>
           </TagBox>
         </div>
-        <img src="/assets/right.svg" alt="right" />
       </SelectedCardContentsBox>
       <hr />
-      <CommonButton
-        size="large"
-        $type="primary"
-        style={{ width: '100%' }}
-        handleClick={handleCardClick}
-      >
-        모임 상세보기
-      </CommonButton>
+      <SelectedCardCButtonBox>
+        <BookMark meetingId={meetingId} />
+        <CommonButton
+          size="large"
+          $type="primary"
+          style={{ width: '100%' }}
+          handleClick={handleCardClick}
+        >
+          모임 상세보기
+        </CommonButton>
+      </SelectedCardCButtonBox>
     </HomeSelectedMeetingCardLayout>
   )
 }
