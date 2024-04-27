@@ -10,6 +10,7 @@ import { type CommonResponse } from '@/type/response'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import setRequestTokenSchedule from '@/util/setRequestTokenSchedule'
 import { type MyMeetingsStatus } from '@/type/meeting'
+import { notify } from '@/components/Toast'
 
 const login = async (code: string, service: Service): Promise<User> => {
   try {
@@ -36,7 +37,10 @@ const resetAccessToken = async (): Promise<void> => {
     setRequestTokenSchedule(accessToken)
     setLocalStorageItem('accessToken', accessToken)
   } catch (error) {
-    window.alert('로그인 갱신이 필요합니다. 다시 로그인 해주세요')
+    notify({
+      type: 'warning',
+      text: '로그인 갱신이 필요합니다. 다시 로그인 해주세요',
+    })
     console.log(error)
     throw error
   }
