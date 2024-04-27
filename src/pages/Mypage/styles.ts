@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const MypageLayout = styled.div`
   height: fit-content;
@@ -21,10 +21,10 @@ export const NavBox = styled.header`
   position: relative;
 
   h2 {
-    ${({ theme }) => `
-    color: ${theme.color.black60};
-    font-size: ${theme.fontSize.medium};
-    font-weight: ${theme.fontWeight.bold};
+    ${({ theme }) => css`
+      color: ${theme.color.black60};
+      font-size: ${theme.fontSize.medium};
+      font-weight: ${theme.fontWeight.bold};
     `}
   }
 
@@ -49,10 +49,10 @@ export const ProfileBox = styled.div`
   }
 
   p {
-    ${({ theme }) => `
-    color: ${theme.color.black80};
-    font-size: ${theme.fontSize.medium};
-    font-weight: ${theme.fontWeight.bold};
+    ${({ theme }) => css`
+      color: ${theme.color.black80};
+      font-size: ${theme.fontSize.medium};
+      font-weight: ${theme.fontWeight.bold};
     `}
   }
 `
@@ -89,10 +89,10 @@ export const InfoCard = styled.div`
   justify-content: center;
 
   h2 {
-    ${({ theme }) => `
-    color: ${theme.color.white};
-    font-size: ${theme.fontSize.small};
-    font-weight: ${theme.fontWeight.normal};
+    ${({ theme }) => css`
+      color: ${theme.color.white};
+      font-size: ${theme.fontSize.small};
+      font-weight: ${theme.fontWeight.normal};
     `}
   }
 
@@ -101,11 +101,10 @@ export const InfoCard = styled.div`
     width: 100%;
     position: relative;
     text-align: center;
-    ${({ theme }) => `
-    color: ${theme.color.white};
-    font-size: ${theme.fontSize.large};
-    font-weight: 700;
-    
+    ${({ theme }) => css`
+      color: ${theme.color.white};
+      font-size: ${theme.fontSize.large};
+      font-weight: 700;
     `}
   }
 
@@ -114,10 +113,10 @@ export const InfoCard = styled.div`
     position: absolute;
     right: 0;
     bottom: -10px;
-    ${({ theme }) => `
-    color: ${theme.color.primary30};
-    font-size: ${theme.fontSize.smaller};
-    font-weight: ${theme.fontWeight.normal};
+    ${({ theme }) => css`
+      color: ${theme.color.primary30};
+      font-size: ${theme.fontSize.smaller};
+      font-weight: ${theme.fontWeight.normal};
     `}
   }
 `
@@ -145,10 +144,10 @@ export const LogoutBox = styled.div`
 
     p {
       padding-top: 4px;
-      ${({ theme }) => `
-      color: ${theme.color.black80};
-      font-size: ${theme.fontSize.medium};
-      font-weight: ${theme.fontWeight.bold};
+      ${({ theme }) => css`
+        color: ${theme.color.black80};
+        font-size: ${theme.fontSize.medium};
+        font-weight: ${theme.fontWeight.bold};
       `}
     }
   }
@@ -156,5 +155,18 @@ export const LogoutBox = styled.div`
   img {
     width: 20px;
     height: 20px;
+  }
+`
+
+export const UnregisterBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2rem;
+  button {
+    ${({ theme }) => css`
+      color: ${theme.color.black30};
+      font-size: ${theme.fontSize.medium};
+      border-bottom: 2px solid ${theme.color.black40};
+    `}
   }
 `
