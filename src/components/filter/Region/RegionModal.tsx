@@ -223,8 +223,8 @@ export default function RegionModal({
               </button>
               <CommonButton
                 size="large"
+                $type="primary"
                 handleClick={handleSelectClick}
-                style={{ width: '100%', background: theme.color.primary100 }}
               >
                 선택 완료하기
               </CommonButton>

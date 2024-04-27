@@ -36,7 +36,9 @@ function FilterFrame(): JSX.Element {
               <BottomBox>
                 <BottomBoxNav>
                   <button type="button">초기화</button>
-                  <CommonButton size="small">선택 완료하기</CommonButton>
+                  <CommonButton size="small" $type="primary">
+                    선택 완료하기
+                  </CommonButton>
                 </BottomBoxNav>
               </BottomBox>
             </FilterContainer>

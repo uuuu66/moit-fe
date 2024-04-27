@@ -12,7 +12,6 @@ import {
 } from '../FilterFrame/styles'
 import { type TechStackLists, type TechStackList } from '@/type/filter'
 import CommonButton from '@/components/common/Button/CommonButton'
-import { theme } from '@/constants/theme'
 
 interface TechStackModalProps {
   techItems: TechStackLists
@@ -164,8 +163,8 @@ export default function TechStackModal({
               </button>
               <CommonButton
                 size="large"
+                $type="primary"
                 handleClick={handleCompleteClick}
-                style={{ width: '100%', background: theme.color.primary100 }}
               >
                 선택 완료하기
               </CommonButton>

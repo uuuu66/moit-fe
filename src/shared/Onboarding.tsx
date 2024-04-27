@@ -16,9 +16,9 @@ function Onboarding({ handleClick }: { handleClick: () => void }): JSX.Element {
       </p>
       <CommonButton
         size="large"
+        $type="primary"
         handleClick={handleClick}
         style={{
-          backgroundColor: `${theme.color.primary100}`,
           margin: '0 2rem',
         }}
       >

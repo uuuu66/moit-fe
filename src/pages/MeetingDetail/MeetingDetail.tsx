@@ -32,7 +32,6 @@ import { getLocalStorageItem } from '@/util/localStorage'
 import BookMark from '@/components/meeting/Bookmark/BookMark'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
-import { theme } from '@/constants/theme'
 
 function MeetingDetail(): JSX.Element {
   useMap()
@@ -240,7 +239,7 @@ function MeetingDetail(): JSX.Element {
             // 참여 했나요?
             <CommonButton
               size="large"
-              style={{ backgroundColor: '#FA7070' }}
+              $type="pink"
               handleClick={() => {
                 setOnWithdrawModal(!onWithdrawModal)
               }}
@@ -262,11 +261,7 @@ function MeetingDetail(): JSX.Element {
         <DetailButtonContainer>
           <CommonButton
             size="small"
-            style={{
-              backgroundColor: `${theme.color.white}`,
-              color: `${theme.color.primary100}`,
-              border: `1px solid ${theme.color.primary100}`,
-            }}
+            $type="white"
             handleClick={() => {
               setOnDeleteModal(!onDeleteModal)
             }}
@@ -275,6 +270,7 @@ function MeetingDetail(): JSX.Element {
           </CommonButton>
           <CommonButton
             size="small"
+            $type="primary"
             handleClick={() => {
               navi(`/meetings/${meetingId}/modify`)
             }}

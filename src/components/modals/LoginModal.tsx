@@ -9,7 +9,6 @@ import {
   LoginModalLayout,
 } from '../meeting/AddMeetingButton/styles'
 import CommonButton from '../common/Button/CommonButton'
-import { theme } from '@/constants/theme'
 
 interface LoginModalProps {
   handleCloseModal: () => void
@@ -50,25 +49,12 @@ export default function LoginModal({
           </ContentsBox>
           <ButtonBox>
             <Link to={kakaoLoginURL} style={{ textDecoration: 'none' }}>
-              <CommonButton
-                size="large"
-                style={{
-                  width: '100%',
-                  background: theme.color.yellow,
-                  color: theme.color.black100,
-                }}
-              >
+              <CommonButton size="large" $type="yellow">
                 카카오로 시작하기
               </CommonButton>
             </Link>
             <Link to={naverLoginURL} style={{ textDecoration: 'none' }}>
-              <CommonButton
-                size="large"
-                style={{
-                  width: '100%',
-                  background: theme.color.green,
-                }}
-              >
+              <CommonButton size="large" $type="green">
                 네이버로 시작하기
               </CommonButton>
             </Link>

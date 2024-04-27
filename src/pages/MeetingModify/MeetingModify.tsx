@@ -387,7 +387,11 @@ function MeetingModify(): JSX.Element {
             수정하기
           </CommonButton>
         ) : (
-          <CommonButton size="large" handleClick={handleMeetingModifySubmit}>
+          <CommonButton
+            size="large"
+            $type="primary"
+            handleClick={handleMeetingModifySubmit}
+          >
             수정하기
           </CommonButton>
         )}

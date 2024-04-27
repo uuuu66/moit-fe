@@ -40,11 +40,11 @@ function AlertModal({
           <div className="buttonBox">
             <CommonButton
               size="small"
+              $type="gray"
               handleClick={onClose}
               style={{
                 width: '15rem',
                 color: `${theme.color.black40}`,
-                backgroundColor: `${theme.color.black20}`,
                 borderRadius: '8px',
               }}
             >
@@ -52,10 +52,10 @@ function AlertModal({
             </CommonButton>
             <CommonButton
               size="small"
+              $type="primary"
               handleClick={handleClick}
               style={{
                 width: '15rem',
-                color: `${theme.color.white}`,
                 borderRadius: '8px',
               }}
             >
