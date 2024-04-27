@@ -23,6 +23,7 @@ export const theme = {
     bg1: '#F9FAFC',
     bg2: '#F3F3F3',
     bg3: '#F9FAFD',
+    bg4: '#B4BEF1',
     white: '#FFFFFF',
     yellow: '#F7E600',
     green: '#57B04B',
