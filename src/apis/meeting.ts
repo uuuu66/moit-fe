@@ -160,10 +160,9 @@ const getChatMsg = async <T = ChatMessage[]>({
   pageParam,
   enterTime,
 }: GetChatsParams): Promise<ChatPaginationReturn<T>> => {
-  console.log(enterTime)
   try {
     const res = await authInstance.get(
-      `api/meetings/${meetingId}/chats?page=${pageParam}`
+      `api/meetings/${meetingId}/chats/${enterTime}?page=${pageParam}`
     )
     const { data } = res.data
     const chats = data?.chats
