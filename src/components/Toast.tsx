@@ -15,7 +15,7 @@ export const notify = ({ type, text }: Props): void => {
       toast.success(text)
       break
     case 'warning':
-      toast.warning(text)
+      toast.warning(text, { theme: 'dark' })
       break
     case 'error':
       toast.error(text)

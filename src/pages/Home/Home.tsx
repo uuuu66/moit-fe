@@ -24,6 +24,7 @@ import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import useUserLocation from '@/hooks/useUserLocation'
 import useScreenSize from '@/hooks/useScreenSize'
+import { notify } from '@/components/Toast'
 
 export default function Home(): JSX.Element {
   const { map } = useMap()
@@ -149,7 +150,10 @@ export default function Home(): JSX.Element {
       Boolean(getLocalStorageItem('region')) &&
       (getLocalStorageItem('region') as number[]).length !== 0
     ) {
-      window.alert('재조회 시 지역 필터는 초기화됩니다.')
+      notify({
+        type: 'warning',
+        text: '재조회 시 지역 필터는 초기화됩니다.',
+      })
       setLocalStorageItem('region', [])
       setLocalStorageItem('firstRegion', '')
       setFilters({ ...filters, region: [] })
