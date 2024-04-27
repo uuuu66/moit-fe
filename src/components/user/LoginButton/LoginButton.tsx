@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import LoginModal from '@/components/modals/LoginModal'
 import { getLocalStorageItem } from '@/util/localStorage'
 import { logout } from '@/apis/user'
+import { notify } from '@/components/Toast'
 
 export default function LoginButton(): JSX.Element {
   const [onLoginModal, setOnLoginModal] = useState(false)
@@ -24,7 +25,10 @@ export default function LoginButton(): JSX.Element {
         .catch(() => {})
         .finally(() => {
           setIsLogin(false)
-          window.alert('로그아웃이 완료되었습니다.')
+          notify({
+            type: 'success',
+            text: '로그아웃이 완료되었습니다.',
+          })
         })
     } else {
       setOnLoginModal(true)
