@@ -114,6 +114,18 @@ const deleteBookMark = async (meetingId: number): Promise<void> => {
   }
 }
 
+const deleteUnregister = async (): Promise<void> => {
+  try {
+    await authInstance.delete(`/api/member/signout`)
+  } catch (error) {
+    console.log(error)
+    throw error
+  } finally {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+  }
+}
+
 export {
   login,
   resetAccessToken,
@@ -123,4 +135,5 @@ export {
   getBookmarks,
   addBookMark,
   deleteBookMark,
+  deleteUnregister,
 }
