@@ -11,7 +11,6 @@ import {
   TagBox,
 } from './styles'
 import CommonButton from '@/components/common/Button/CommonButton'
-import { theme } from '@/constants/theme'
 import useScrollPosition from '@/hooks/useScrollPosition'
 
 interface HomeSelectedMeetingCardProps {
@@ -86,7 +85,8 @@ export default function HomeSelectedMeetingCard({
       <hr />
       <CommonButton
         size="large"
-        style={{ width: '100%', background: theme.color.primary100 }}
+        $type="primary"
+        style={{ width: '100%' }}
         handleClick={handleCardClick}
       >
         모임 상세보기

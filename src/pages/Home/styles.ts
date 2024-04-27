@@ -47,6 +47,11 @@ export const ResetSearchButton = styled(ModalBtn)`
   color: ${theme.color.white};
   border: 1px solid ${theme.color.white};
   box-shadow: 0 1px 4px 0 ${theme.color.primary100};
+  
+  &:hover {
+    background-color: ${theme.color.hoverPrimary100};
+    transition: 0.1s ease-in-out
+  }
 `}
 `
 

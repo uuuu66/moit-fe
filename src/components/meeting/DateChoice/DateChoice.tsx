@@ -35,13 +35,6 @@ function DateChoice({ meetingDate, handleDateChange }: Props): JSX.Element {
 
 export default DateChoice
 
-export const Box = styled.div`
-  background-color: #e9e9e9;
-  padding: 20px 10px;
-  border-radius: 0.5rem;
-  display: flex;
-  justify-content: space-between;
-`
 export const StDatePicker = styled(DatePicker)`
   width: 100%;
   font-size: ${theme.fontSize.medium};

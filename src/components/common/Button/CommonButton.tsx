@@ -6,6 +6,7 @@ interface ButtonProps {
   size: 'small' | 'large'
   handleClick?: () => void
   style?: React.CSSProperties
+  $type?: 'primary' | 'pink' | 'yellow' | 'green' | 'white' | 'gray'
   disabled?: boolean
 }
 
@@ -16,6 +17,7 @@ function CommonButton({
   handleClick,
   style,
   disabled = false,
+  $type,
 }: ButtonProps): JSX.Element {
   return (
     <Btn
@@ -24,6 +26,7 @@ function CommonButton({
       onClick={handleClick}
       style={style}
       disabled={disabled}
+      $type={$type}
     >
       <BtnSpan>{children}</BtnSpan>
     </Btn>
@@ -33,6 +36,7 @@ function CommonButton({
 CommonButton.defaultProps = {
   handleClick: () => {},
   style: undefined,
+  $type: undefined,
   disabled: false,
 }
 

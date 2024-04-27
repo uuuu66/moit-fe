@@ -8,6 +8,10 @@ export const HomeMeetingsCardLayout = styled.div`
   overflow: hidden;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
   cursor: pointer;
+
+  &:hover {
+    border: ${({ theme }) => `1px solid ${theme.color.primary100}`};
+  }
 `
 
 export const TitleBox = styled.div`

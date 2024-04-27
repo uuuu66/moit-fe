@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { getLocalStorageItem } from '@/util/localStorage'
 import LoginModal from '@/components/modals/LoginModal'
 import CommonButton from '@/components/common/Button/CommonButton'
-import { theme } from '@/constants/theme'
 
 interface JoinMeetingButtonProps {
   handleJoinMeeting: () => void
@@ -25,8 +24,8 @@ export default function JoinMeetingButton({
     <>
       <CommonButton
         size="large"
+        $type="primary"
         handleClick={handleClickButton}
-        style={{ backgroundColor: `${theme.color.primary100}` }}
       >
         모임 참여하기
       </CommonButton>

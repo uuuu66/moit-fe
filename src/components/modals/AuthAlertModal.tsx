@@ -1,4 +1,3 @@
-import { theme } from '@/constants/theme'
 import CommonButton from '../common/Button/CommonButton'
 import { AlertBackground, type AlertModalProps, Content } from './AlertModal'
 import ModalPortal from './ModalPortal'
@@ -24,24 +23,15 @@ function AuthAlertModal({
             <span className="sub">{secondSubMessage}</span>
           </div>
           <div className="buttonBox">
-            <CommonButton
-              size="small"
-              handleClick={onClose}
-              style={{
-                width: '15rem',
-                color: `${theme.color.black40}`,
-                backgroundColor: `${theme.color.black20}`,
-                borderRadius: '8px',
-              }}
-            >
+            <CommonButton size="small" $type="gray" handleClick={onClose}>
               취소
             </CommonButton>
             <CommonButton
               size="small"
+              $type="primary"
               handleClick={handleClick}
               style={{
                 width: '15rem',
-                color: `${theme.color.white}`,
                 borderRadius: '8px',
               }}
             >

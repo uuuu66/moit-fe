@@ -10,7 +10,6 @@ import {
   ToggleButton,
 } from '@/components/filter/FilterFrame/styles'
 import CommonButton from '@/components/common/Button/CommonButton'
-import { theme } from '@/constants/theme'
 
 interface CareerModalProps {
   careerItems: Array<{ careerName: string; id: number }>
@@ -125,8 +124,8 @@ export default function CareerModal({
               </button>
               <CommonButton
                 size="large"
+                $type="primary"
                 handleClick={handleSelectClick}
-                style={{ width: '100%', background: theme.color.primary100 }}
               >
                 선택 완료하기
               </CommonButton>

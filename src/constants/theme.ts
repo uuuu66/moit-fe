@@ -29,6 +29,13 @@ export const theme = {
     pg1: '#F3F4FC', // 수정필요
     line2: '#E6E4E4',
     warn: '#FF3257',
+    pink: '#E76075',
+    hoverPrimary100: '#4B63E4',
+    hoverPink: '#E54E65',
+    hoverWhite: '#E0E4FF',
+    hoverGray: '#CBCBCB',
+    hoverYellow: '#E1D201',
+    hoverGreen: '#52A147',
   },
   fontSize: {
     large: '2.4rem',

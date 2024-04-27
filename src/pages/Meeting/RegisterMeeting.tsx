@@ -357,6 +357,7 @@ function RegisterMeeting(): JSX.Element {
         ) : (
           <CommonButton
             size="large"
+            $type="primary"
             handleClick={() => {
               setOnRegisterModal(!onRegisterModal)
             }}
