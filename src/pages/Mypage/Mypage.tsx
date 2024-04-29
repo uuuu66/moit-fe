@@ -11,9 +11,10 @@ import {
   ProfileBox,
   LogoutBox,
   SectionLine,
+  UnregisterBox,
 } from './styles'
 import { userKeys } from '@/constants/queryKeys'
-import { getProfile, logout } from '@/apis/user'
+import { deleteUnregister, getProfile, logout } from '@/apis/user'
 import { getLocalStorageItem } from '@/util/localStorage'
 
 import LoadingPage from '../../shared/LoadingPage'
@@ -26,6 +27,7 @@ import AuthAlertModal from '@/components/modals/AuthAlertModal'
 
 export default function Mypage(): JSX.Element {
   const [onLogoutModal, setOnLogoutModal] = useState(false)
+  const [onUnregisterModal, setOnUnregisterModal] = useState(false)
   const navigate = useNavigate()
 
   const { data: profileInfo, isError } = useQuery({
@@ -100,6 +102,16 @@ export default function Mypage(): JSX.Element {
         </div>
         <img src="/assets/right.svg" alt="right" />
       </LogoutBox>
+      <UnregisterBox>
+        <button
+          type="button"
+          onClick={() => {
+            setOnUnregisterModal(!onUnregisterModal)
+          }}
+        >
+          탈퇴하기
+        </button>
+      </UnregisterBox>
       {onLogoutModal && (
         <AuthAlertModal
           message="로그아웃"
@@ -120,6 +132,28 @@ export default function Mypage(): JSX.Element {
               })
           }}
           buttonName="로그아웃"
+        />
+      )}
+      {onUnregisterModal && (
+        <AuthAlertModal
+          message="탈퇴"
+          firstSubMessage="회원탈퇴 시 모든 정보가"
+          secondSubMessage="즉시 삭제 되며, 복구되지 않습니다"
+          onClose={() => {
+            setOnUnregisterModal(!onUnregisterModal)
+          }}
+          handleClick={(): void => {
+            deleteUnregister()
+              .catch(() => {})
+              .finally(() => {
+                navigate('/')
+                notify({
+                  type: 'default',
+                  text: '회원 탈퇴 되었습니다.',
+                })
+              })
+          }}
+          buttonName="탈퇴"
         />
       )}
     </MypageLayout>
