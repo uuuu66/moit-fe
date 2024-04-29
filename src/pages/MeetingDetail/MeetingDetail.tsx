@@ -266,6 +266,7 @@ function MeetingDetail(): JSX.Element {
             handleClick={() => {
               navi(`/meetings/${meetingId}/modify`)
             }}
+            disabled={data?.status === 'COMPLETE'}
           >
             수정하기
           </CommonButton>
