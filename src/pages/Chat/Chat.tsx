@@ -102,6 +102,7 @@ export default function Chat(): JSX.Element {
             handleKeyEnter(e)
           }}
           placeholder="메세지를 입력해 주세요"
+          maxLength={10000}
         />
         <SendButton onClick={sendChatMessage}>
           <img src="/assets/send.svg" alt="" />
