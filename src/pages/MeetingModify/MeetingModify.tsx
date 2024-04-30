@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
@@ -31,6 +31,7 @@ import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import { getLocalStorageItem } from '@/util/localStorage'
 import { notify } from '@/components/Toast'
+import { meetingKeys } from '@/constants/queryKeys'
 
 function MeetingModify(): JSX.Element {
   useMap()
@@ -38,6 +39,7 @@ function MeetingModify(): JSX.Element {
   const { meetingId } = useParams()
   const token: string = getLocalStorageItem('accessToken')
   const { sub: userEmail } = jwtDecode(token)
+  const queryClient = useQueryClient()
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['meetingListDetail', meetingId],
@@ -113,6 +115,8 @@ function MeetingModify(): JSX.Element {
       await editMeeting(Number(meetingId), info)
     },
     onSuccess: () => {
+      // void queryClient.invalidateQueries({ queryKey: meetingKeys.all })
+      void queryClient.refetchQueries({ queryKey: meetingKeys.all })
       notify({
         type: 'default',
         text: '모임 수정이 완료되었습니다.',

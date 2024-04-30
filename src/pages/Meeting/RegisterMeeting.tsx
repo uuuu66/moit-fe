@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import CommonButton from '@/components/common/Button/CommonButton'
 import {
   CareerContainer,
@@ -24,6 +24,7 @@ import { DetailButtonContainer } from '../MeetingDetail/styles'
 import MeetingTechStack from '@/components/filter/TechStack/MeetingTechStack'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
+import { meetingKeys } from '@/constants/queryKeys'
 
 export interface Info {
   meetingName: string
@@ -155,12 +156,13 @@ function RegisterMeeting(): JSX.Element {
       }
     })
   }
-
+  const queryClient = useQueryClient()
   const postMutation = useMutation<any, unknown, Info>({
     mutationFn: async (newMeetingData: Info) => {
       await postMeetingData(newMeetingData)
     },
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: meetingKeys.all })
       notify({
         type: 'default',
         text: '모임 등록이 완료되었습니다.',

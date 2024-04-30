@@ -1,5 +1,5 @@
 import { Circle, Map, MapMarker } from 'react-kakao-maps-sdk'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { throttle } from 'lodash'
 import {
@@ -63,7 +63,6 @@ export default function Home(): JSX.Element {
 
   const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: meetingKeys.filter({ ...center, ...filters }),
-    // queryKey: ['test'],
     queryFn: async ({ pageParam }) => {
       return await getMeetings({ center, filters, pageParam })
     },
@@ -72,8 +71,8 @@ export default function Home(): JSX.Element {
       return undefined
     },
     initialPageParam: 1,
-    refetchOnMount: false,
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   const meetings = useMemo(() => {
@@ -81,6 +80,12 @@ export default function Home(): JSX.Element {
     data?.pages.forEach(({ result }) => (list = [...list, ...result]))
     return list
   }, [data])
+
+  useEffect(() => {
+    if (meetings.length === 0 && data !== undefined) {
+      notify({ type: 'warning', text: '조회된 모임이 없습니다.' })
+    }
+  }, [data, meetings])
 
   const handleFetchPages = throttle(() => {
     void fetchNextPage()
@@ -98,7 +103,6 @@ export default function Home(): JSX.Element {
     const currentCenter = mapRef.current?.getCenter()
     if (currentCenter == null) return
 
-    // 재조회 시 지역 필터 초기화
     const resetRegionFilter = (): void => {
       if (
         Boolean(getLocalStorageItem('region')) &&
@@ -126,7 +130,6 @@ export default function Home(): JSX.Element {
     })
   }
 
-  // 필터 선택 완료 시 필터 상태 저장
   const handleSetFilters = (key: FiltersKey, value: number[]): void => {
     setFilters((prev) => ({ ...prev, [key]: value }))
     setLocalStorageItem(key, value)
@@ -135,7 +138,6 @@ export default function Home(): JSX.Element {
   const [selectedMeeting, setSelectedMeeting] = useState<GetMeeting | null>(
     null
   )
-
   const handleSelectedMeeting = (id: number): void => {
     const target = meetings.filter(({ meetingId }) => meetingId === Number(id))
     setSelectedMeeting(target[0])
@@ -247,12 +249,12 @@ export default function Home(): JSX.Element {
           <Circle
             center={{ lat: center.lat, lng: center.lng }}
             radius={5000}
-            strokeWeight={2} //
-            strokeColor="red" // 선의 색깔입니다
-            strokeOpacity={0.5} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-            strokeStyle="dash" // 선의 두께입니다
-            fillColor={meetings.length !== 0 ? 'skyblue' : 'red'} // 채우기 색깔입니다
-            fillOpacity={meetings.length !== 0 ? 0.2 : 0.3}
+            strokeWeight={1}
+            strokeColor="#FF3257"
+            strokeOpacity={0.5}
+            strokeStyle="dash"
+            fillColor={meetings.length !== 0 ? '#667AE4' : '#FF3257'}
+            fillOpacity={meetings.length !== 0 ? 0.2 : 0.2}
           />
         )}
       </Map>

@@ -31,6 +31,7 @@ import { getLocalStorageItem } from '@/util/localStorage'
 import BookMark from '@/components/meeting/Bookmark/BookMark'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
+import { meetingKeys } from '@/constants/queryKeys'
 
 function MeetingDetail(): JSX.Element {
   useMap()
@@ -85,6 +86,8 @@ function MeetingDetail(): JSX.Element {
       await deleteMeeting(Number(meetingId))
     },
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: meetingKeys.all })
+      sessionStorage.removeItem('selectedMeetingId')
       notify({
         type: 'default',
         text: '모임이 삭제 되었습니다.',
