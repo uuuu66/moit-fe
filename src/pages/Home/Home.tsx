@@ -1,73 +1,70 @@
-import { Map, MapMarker } from 'react-kakao-maps-sdk'
-import { useEffect, useMemo, useState } from 'react'
+import { Circle, Map, MapMarker } from 'react-kakao-maps-sdk'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { throttle } from 'lodash'
-import useMap from '@/hooks/useMap'
 import {
-  HomeLayout,
   FilterBox,
+  HomeLayout,
   ResetSearchBox,
-  UserLocationButtonBox,
   ResetSearchButton,
+  UserLocationButtonBox,
 } from './styles'
+import useScreenSize from '@/hooks/useScreenSize'
 import { type GetMeeting, type Center } from '@/type/meeting'
+import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
+import useUserLocation from '@/hooks/useUserLocation'
+import LoadingPage from '@/shared/LoadingPage'
+import { notify } from '@/components/Toast'
+import { type FiltersKey, type Filters } from '@/type/filter'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
+import ErrorPage from '@/shared/ErrorPage'
 import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
-import { type FiltersKey, type Filters } from '@/type/filter'
-import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
+import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
+import Region from '@/components/filter/Region/Region'
 import Career from '@/components/filter/Career/Career'
 import TechStack from '@/components/filter/TechStack/TechStack'
-import Region from '@/components/filter/Region/Region'
-import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
-import LoadingPage from '@/shared/LoadingPage'
-import ErrorPage from '@/shared/ErrorPage'
-import useUserLocation from '@/hooks/useUserLocation'
-import useScreenSize from '@/hooks/useScreenSize'
-import { notify } from '@/components/Toast'
+
+const DEFAULT_CENTER = {
+  lat: 37.5667,
+  lng: 126.9784,
+}
 
 export default function Home(): JSX.Element {
-  const { map } = useMap()
-  // 중심좌표: 초기값 - 로컬스토리지 > 유저좌표 > 서울시청(유저가 좌표 동의 x, get좌표 되지 않는 브라우저인 경우)
-  const [center, setCenter] = useState<Center>(
-    (getLocalStorageItem('center') as Center) ?? {
-      lat: 37.5667,
-      lng: 126.9784,
-    }
-  )
+  const mapRef = useRef<kakao.maps.Map | null>(null)
+  const { screenHeight } = useScreenSize()
+  const { setUserLocation, isLoading: isLocateLoading } = useUserLocation()
   const [filters, setFilters] = useState<Filters>({
     techStacks: getLocalStorageItem('techStacks') ?? [],
     careers: getLocalStorageItem('careers') ?? [],
     region: getLocalStorageItem('region') ?? [],
   })
-  const [mapElement, setMapElement] = useState<kakao.maps.Map>()
-  const { setUserLocation, isLoading: isLocateLoading } = useUserLocation()
-  const { screenHeight } = useScreenSize()
 
-  useEffect(() => {
-    console.log(1)
-    // 첫 접속 시: 유저 위치 조회 후 setCenter
-    const locationValue = getLocalStorageItem('center')
-    if (locationValue != null) return
+  const region = useMemo(() => filters.region, [filters.region])
+  const careers = useMemo(() => filters.careers, [filters.careers])
+  const techStacks = useMemo(() => filters.techStacks, [filters.techStacks])
+
+  const setUserFirstLocation = (): Center => {
+    const handleUserFirstLocation = (position: GeolocationPosition): void => {
+      setCenter({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+      setLocalStorageItem('center', {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+    }
+
     setUserLocation(handleUserFirstLocation)
-  }, [setUserLocation])
-
-  // 센터상태 변경 시 값을 로컬스토리지에 저장
-  useEffect(() => {
-    console.log(2)
-
-    setLocalStorageItem('center', center)
-  }, [center])
-
-  // 유저 위치 조회 결과를 setCenter
-  const handleUserFirstLocation = (position: GeolocationPosition): void => {
-    setCenter({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    })
+    setLocalStorageItem('center', DEFAULT_CENTER)
+    return DEFAULT_CENTER
   }
 
-  // 좌표에 따라 데이터 패칭
+  const [center, setCenter] = useState<Center>(
+    (getLocalStorageItem('center') as Center) ?? setUserFirstLocation()
+  )
+
   const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: meetingKeys.filter({ ...center, ...filters }),
     queryFn: async ({ pageParam }) => {
@@ -78,55 +75,52 @@ export default function Home(): JSX.Element {
       return undefined
     },
     initialPageParam: 1,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   const meetings = useMemo(() => {
     let list: GetMeeting[] = []
-    data != null &&
-      data.pages.forEach(({ result }) => (list = [...list, ...result]))
+    data?.pages.forEach(({ result }) => (list = [...list, ...result]))
     return list
   }, [data])
+
+  useEffect(() => {
+    if (meetings.length === 0 && data !== undefined) {
+      notify({ type: 'warning', text: '조회된 모임이 없습니다.' })
+    }
+  }, [data, meetings])
 
   const handleFetchPages = throttle(() => {
     void fetchNextPage()
   }, 3000)
 
-  // 조회한 마커가 모두 보이도록 지도 위치 조정
-  useEffect(() => {
-    console.log(3)
+  const resetMaptoUserLocation = (position: GeolocationPosition): void => {
+    if (mapRef.current === null) return
+    mapRef.current.setCenter(
+      new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude)
+    )
+    mapRef.current.setLevel(7)
+  }
 
-    if (map === null || mapElement === null) return
-    const resetMapwithFilteredMarkers = (list: GetMeeting[] = []): void => {
-      // Todo: list가 없을 때의 정책 필요
-      if (list.length === 0) return
-      const points = list.map(
-        ({ locationLat, locationLng }) =>
-          new map.LatLng(locationLat, locationLng)
-      )
-      const bounds = new map.LatLngBounds()
-      points.forEach((point) => {
-        bounds.extend(point)
-      })
-      mapElement?.setBounds(bounds)
-    }
-
-    resetMapwithFilteredMarkers(meetings)
-  }, [meetings, mapElement, map])
-
-  useEffect(() => {
-    console.log(4)
-
-    const storageMeetingId = sessionStorage.getItem('selectedMeetingId')
-    if (storageMeetingId !== null) {
-      handleSelectedMeeting(Number(storageMeetingId))
-      sessionStorage.removeItem('selectedMeetingId')
-    }
-  })
-
-  // 현 위치 setCenter
   const setCurrentCenter = (): void => {
-    const currentCenter = mapElement?.getCenter()
+    const currentCenter = mapRef.current?.getCenter()
     if (currentCenter == null) return
+
+    const resetRegionFilter = (): void => {
+      if (
+        Boolean(getLocalStorageItem('region')) &&
+        (getLocalStorageItem('region') as number[]).length !== 0
+      ) {
+        notify({
+          type: 'warning',
+          text: '재조회 시 지역 필터는 초기화됩니다.',
+        })
+        setLocalStorageItem('region', [])
+        setLocalStorageItem('firstRegion', '')
+        setFilters({ ...filters, region: [] })
+      }
+    }
 
     resetRegionFilter()
 
@@ -134,38 +128,28 @@ export default function Home(): JSX.Element {
       lat: currentCenter.getLat(),
       lng: currentCenter.getLng(),
     })
+    setLocalStorageItem('center', {
+      lat: currentCenter.getLat(),
+      lng: currentCenter.getLng(),
+    })
   }
 
-  // 유저 위치 조회 결과로 map중심좌표 조정
-  const resetMaptoUserLocation = (position: GeolocationPosition): void => {
-    if (map == null || mapElement == null) return
-    mapElement.setCenter(
-      new map.LatLng(position.coords.latitude, position.coords.longitude)
-    )
-    mapElement.setLevel(4)
-  }
-
-  // 필터 선택 완료 시 필터 상태 저장
   const handleSetFilters = (key: FiltersKey, value: number[]): void => {
     setFilters((prev) => ({ ...prev, [key]: value }))
     setLocalStorageItem(key, value)
   }
 
-  // 재조회 시 지역 필터 초기화
-  const resetRegionFilter = (): void => {
-    if (
-      Boolean(getLocalStorageItem('region')) &&
-      (getLocalStorageItem('region') as number[]).length !== 0
-    ) {
-      notify({
-        type: 'warning',
-        text: '재조회 시 지역 필터는 초기화됩니다.',
-      })
-      setLocalStorageItem('region', [])
-      setLocalStorageItem('firstRegion', '')
-      setFilters({ ...filters, region: [] })
-    }
-  }
+  const handleSelectedFilters = useCallback(
+    (filterName: FiltersKey, num: number[]) => {
+      handleSetFilters(filterName, num)
+    },
+    []
+  )
+
+  const handleSelectedRegion = useCallback((currentCenter: Center) => {
+    setCenter(currentCenter)
+    setLocalStorageItem('center', currentCenter)
+  }, [])
 
   const [selectedMeeting, setSelectedMeeting] = useState<GetMeeting | null>(
     null
@@ -175,9 +159,9 @@ export default function Home(): JSX.Element {
     const target = meetings.filter(({ meetingId }) => meetingId === Number(id))
     setSelectedMeeting(target[0])
 
-    if (mapElement != null && map != null) {
-      mapElement?.setCenter(
-        new map.LatLng(target[0].locationLat, target[0].locationLng)
+    if (mapRef.current !== null) {
+      mapRef.current.setCenter(
+        new kakao.maps.LatLng(target[0].locationLat, target[0].locationLng)
       )
     }
   }
@@ -186,7 +170,12 @@ export default function Home(): JSX.Element {
     const selectedId = e.getTitle()
     handleSelectedMeeting(Number(selectedId))
   }
-  console.log('render', center)
+
+  const storageMeetingId = sessionStorage.getItem('selectedMeetingId')
+  if (storageMeetingId !== null) {
+    handleSelectedMeeting(Number(storageMeetingId))
+    sessionStorage.removeItem('selectedMeetingId')
+  }
 
   if (isError) return <ErrorPage />
   return (
@@ -196,25 +185,17 @@ export default function Home(): JSX.Element {
       <FilterBox>
         <div className="scroll-box">
           <Region
-            selectedFilters={filters.region}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('region', num)
-            }}
-            handleSetCenter={(currentCenter: Center) => {
-              setCenter(currentCenter)
-            }}
+            selectedFilters={region}
+            handleSelectedFilters={handleSelectedFilters}
+            handleSetCenter={handleSelectedRegion}
           />
           <Career
-            selectedFilters={filters.careers}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('careers', num)
-            }}
+            selectedFilters={careers}
+            handleSelectedFilters={handleSelectedFilters}
           />
           <TechStack
-            selectedFilters={filters.techStacks}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('techStacks', num)
-            }}
+            selectedFilters={techStacks}
+            handleSelectedFilters={handleSelectedFilters}
           />
         </div>
       </FilterBox>
@@ -241,19 +222,18 @@ export default function Home(): JSX.Element {
         </ResetSearchButton>
       </ResetSearchBox>
       <Map
+        ref={mapRef}
         center={{
-          lat: 37.5667,
-          lng: 126.9784,
+          lat: center.lat,
+          lng: center.lng,
         }}
         style={{
           width: '100%',
           height: screenHeight < 932 ? `${screenHeight - 114}px` : '820px',
         }}
+        level={8}
         maxLevel={3}
-        minLevel={7}
-        onCreate={(maps) => {
-          setMapElement(maps)
-        }}
+        minLevel={12}
       >
         {meetings?.map(({ meetingId, locationLat, locationLng }) => (
           <MapMarker
@@ -273,6 +253,18 @@ export default function Home(): JSX.Element {
             position={{ lat: locationLat, lng: locationLng }}
           />
         ))}
+        {!isLoading && (
+          <Circle
+            center={{ lat: center.lat, lng: center.lng }}
+            radius={5000}
+            strokeWeight={1}
+            strokeColor="#FF3257"
+            strokeOpacity={0.5}
+            strokeStyle="dash"
+            fillColor={meetings.length !== 0 ? '#667AE4' : '#FF3257'}
+            fillOpacity={meetings.length !== 0 ? 0.2 : 0.2}
+          />
+        )}
       </Map>
       {meetings != null && (
         <HomeMeetingsPanel

@@ -8,10 +8,12 @@ import getFilterDisplayNames from '@/util/getFilterDisplayNames'
 import { LocationContainer } from '@/components/meeting/FindLocation/FindLocation'
 import { CareerContainer } from '@/pages/Meeting/styles'
 import { theme } from '@/constants/theme'
+import { type FiltersKey } from '@/type/filter'
 
 interface TechStackProps {
   selectedFilters: number[]
   handleSelectedFilters: (
+    filterName: FiltersKey,
     selectedNums: number[],
     selectedNames?: string[]
   ) => void

@@ -82,7 +82,6 @@ const getMeetingsBySearch = async <T = GetMeeting[]>({
 const getPopularMeetings = async <T = GetMeeting[]>(): Promise<T> => {
   try {
     const res = await instance.get<CommonResponse<T>>(`api/meetings/popular`)
-    console.log(res.data.data)
     return res.data.data
   } catch (error) {
     console.log(error)

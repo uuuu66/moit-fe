@@ -1,20 +1,22 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 import TechStackModal from './TechStackModal'
 import { ModalBtn } from '../FilterFrame/styles'
 import { getTechStackList } from '@/apis/filter'
 import getFilterDisplayNames from '@/util/getFilterDisplayNames'
+import { type FiltersKey } from '@/type/filter'
 
 interface TechStackProps {
   selectedFilters: number[]
   handleSelectedFilters: (
+    filterName: FiltersKey,
     selectedNums: number[],
     selectedNames?: string[]
   ) => void
 }
 
-function TechStack({
+export default memo(function TechStack({
   selectedFilters,
   handleSelectedFilters,
 }: TechStackProps): JSX.Element | null {
@@ -23,6 +25,8 @@ function TechStack({
   const { data } = useQuery({
     queryKey: ['stackList'],
     queryFn: async () => await getTechStackList(),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   })
 
   if (data == null) return null
@@ -69,6 +73,4 @@ function TechStack({
       )}
     </>
   )
-}
-
-export default TechStack
+})

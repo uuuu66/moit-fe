@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ModalBtn } from '../FilterFrame/styles'
 import RegionModal from './RegionModal'
@@ -6,14 +6,18 @@ import { type Center } from '@/type/meeting'
 import { filterKeys } from '@/constants/queryKeys'
 import { getFirstRegions, getSecondRegions } from '@/apis/filter'
 import { getLocalStorageItem } from '@/util/localStorage'
+import { type FiltersKey } from '@/type/filter'
 
 interface RegionProps {
   selectedFilters: number[]
-  handleSelectedFilters: (selectedNums: number[]) => void
+  handleSelectedFilters: (
+    filterName: FiltersKey,
+    selectedNums: number[]
+  ) => void
   handleSetCenter: (value: Center) => void
 }
 
-export default function Region({
+export default memo(function Region({
   selectedFilters,
   handleSelectedFilters,
   handleSetCenter,
@@ -29,6 +33,9 @@ export default function Region({
   const { data: firstRegions } = useQuery({
     queryKey: filterKeys.firstRegion,
     queryFn: async () => await getFirstRegions(),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   const [selectedFirstRegion, setSelectedFirstRegion] = useState(
@@ -39,6 +46,8 @@ export default function Region({
     queryKey: filterKeys.secondRegion(selectedFirstRegion),
     queryFn: async () => await getSecondRegions(selectedFirstRegion),
     enabled: !(selectedFirstRegion.length === 0),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   })
 
   useEffect(() => {
@@ -83,4 +92,4 @@ export default function Region({
       )}
     </>
   )
-}
+})

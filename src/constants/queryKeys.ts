@@ -1,4 +1,4 @@
-import { type MyMeetingsStatus, type Center } from '@/type/meeting'
+import { type MyMeetingsStatus } from '@/type/meeting'
 
 const filterKeys = {
   firstRegion: ['firstRegion'],
@@ -7,7 +7,7 @@ const filterKeys = {
 
 const meetingKeys = {
   all: ['meetings'],
-  lists: (center: Center) => ['meetings', 'list', { center }],
+  lists: ['meetings', 'list'],
   search: (search: string) => ['meetings', 'list', { search }],
   filter: (filter: object) => ['meetings', 'list', { ...filter }],
   myMeetings: (status: MyMeetingsStatus) => ['meetings', 'list', { status }],
