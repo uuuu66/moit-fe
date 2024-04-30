@@ -10,11 +10,15 @@ import {
   ToggleButton,
 } from '@/components/filter/FilterFrame/styles'
 import CommonButton from '@/components/common/Button/CommonButton'
+import { type FiltersKey } from '@/type/filter'
 
 interface CareerModalProps {
   careerItems: Array<{ careerName: string; id: number }>
   selectedFilters: number[]
-  handleSelectedFilters: (selectedNums: number[]) => void
+  handleSelectedFilters: (
+    filterName: FiltersKey,
+    selectedNums: number[]
+  ) => void
   handleModalClose: () => void
 }
 
@@ -76,7 +80,7 @@ export default function CareerModal({
   }
 
   const handleSelectClick = (): void => {
-    handleSelectedFilters(selectedCareer)
+    handleSelectedFilters('careers', selectedCareer)
     handleModalClose()
   }
 

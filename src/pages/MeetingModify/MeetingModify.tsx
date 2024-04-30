@@ -32,6 +32,7 @@ import ErrorPage from '@/shared/ErrorPage'
 import { getLocalStorageItem } from '@/util/localStorage'
 import { notify } from '@/components/Toast'
 import { meetingKeys } from '@/constants/queryKeys'
+import { type FiltersKey } from '@/type/filter'
 
 function MeetingModify(): JSX.Element {
   useMap()
@@ -180,7 +181,10 @@ function MeetingModify(): JSX.Element {
     }
   }
 
-  const handleTechStackClick = (selectedStacks: number[]): void => {
+  const handleTechStackClick = (
+    _filterName: FiltersKey,
+    selectedStacks: number[]
+  ): void => {
     setInfo((prevState) => ({
       ...prevState,
       skillIds: selectedStacks,

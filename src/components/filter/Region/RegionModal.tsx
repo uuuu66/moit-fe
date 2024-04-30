@@ -15,6 +15,7 @@ import {
   type FirstRegion,
   type FirstRegions,
   type SecondRegions,
+  type FiltersKey,
 } from '@/type/filter'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { type Center } from '@/type/meeting'
@@ -27,7 +28,10 @@ interface RegionModalProps {
   selectedFirstRegion: string
   selectedFilters: number[]
   setSelectedFirstRegion: (name: string) => void
-  handleSelectedFilters: (selectedNums: number[]) => void
+  handleSelectedFilters: (
+    filterName: FiltersKey,
+    selectedNums: number[]
+  ) => void
   handleRegionName: (name: string) => void
   handleSetCenter: (value: Center) => void
   handleModalClose: () => void
@@ -165,6 +169,7 @@ export default function RegionModal({
       handleSetCenter(center)
     }
     handleSelectedFilters(
+      'region',
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       selectedSecondRegion[0] ? [selectedSecondRegion[0].id] : []
     )

@@ -1,14 +1,18 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import CareerModal from './CareerModal'
 import { ModalBtn } from '@/components/filter/FilterFrame/styles'
 import getFilterDisplayNames from '@/util/getFilterDisplayNames'
+import { type FiltersKey } from '@/type/filter'
 
 interface CareerProps {
   selectedFilters: number[]
-  handleSelectedFilters: (selectedNums: number[]) => void
+  handleSelectedFilters: (
+    filterName: FiltersKey,
+    selectedNums: number[]
+  ) => void
 }
 
-function Career({
+export default memo(function Career({
   selectedFilters,
   handleSelectedFilters,
 }: CareerProps): JSX.Element {
@@ -60,6 +64,4 @@ function Career({
       )}
     </>
   )
-}
-
-export default Career
+})

@@ -1,5 +1,5 @@
 import { Circle, Map, MapMarker } from 'react-kakao-maps-sdk'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { throttle } from 'lodash'
 import {
@@ -39,6 +39,10 @@ export default function Home(): JSX.Element {
     careers: getLocalStorageItem('careers') ?? [],
     region: getLocalStorageItem('region') ?? [],
   })
+
+  const region = useMemo(() => filters.region, [filters.region])
+  const careers = useMemo(() => filters.careers, [filters.careers])
+  const techStacks = useMemo(() => filters.techStacks, [filters.techStacks])
 
   const setUserFirstLocation = (): Center => {
     const handleUserFirstLocation = (position: GeolocationPosition): void => {
@@ -135,9 +139,22 @@ export default function Home(): JSX.Element {
     setLocalStorageItem(key, value)
   }
 
+  const handleSelectedFilters = useCallback(
+    (filterName: FiltersKey, num: number[]) => {
+      handleSetFilters(filterName, num)
+    },
+    []
+  )
+
+  const handleSelectedRegion = useCallback((currentCenter: Center) => {
+    setCenter(currentCenter)
+    setLocalStorageItem('center', currentCenter)
+  }, [])
+
   const [selectedMeeting, setSelectedMeeting] = useState<GetMeeting | null>(
     null
   )
+
   const handleSelectedMeeting = (id: number): void => {
     const target = meetings.filter(({ meetingId }) => meetingId === Number(id))
     setSelectedMeeting(target[0])
@@ -168,26 +185,17 @@ export default function Home(): JSX.Element {
       <FilterBox>
         <div className="scroll-box">
           <Region
-            selectedFilters={filters.region}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('region', num)
-            }}
-            handleSetCenter={(currentCenter: Center) => {
-              setCenter(currentCenter)
-              setLocalStorageItem('center', currentCenter)
-            }}
+            selectedFilters={region}
+            handleSelectedFilters={handleSelectedFilters}
+            handleSetCenter={handleSelectedRegion}
           />
           <Career
-            selectedFilters={filters.careers}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('careers', num)
-            }}
+            selectedFilters={careers}
+            handleSelectedFilters={handleSelectedFilters}
           />
           <TechStack
-            selectedFilters={filters.techStacks}
-            handleSelectedFilters={(num) => {
-              handleSetFilters('techStacks', num)
-            }}
+            selectedFilters={techStacks}
+            handleSelectedFilters={handleSelectedFilters}
           />
         </div>
       </FilterBox>

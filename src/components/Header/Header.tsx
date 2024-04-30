@@ -1,8 +1,9 @@
 import { Link, useLocation } from 'react-router-dom'
+import { memo } from 'react'
 import { ButtonBox, HeaderContainer } from './styles'
 import LoginButton from '../user/LoginButton/LoginButton'
 
-function Header(): JSX.Element {
+export default memo(function Header(): JSX.Element {
   const location = useLocation()
   const isHeaderRequired = location.pathname === '/'
 
@@ -19,6 +20,4 @@ function Header(): JSX.Element {
       </ButtonBox>
     </HeaderContainer>
   )
-}
-
-export default Header
+})

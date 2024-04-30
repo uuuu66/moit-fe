@@ -25,6 +25,7 @@ import MeetingTechStack from '@/components/filter/TechStack/MeetingTechStack'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
 import { meetingKeys } from '@/constants/queryKeys'
+import { type FiltersKey } from '@/type/filter'
 
 export interface Info {
   meetingName: string
@@ -135,7 +136,10 @@ function RegisterMeeting(): JSX.Element {
     }
   }
 
-  const handleTechStackClick = (selectedStacks: number[]): void => {
+  const handleTechStackClick = (
+    _filterName: FiltersKey,
+    selectedStacks: number[]
+  ): void => {
     setInfo((prevState) => ({
       ...prevState,
       skillIds: selectedStacks,

@@ -10,13 +10,18 @@ import {
   SearchInputBox,
   ToggleButton,
 } from '../FilterFrame/styles'
-import { type TechStackLists, type TechStackList } from '@/type/filter'
+import {
+  type TechStackLists,
+  type TechStackList,
+  type FiltersKey,
+} from '@/type/filter'
 import CommonButton from '@/components/common/Button/CommonButton'
 
 interface TechStackModalProps {
   techItems: TechStackLists
   selectedFilters: number[]
   handleSelectedFilters: (
+    filterName: FiltersKey,
     selectedNums: number[],
     selectedNames?: string[]
   ) => void
@@ -101,7 +106,11 @@ export default function TechStackModal({
   )
 
   const handleCompleteClick = (): void => {
-    handleSelectedFilters(selectedStackItems, selectedStacksName as string[])
+    handleSelectedFilters(
+      'techStacks',
+      selectedStackItems,
+      selectedStacksName as string[]
+    )
     handleModalClose()
   }
 
