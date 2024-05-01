@@ -1,11 +1,12 @@
 import styled from 'styled-components'
+import { theme } from '@/constants/theme'
 
 export const MyMeetingsLayout = styled.div`
-  padding: 28px 20px;
+  padding: 22px 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: ${({ theme }) => theme.color.pg1};
+  background: ${theme.color.pg1};
 `
 
 export const BookmarkedMeetingsLayout = styled(MyMeetingsLayout)`
@@ -25,27 +26,43 @@ export const ButtonBox = styled.div`
     button {
       padding: 6px 12px;
       border-radius: 20px;
-      ${({ theme }) => `
-      background:${theme.color.black20};
-      color:${theme.color.black60};
+      background: ${theme.color.black20};
+      color: ${theme.color.black60};
       font-size: ${theme.fontSize.small};
-      font-weight: ${theme.fontWeight.normal};    
-      `}
+      font-weight: ${theme.fontWeight.normal};
     }
 
     .tab-active-button {
-      ${({ theme }) => `
       background: ${theme.color.primary100};
       color: ${theme.color.white};
-      }`}
     }
   }
 
-  .tab-toggle-button {
-    ${({ theme }) => `
-    color:${theme.color.black40};
+  p {
+    color: ${theme.color.black80};
+    font-size: ${theme.fontSize.larger2};
+    font-weight: ${theme.fontWeight.bold};
+  }
+`
+
+export const ToggleButton = styled.button`
+  width: 100%;
+  height: 44px;
+  background: ${theme.color.white};
+  border: 1px solid ${theme.color.black20};
+  border-radius: 8px;
+
+  .toggle-button-text {
+    color: ${theme.color.black60};
     font-size: ${theme.fontSize.small};
-    font-weight: ${theme.fontWeight.light};    
-    `}
+    font-weight: ${theme.fontWeight.normal};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    img {
+      width: 16px;
+    }
   }
 `

@@ -9,7 +9,7 @@ export const MypageLayout = styled.div`
   background: ${({ theme }) => theme.color.bg1};
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 22px;
 `
 
 export const NavBox = styled.header`
@@ -39,7 +39,7 @@ export const ProfileBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 18px;
 
   .profile-flex-box {
     display: flex;

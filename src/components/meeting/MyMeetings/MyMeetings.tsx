@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { ButtonBox, MyMeetingsLayout } from './styles'
+import { ButtonBox, MyMeetingsLayout, ToggleButton } from './styles'
 import { type MyMeetingsStatus } from '@/type/meeting'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMyMeetings } from '@/apis/user'
@@ -52,24 +52,28 @@ export default function MyMeetings(): JSX.Element {
             </button>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            setOnTotalOpen(!onTotalOpen)
-          }}
-        >
-          {meetings != null && meetings.length > 2 && (
-            <span className="tab-toggle-button">
-              {onTotalOpen ? '목록 접기' : '더보기'}
-            </span>
-          )}
-        </button>
       </ButtonBox>
       <MypageMeetingList
         meetings={getCurrentMeetings()}
         meetingsStatus={tab.status}
         emptyText={tab.name}
       />
+      <ToggleButton
+        type="button"
+        onClick={() => {
+          setOnTotalOpen(!onTotalOpen)
+        }}
+      >
+        {meetings != null && meetings.length > 2 && (
+          <div className="toggle-button-text">
+            <span>{onTotalOpen ? '접기' : '더보기'}</span>
+            <img
+              src={`/assets/${onTotalOpen ? 'up' : 'down'}.svg`}
+              alt="toggle"
+            />
+          </div>
+        )}
+      </ToggleButton>
     </MyMeetingsLayout>
   )
 }

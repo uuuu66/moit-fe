@@ -31,7 +31,7 @@ export const Background = styled.div`
   min-width: 360px;
   max-width: 430px;
   height: 932px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   position: absolute;
   left: 0;
   bottom: 0;
