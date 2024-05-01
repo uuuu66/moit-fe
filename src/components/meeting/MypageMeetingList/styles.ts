@@ -1,17 +1,19 @@
 import styled from 'styled-components'
+import { theme } from '@/constants/theme'
 
 export const MeetingCardBox = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 `
 
 export const MeetingCard = styled.div<{ $isProgress: boolean }>`
   padding: 20px;
   margin: 2px;
+  border: 1px solid transparent;
   border-radius: 8px;
-  background: ${({ theme }) => theme.color.white};
+  background: ${theme.color.white};
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
@@ -19,22 +21,60 @@ export const MeetingCard = styled.div<{ $isProgress: boolean }>`
   gap: 10px;
 
   &:hover {
-    border: ${({ theme }) => `1px solid ${theme.color.primary100}`};
+    border: 1px solid ${theme.color.primary100};
   }
 
   span {
-    ${({ theme, $isProgress }) => `
-    color: ${$isProgress ? theme.color.primary100 : theme.color.black40};
+    color: ${({ $isProgress }) =>
+      $isProgress ? theme.color.primary100 : theme.color.black40};
     font-size: ${theme.fontSize.smaller};
     font-weight: ${theme.fontWeight.normal};
-    `}
   }
 
   hr {
     width: 100%;
     margin: 0;
     border: none;
-    border-bottom: ${({ theme }) => `1px dotted ${theme.color.black40}`};
+    border-bottom: 1px dotted ${theme.color.black40};
+  }
+`
+
+export const BookmarkedCard = styled.div<{ $isProgress: boolean }>`
+  border-radius: 16px;
+  background: ${theme.color.white};
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+
+  .bookmark-card-box-top {
+    padding: 12px 20px;
+    width: 100%;
+    border-bottom: none;
+    background: ${theme.color.primary100};
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .bookmark-card-box-bottom {
+    padding: 16px 20px 20px;
+    border: 1px solid transparent;
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+  }
+
+  span {
+    color: ${theme.color.white};
+    font-size: ${theme.fontSize.smaller};
+    font-weight: ${theme.fontWeight.normal};
+  }
+
+  &:hover {
+    .bookmark-card-box-bottom {
+      padding: 16px 20px 20px;
+      border: 1px solid ${theme.color.primary100};
+      border-top: none;
+    }
   }
 `
 
@@ -46,11 +86,9 @@ export const TitleBox = styled.div`
   justify-content: space-between;
 
   h2 {
-    ${({ theme }) => `
     color: ${theme.color.black80};
     font-size: ${theme.fontSize.medium};
     font-weight: ${theme.fontWeight.bold};
-    `}
   }
 `
 
@@ -69,10 +107,8 @@ export const EmptyTextBox = styled.div`
   }
 
   p {
-    ${({ theme }) => `
     color: ${theme.color.black40};
     font-size: ${theme.fontSize.medium};
     font-weight: ${theme.fontWeight.normal};
-    `}
   }
 `

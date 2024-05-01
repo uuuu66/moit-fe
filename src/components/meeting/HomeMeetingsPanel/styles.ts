@@ -62,10 +62,10 @@ export const MeetingsBackground = styled.div`
   width: 100%;
   position: absolute;
   bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
 `
 export const MeetingsBox = styled.div<{ $isSmall: boolean }>`
   height: fit-content;
-  /* max-height: 544px; */
   max-height: ${({ $isSmall }) => ($isSmall ? '424px' : '544px')};
   overflow: scroll;
   width: 100%;

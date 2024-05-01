@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { getMyMeetings } from '@/apis/user'
 import { meetingKeys } from '@/constants/queryKeys'
 import { type MyMeeting } from '@/type/user'
-import { BookmarkedMeetingsLayout, ButtonBox } from './styles'
+import { BookmarkedMeetingsLayout, ButtonBox, ToggleButton } from './styles'
 import MypageMeetingList from '../MypageMeetingList/MypageMeetingList'
 
 export default function BookmarkedMeetings(): JSX.Element {
@@ -22,25 +22,29 @@ export default function BookmarkedMeetings(): JSX.Element {
   return (
     <BookmarkedMeetingsLayout>
       <ButtonBox>
-        <button type="button">북마크한 모임</button>
-        <button
-          type="button"
-          onClick={() => {
-            setOnTotalOpen(!onTotalOpen)
-          }}
-        >
-          {meetings != null && meetings.length > 2 && (
-            <span className="tab-toggle-button">
-              {onTotalOpen ? '목록 접기' : '더보기'}
-            </span>
-          )}
-        </button>
+        <p>북마크한 모임</p>
       </ButtonBox>
       <MypageMeetingList
         meetings={getCurrentMeetings()}
         meetingsStatus="bookmarked"
         emptyText="북마크한"
       />
+      <ToggleButton
+        type="button"
+        onClick={() => {
+          setOnTotalOpen(!onTotalOpen)
+        }}
+      >
+        {meetings != null && meetings.length > 2 && (
+          <div className="toggle-button-text">
+            <span>{onTotalOpen ? '접기' : '더보기'}</span>
+            <img
+              src={`/assets/${onTotalOpen ? 'up' : 'down'}.svg`}
+              alt="toggle"
+            />
+          </div>
+        )}
+      </ToggleButton>
     </BookmarkedMeetingsLayout>
   )
 }
