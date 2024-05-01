@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Background } from '../filter/FilterFrame/styles'
 import ModalPortal from './ModalPortal'
 import { KAKAO_OAUTH, NAVER_OAUTH } from '@/constants/auth'
@@ -17,6 +17,7 @@ interface LoginModalProps {
 export default function LoginModal({
   handleCloseModal,
 }: LoginModalProps): JSX.Element {
+  const { pathname } = useLocation()
   const kakaoLoginURL = `${KAKAO_OAUTH.url}?client_id=${KAKAO_OAUTH.client_id}&redirect_uri=${KAKAO_OAUTH.redirect_uri}&response_type=${KAKAO_OAUTH.response_type}`
 
   const naverLoginURL = `${NAVER_OAUTH.url}?response_type=${NAVER_OAUTH.response_type}&client_id=${NAVER_OAUTH.client_id}&state=test&redirect_uri=${NAVER_OAUTH.redirect_uri}`
@@ -49,12 +50,24 @@ export default function LoginModal({
           </ContentsBox>
           <ButtonBox>
             <Link to={kakaoLoginURL} style={{ textDecoration: 'none' }}>
-              <CommonButton size="large" $type="yellow">
+              <CommonButton
+                size="large"
+                $type="yellow"
+                handleClick={() => {
+                  sessionStorage.setItem('loginPage', pathname)
+                }}
+              >
                 카카오로 시작하기
               </CommonButton>
             </Link>
             <Link to={naverLoginURL} style={{ textDecoration: 'none' }}>
-              <CommonButton size="large" $type="green">
+              <CommonButton
+                size="large"
+                $type="green"
+                handleClick={() => {
+                  sessionStorage.setItem('loginPage', pathname)
+                }}
+              >
                 네이버로 시작하기
               </CommonButton>
             </Link>

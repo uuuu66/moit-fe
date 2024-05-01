@@ -19,13 +19,18 @@ export default function Login(): JSX.Element {
         setRequestTokenSchedule(accessToken)
         setLocalStorageItem('accessToken', accessToken)
         setLocalStorageItem('refreshToken', data.refreshToken)
+        const lastPath = sessionStorage.getItem('loginPage')
+
+        lastPath !== null && lastPath !== '/'
+          ? navigate(lastPath)
+          : navigate('/')
       })
       .catch((error) => {
         console.log(error)
-        // Todo:에러일 경우 모달 ?
+        navigate('/')
       })
       .finally(() => {
-        navigate('/')
+        sessionStorage.removeItem('loginPage')
       })
   }, [authCode, service, navigate])
 
