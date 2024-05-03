@@ -1,27 +1,39 @@
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
-import { addMonths } from 'date-fns'
+import { memo, useCallback, useMemo } from 'react'
+import { addMonths } from '@/util/dateFns'
 import { theme } from '@/constants/theme'
+import useRegisterContext from '@/hooks/useRegisterContext'
 
-interface Props {
-  meetingDate: Date | null | undefined
-  handleDateChange: (date: Date) => void
-}
+function DateChoice(): JSX.Element {
+  const { info, setInfo } = useRegisterContext()
 
-function DateChoice({ meetingDate, handleDateChange }: Props): JSX.Element {
+  const handleDateChange = useCallback(
+    (date: Date): void => {
+      setInfo((prevState) => ({
+        ...prevState,
+        meetingDate: date,
+        meetingStartTime: null,
+        meetingEndTime: null,
+      }))
+    },
+    [setInfo]
+  )
+
+  const minDate = useMemo(() => new Date(), [])
+  const maxDate = useMemo(() => addMonths(new Date(), 2), [])
+
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label style={{ display: 'flex', justifyContent: 'space-between' }}>
       <StDatePicker
         dateFormat="yyyy년 MM월 dd일"
-        selected={meetingDate}
+        selected={info.meetingDate}
         shouldCloseOnSelect
-        onChange={(date: Date) => {
-          handleDateChange(date)
-        }}
-        minDate={new Date()}
-        maxDate={addMonths(new Date(), 2)}
+        onChange={handleDateChange}
+        minDate={minDate}
+        maxDate={maxDate}
         placeholderText="YY-MM-DD"
       />
       <img
@@ -33,7 +45,7 @@ function DateChoice({ meetingDate, handleDateChange }: Props): JSX.Element {
   )
 }
 
-export default DateChoice
+export default memo(DateChoice)
 
 export const StDatePicker = styled(DatePicker)`
   width: 100%;

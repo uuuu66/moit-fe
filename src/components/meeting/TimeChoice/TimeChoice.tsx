@@ -2,30 +2,37 @@
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
-import { useState } from 'react'
-import { addMinutes, isToday, setHours, setMinutes } from 'date-fns'
+import { memo, useMemo, useState } from 'react'
 import { ko } from 'date-fns/locale'
+import { addMinutes, isToday, setHours, setMinutes } from '@/util/dateFns'
 import { InputBox } from '../../../pages/Meeting/styles'
 import { theme } from '@/constants/theme'
+import useRegisterContext from '@/hooks/useRegisterContext'
 
-interface TimeChoiceProps {
-  startTime: Date | null | undefined
-  endTime: Date | null | undefined
-  handleStartTimeChange: (time: Date | null) => void
-  handleEndTimeChange: (time: Date | null) => void
-  meetingDate: Date | null | undefined
-}
+function TimeChoice(): JSX.Element {
+  const { info, setInfo } = useRegisterContext()
 
-function TimeChoice({
-  startTime,
-  endTime,
-  handleStartTimeChange,
-  handleEndTimeChange,
-  meetingDate,
-}: TimeChoiceProps): JSX.Element {
+  const handleStartTimeChange = (time: Date | null): void => {
+    setInfo((prevState) => ({
+      ...prevState,
+      meetingStartTime: time,
+    }))
+  }
+
+  const handleEndTimeChange = (time: Date | null): void => {
+    setInfo((prevState) => ({
+      ...prevState,
+      meetingEndTime: time,
+    }))
+  }
+
   const [isSelected, setIsSelected] = useState(false)
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false)
   const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false)
+
+  const startTime = info.meetingStartTime
+  const endTime = info.meetingEndTime
+  const { meetingDate } = info
 
   const onSelect = (time: Date): void => {
     handleEndTimeChange(null)
@@ -48,10 +55,13 @@ function TimeChoice({
     minTime = setHours(setMinutes(new Date(), 0), 0)
   }
 
-  const minEndTime =
-    startTime != null ? addMinutes(new Date(startTime), 30) : new Date()
+  const minEndTime = useMemo(() => {
+    return startTime != null ? addMinutes(new Date(startTime), 30) : new Date()
+  }, [startTime])
 
-  const maxTime = setHours(setMinutes(new Date(), 30), 23)
+  const maxTime = useMemo(() => {
+    return setHours(setMinutes(new Date(), 30), 23)
+  }, [])
 
   return (
     <div
@@ -135,7 +145,7 @@ function TimeChoice({
   )
 }
 
-export default TimeChoice
+export default memo(TimeChoice)
 
 export const TimeBox = styled(InputBox)`
   width: 48%;
