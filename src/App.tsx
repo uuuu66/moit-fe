@@ -8,15 +8,7 @@ import { theme } from './constants/theme'
 import Toast from './components/Toast'
 
 function App(): JSX.Element {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-        retry: 1,
-      },
-    },
-  })
+  const queryClient = new QueryClient()
   useResetToken()
 
   return (
