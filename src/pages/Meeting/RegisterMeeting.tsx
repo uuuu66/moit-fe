@@ -20,7 +20,7 @@ import { DetailButtonContainer } from '../MeetingDetail/styles'
 import MeetingTechStack from '@/components/filter/TechStack/MeetingTechStack'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
-import { meetingKeys } from '@/constants/queryKeys'
+import { meetingKeys, userKeys } from '@/constants/queryKeys'
 import { type FiltersKey } from '@/type/filter'
 import { RegisterContext } from '@/context/RegisterContext'
 import MeetingName from '@/components/meeting/meetingForm/MeetingName'
@@ -86,7 +86,9 @@ function RegisterMeeting(): JSX.Element {
       await postMeetingData(newMeetingData)
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: meetingKeys.all })
+      // TODO 등록 : 미팅리스트, 프로필
+      void queryClient.invalidateQueries({ queryKey: meetingKeys.lists })
+      void queryClient.invalidateQueries({ queryKey: userKeys.profile })
       notify({
         type: 'default',
         text: '모임 등록이 완료되었습니다.',

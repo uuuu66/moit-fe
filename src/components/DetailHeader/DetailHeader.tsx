@@ -12,6 +12,7 @@ import { getMeetingDetail } from '@/apis/meeting'
 import { getLocalStorageItem } from '@/util/localStorage'
 import LoginModal from '../modals/LoginModal'
 import { notify } from '../Toast'
+import { meetingKeys } from '@/constants/queryKeys'
 
 interface DetailHeaderProps {
   meetingId: number
@@ -24,7 +25,8 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
   const [onLoginModal, setOnLoginModal] = useState(false)
 
   const { data } = useQuery({
-    queryKey: ['chatroom'],
+    // queryKey: ['chatroom'],
+    queryKey: meetingKeys.detail(meetingId),
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
 
