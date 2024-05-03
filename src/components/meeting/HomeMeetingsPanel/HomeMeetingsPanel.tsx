@@ -11,6 +11,7 @@ import {
 import HomeMeetingsCard from '../MeetingCard/HomeMeetingsCard'
 import useScrollEnd from '@/hooks/useScrollEnd'
 import useScreenSize from '@/hooks/useScreenSize'
+import ScrollTopButton from '../ScrollTopButton/ScrollTopButton'
 
 interface HomeMeetingsPanelProps {
   meetings: GetMeeting[]
@@ -22,6 +23,7 @@ export default function HomeMeetingsPanel({
   handleScrollEnd,
 }: HomeMeetingsPanelProps): JSX.Element {
   const [isPanelOpen, setIsPanelOpen] = useState(false)
+  const [onScrollTopButton, setOnScrollTopButton] = useState(false)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const { screenHeight } = useScreenSize()
@@ -30,6 +32,11 @@ export default function HomeMeetingsPanel({
   useEffect(() => {
     const scrollBox = scrollBoxRef?.current
     const handleScrollEvent = (): void => {
+      if (scrollBox !== null && scrollBox?.scrollTop > 0) {
+        setOnScrollTopButton(true)
+      } else {
+        setOnScrollTopButton(false)
+      }
       handleScroll(scrollBox, handleScrollEnd)
     }
     scrollBox?.addEventListener('scroll', handleScrollEvent)
@@ -81,6 +88,11 @@ export default function HomeMeetingsPanel({
             }}
           />
           <MeetingsBox $isSmall={screenHeight < 800} ref={scrollBoxRef}>
+            {onScrollTopButton && (
+              <div className="scroll-top-button-box">
+                <ScrollTopButton scrollBox={scrollBoxRef.current} />
+              </div>
+            )}
             <CardBox>
               {meetings.map(
                 ({

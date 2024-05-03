@@ -76,6 +76,20 @@ export const MeetingsBox = styled.div<{ $isSmall: boolean }>`
   &::-webkit-scrollbar {
     display: none;
   }
+
+  .scroll-top-button-box {
+    width: 100%;
+    height: 0;
+    position: sticky;
+    top: 470px;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+
+    @media screen and (max-height: 800px) {
+      top: 340px;
+    }
+  }
 `
 
 export const CardBox = styled.div`

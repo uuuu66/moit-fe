@@ -39,6 +39,8 @@ export default function Home(): JSX.Element {
     careers: getLocalStorageItem('careers') ?? [],
     region: getLocalStorageItem('region') ?? [],
   })
+  const userCenter = sessionStorage.getItem('userCenter')
+  const userLocation = userCenter !== null ? JSON.parse(userCenter) : null
 
   const region = useMemo(() => filters.region, [filters.region])
   const careers = useMemo(() => filters.careers, [filters.careers])
@@ -54,6 +56,13 @@ export default function Home(): JSX.Element {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       })
+      sessionStorage.setItem(
+        'userCenter',
+        JSON.stringify({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        })
+      )
     }
 
     setUserLocation(handleUserFirstLocation)
@@ -97,6 +106,13 @@ export default function Home(): JSX.Element {
 
   const resetMaptoUserLocation = (position: GeolocationPosition): void => {
     if (mapRef.current === null) return
+    sessionStorage.setItem(
+      'userCenter',
+      JSON.stringify({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+    )
     mapRef.current.setCenter(
       new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude)
     )
@@ -253,6 +269,15 @@ export default function Home(): JSX.Element {
             position={{ lat: locationLat, lng: locationLng }}
           />
         ))}
+        {userLocation !== null && (
+          <MapMarker
+            image={{
+              src: '/assets/userPin.svg',
+              size: { width: 24, height: 24 },
+            }}
+            position={userLocation}
+          />
+        )}
         {!isLoading && (
           <Circle
             center={{ lat: center.lat, lng: center.lng }}
