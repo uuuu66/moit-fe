@@ -9,6 +9,7 @@ import { LocationContainer } from '@/components/meeting/FindLocation/FindLocatio
 import { CareerContainer } from '@/pages/Meeting/styles'
 import { theme } from '@/constants/theme'
 import { type FiltersKey } from '@/type/filter'
+import { filterKeys } from '@/constants/queryKeys'
 
 interface TechStackProps {
   selectedFilters: number[]
@@ -26,7 +27,7 @@ function MeetingTechStack({
   const [isShow, setIsShow] = useState<boolean>(false)
 
   const { data } = useQuery({
-    queryKey: ['stackList'],
+    queryKey: filterKeys.stackList,
     queryFn: async () => await getTechStackList(),
   })
 

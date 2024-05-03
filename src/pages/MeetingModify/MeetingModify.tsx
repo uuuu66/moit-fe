@@ -31,7 +31,7 @@ import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import { getLocalStorageItem } from '@/util/localStorage'
 import { notify } from '@/components/Toast'
-import { meetingKeys } from '@/constants/queryKeys'
+import { filterKeys, meetingKeys } from '@/constants/queryKeys'
 import { type FiltersKey } from '@/type/filter'
 
 function MeetingModify(): JSX.Element {
@@ -43,12 +43,12 @@ function MeetingModify(): JSX.Element {
   const queryClient = useQueryClient()
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['meetingListDetail', meetingId],
+    queryKey: meetingKeys.detail(meetingId),
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
 
   const { data: techStackList } = useQuery({
-    queryKey: ['stackList'],
+    queryKey: filterKeys.stackList,
     queryFn: async () => await getTechStackList(),
   })
 
@@ -116,7 +116,7 @@ function MeetingModify(): JSX.Element {
       await editMeeting(Number(meetingId), info)
     },
     onSuccess: () => {
-      // void queryClient.invalidateQueries({ queryKey: meetingKeys.all })
+      // TODO 수정 : (미팅리스트), (미팅상세)
       void queryClient.refetchQueries({ queryKey: meetingKeys.all })
       notify({
         type: 'default',

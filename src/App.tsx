@@ -13,7 +13,7 @@ function App(): JSX.Element {
       queries: {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
-        retry: 1,
+        retry: 0,
       },
     },
   })

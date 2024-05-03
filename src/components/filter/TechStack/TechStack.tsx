@@ -6,6 +6,7 @@ import { ModalBtn } from '../FilterFrame/styles'
 import { getTechStackList } from '@/apis/filter'
 import getFilterDisplayNames from '@/util/getFilterDisplayNames'
 import { type FiltersKey } from '@/type/filter'
+import { filterKeys } from '@/constants/queryKeys'
 
 interface TechStackProps {
   selectedFilters: number[]
@@ -23,7 +24,7 @@ export default memo(function TechStack({
   const [isShow, setIsShow] = useState<boolean>(false)
 
   const { data } = useQuery({
-    queryKey: ['stackList'],
+    queryKey: filterKeys.stackList,
     queryFn: async () => await getTechStackList(),
     refetchOnMount: false,
     refetchOnWindowFocus: false,

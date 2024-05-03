@@ -31,7 +31,7 @@ import { getLocalStorageItem } from '@/util/localStorage'
 import BookMark from '@/components/meeting/Bookmark/BookMark'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
-import { meetingKeys } from '@/constants/queryKeys'
+import { meetingKeys, userKeys } from '@/constants/queryKeys'
 
 function MeetingDetail(): JSX.Element {
   useMap()
@@ -43,7 +43,7 @@ function MeetingDetail(): JSX.Element {
   const [onDeleteModal, setOnDeleteModal] = useState(false)
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['meetingListDetail', meetingId],
+    queryKey: meetingKeys.detail(meetingId),
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })
 
@@ -57,7 +57,9 @@ function MeetingDetail(): JSX.Element {
         text: '모임 참여가 완료되었습니다.',
       })
       navi(`/meetings/${meetingId}/chats`, { replace: true })
-      void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
+      // TODO 참여 : (미팅리스트, 미팅상세), 프로필
+      void queryClient.refetchQueries({ queryKey: meetingKeys.all })
+      void queryClient.invalidateQueries({ queryKey: userKeys.profile })
     },
     onError: (error) => {
       console.log('error', error)
@@ -74,7 +76,9 @@ function MeetingDetail(): JSX.Element {
         text: '모임에서 탈퇴하였습니다.',
       })
       navi(`/`, { replace: true })
-      void queryClient.invalidateQueries({ queryKey: ['meetingListDetail'] })
+      // TODO 탈퇴 : (미팅리스트, 미팅상세), (프로필)
+      void queryClient.refetchQueries({ queryKey: meetingKeys.all })
+      void queryClient.invalidateQueries({ queryKey: userKeys.profile })
     },
     onError: (error) => {
       console.log('error', error)
@@ -86,7 +90,9 @@ function MeetingDetail(): JSX.Element {
       await deleteMeeting(Number(meetingId))
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: meetingKeys.all })
+      // TODO 삭제 : (미팅리스트), (프로필)
+      void queryClient.invalidateQueries({ queryKey: meetingKeys.lists })
+      void queryClient.invalidateQueries({ queryKey: userKeys.profile })
       sessionStorage.removeItem('selectedMeetingId')
       notify({
         type: 'default',
