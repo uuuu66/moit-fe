@@ -12,6 +12,7 @@ export default function BookmarkedMeetings(): JSX.Element {
   const { data: meetings } = useQuery({
     queryKey: meetingKeys.myMeetings('bookmarked'),
     queryFn: async () => await getMyMeetings('bookmarked'),
+    staleTime: 0,
   })
 
   const getCurrentMeetings = (): MyMeeting[] => {

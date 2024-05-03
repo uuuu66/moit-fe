@@ -58,13 +58,13 @@ export default function MyMeetings(): JSX.Element {
         meetingsStatus={tab.status}
         emptyText={tab.name}
       />
-      <ToggleButton
-        type="button"
-        onClick={() => {
-          setOnTotalOpen(!onTotalOpen)
-        }}
-      >
-        {meetings != null && meetings.length > 2 && (
+      {meetings != null && meetings.length > 2 && (
+        <ToggleButton
+          type="button"
+          onClick={() => {
+            setOnTotalOpen(!onTotalOpen)
+          }}
+        >
           <div className="toggle-button-text">
             <span>{onTotalOpen ? '접기' : '더보기'}</span>
             <img
@@ -72,8 +72,8 @@ export default function MyMeetings(): JSX.Element {
               alt="toggle"
             />
           </div>
-        )}
-      </ToggleButton>
+        </ToggleButton>
+      )}
     </MyMeetingsLayout>
   )
 }

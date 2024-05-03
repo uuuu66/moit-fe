@@ -84,8 +84,6 @@ export default function Home(): JSX.Element {
       return undefined
     },
     initialPageParam: 1,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
   })
 
   const meetings = useMemo(() => {
