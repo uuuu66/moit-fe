@@ -29,13 +29,13 @@ export default function BookmarkedMeetings(): JSX.Element {
         meetingsStatus="bookmarked"
         emptyText="북마크한"
       />
-      <ToggleButton
-        type="button"
-        onClick={() => {
-          setOnTotalOpen(!onTotalOpen)
-        }}
-      >
-        {meetings != null && meetings.length > 2 && (
+      {meetings != null && meetings.length > 2 && (
+        <ToggleButton
+          type="button"
+          onClick={() => {
+            setOnTotalOpen(!onTotalOpen)
+          }}
+        >
           <div className="toggle-button-text">
             <span>{onTotalOpen ? '접기' : '더보기'}</span>
             <img
@@ -43,8 +43,8 @@ export default function BookmarkedMeetings(): JSX.Element {
               alt="toggle"
             />
           </div>
-        )}
-      </ToggleButton>
+        </ToggleButton>
+      )}
     </BookmarkedMeetingsLayout>
   )
 }

@@ -239,4 +239,18 @@ export const CardBox = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+
+  .scroll-top-button-box {
+    width: 100%;
+    height: 0;
+    position: sticky;
+    top: 600px;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+
+    @media screen and (max-height: 900px) {
+      top: calc(100px + 40vh);
+    }
+  }
 `

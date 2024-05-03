@@ -24,12 +24,14 @@ import ErrorPage from '@/shared/ErrorPage'
 import useScrollEnd from '@/hooks/useScrollEnd'
 import SearchMeetingsCard from '@/components/meeting/MeetingCard/SearchMeetingsCard'
 import { notify } from '@/components/Toast'
+import ScrollTopButton from '@/components/meeting/ScrollTopButton/ScrollTopButton'
 
 export default function Search(): JSX.Element {
   const [onRecentsToggle, setOnRecentsToggle] = useState(true)
   const [recents, setRecents] = useState<string[]>(
     (getLocalStorageItem('recents') as string[]) ?? []
   )
+  const [onScrollTopButton, setOnScrollTopButton] = useState(false)
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const [queries] = useSearchParams()
   const navigate = useNavigate()
@@ -69,6 +71,11 @@ export default function Search(): JSX.Element {
     const scrollBox = scrollBoxRef?.current
 
     const handleScrollEvent = (): void => {
+      if (scrollBox !== null && scrollBox?.scrollTop > 0) {
+        setOnScrollTopButton(true)
+      } else {
+        setOnScrollTopButton(false)
+      }
       handleScroll(scrollBox, handleFetchPages)
     }
     scrollBox?.addEventListener('scroll', handleScrollEvent)
@@ -200,6 +207,11 @@ export default function Search(): JSX.Element {
       </SearchBox>
       {data != null && (
         <CardBox ref={scrollBoxRef}>
+          {onScrollTopButton && (
+            <div className="scroll-top-button-box">
+              <ScrollTopButton scrollBox={scrollBoxRef.current} />
+            </div>
+          )}
           {meetings.length === 0 ? (
             <EmptyTextBox>
               <img src="/assets/warning.svg" alt="warning" />
