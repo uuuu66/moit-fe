@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { memo } from 'react'
 import useMap from '@/hooks/useMap'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type EditMeetingReq } from '@/type/request'
@@ -81,7 +82,7 @@ function FindLocation({ info, setInfo, locationAddress }: Props): JSX.Element {
   )
 }
 
-export default FindLocation
+export default memo(FindLocation)
 
 export const LocationContainer = styled.div`
   color: ${theme.color.black40};
