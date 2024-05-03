@@ -41,6 +41,7 @@ export default function PrevChats({ scrollBox }: PrevChatsProps): JSX.Element {
       return undefined
     },
     initialPageParam: 1,
+    staleTime: 0,
   })
 
   const chatDatas = useMemo(() => {

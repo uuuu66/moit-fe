@@ -11,7 +11,7 @@ export const MyMeetingsLayout = styled.div`
 
 export const BookmarkedMeetingsLayout = styled(MyMeetingsLayout)`
   background: unset;
-  padding-bottom: 0;
+  padding: 18px 20px 0;
 `
 
 export const ButtonBox = styled.div`
