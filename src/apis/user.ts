@@ -41,6 +41,14 @@ const resetAccessToken = async (): Promise<void> => {
       type: 'warning',
       text: '로그인 갱신이 필요합니다. 다시 로그인 해주세요',
     })
+    logout()
+      .catch(() => {})
+      .finally(() => {
+        notify({
+          type: 'default',
+          text: '로그아웃 되었습니다.',
+        })
+      })
     console.log(error)
     throw error
   }

@@ -42,6 +42,7 @@ function Router(): JSX.Element {
           element={!isLogin ? <ErrorPage /> : <Chat />}
         />
         <Route path="/mypage" element={!isLogin ? <ErrorPage /> : <Mypage />} />
+        <Route path="*" element={<ErrorPage isNotFoundPage />} />
       </Route>
     </Routes>
   )

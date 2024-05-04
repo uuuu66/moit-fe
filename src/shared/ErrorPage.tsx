@@ -2,7 +2,11 @@ import { useNavigate } from 'react-router-dom'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { Container } from './LoadingPage'
 
-function ErrorPage(): JSX.Element {
+interface ErrorPageProps {
+  isNotFoundPage?: boolean
+}
+
+function ErrorPage({ isNotFoundPage }: ErrorPageProps): JSX.Element {
   const navi = useNavigate()
   const goBack = (): void => {
     navi('/')
@@ -13,7 +17,11 @@ function ErrorPage(): JSX.Element {
       <div>페이지를</div>
       <div>불러올 수 없습니다</div>
       <p>
-        <span>접근 방식이 잘못되었습니다</span>
+        <span>
+          {isNotFoundPage === true
+            ? '존재하지 않는 페이지입니다.'
+            : '접근 방식이 잘못되었습니다'}
+        </span>
         <span>확인 후 다시 시도해 주세요</span>
       </p>
       <CommonButton
@@ -25,6 +33,10 @@ function ErrorPage(): JSX.Element {
       </CommonButton>
     </Container>
   )
+}
+
+ErrorPage.defaultProps = {
+  isNotFoundPage: false,
 }
 
 export default ErrorPage
