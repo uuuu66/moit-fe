@@ -75,7 +75,6 @@ function MeetingDetail(): JSX.Element {
         type: 'default',
         text: '모임에서 탈퇴하였습니다.',
       })
-      navi(`/`, { replace: true })
       // TODO 탈퇴 : (미팅리스트, 미팅상세), (프로필)
       void queryClient.refetchQueries({ queryKey: meetingKeys.all })
       void queryClient.invalidateQueries({ queryKey: userKeys.profile })
