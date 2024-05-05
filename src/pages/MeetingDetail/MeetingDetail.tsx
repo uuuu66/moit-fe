@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import { useState } from 'react'
-import useMap from '@/hooks/useMap'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
 import {
   BasicInfoBox,
@@ -34,7 +33,6 @@ import AlertModal from '@/components/modals/AlertModal'
 import { meetingKeys, userKeys } from '@/constants/queryKeys'
 
 function MeetingDetail(): JSX.Element {
-  useMap()
   const queryClient = useQueryClient()
   const navi = useNavigate()
   const { meetingId } = useParams()

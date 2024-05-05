@@ -1,14 +1,16 @@
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Footer from '@/components/Footer/Footer'
 import Header from '@/components/Header/Header'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import Onboarding from './Onboarding'
 import { theme } from '@/constants/theme'
+import LoadingPage from './LoadingPage'
 
 export default function Layout(): JSX.Element {
   const [screenHeight, setScreenHeight] = useState(window.innerHeight)
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
 
   const isFirstStatus: boolean = getLocalStorageItem('isFirst')
   const [isFirstState, setIsFirstState] = useState<boolean>(
@@ -18,6 +20,7 @@ export default function Layout(): JSX.Element {
   useEffect(() => {
     const handleResize = (): void => {
       setScreenHeight(window.innerHeight)
+      setScreenWidth(window.innerWidth)
     }
 
     window.addEventListener('resize', handleResize)
@@ -28,8 +31,12 @@ export default function Layout(): JSX.Element {
   }, [])
 
   return (
-    <ScreenStyles $screenHeight={screenHeight}>
-      {/* <LayoutBorder> */}
+    <ScreenStyles $screenHeight={screenHeight} $screenWidth={screenWidth}>
+      <img
+        className="background-img"
+        src="/assets/website.jpg"
+        alt="background"
+      />
       {isFirstState ? (
         <Onboarding
           handleClick={() => {
@@ -39,17 +46,18 @@ export default function Layout(): JSX.Element {
         />
       ) : (
         <LayoutStyles $screenHeight={screenHeight}>
-          <ContentsStyles>
-            <Header />
-            <ScrollBox>
-              <Outlet />
-            </ScrollBox>
-          </ContentsStyles>
-          <Footer />
-          <div id="modal" />
+          <Suspense fallback={<LoadingPage name="페이지를" />}>
+            <ContentsStyles>
+              <Header />
+              <ScrollBox>
+                <Outlet />
+              </ScrollBox>
+            </ContentsStyles>
+            <Footer />
+            <div id="modal" />
+          </Suspense>
         </LayoutStyles>
       )}
-      {/* </LayoutBorder> */}
       <IntroduceBox>
         <img src="/assets/introduce.svg" alt="" />
         <div>
@@ -62,14 +70,24 @@ export default function Layout(): JSX.Element {
   )
 }
 
-const ScreenStyles = styled.div<{ $screenHeight: number }>`
-  width: 100vw;
+const ScreenStyles = styled.div<{
+  $screenHeight: number
+  $screenWidth: number
+}>`
+  width: ${({ $screenWidth }) => `${$screenWidth}px`};
   height: ${({ $screenHeight }) => `${$screenHeight}px`};
   display: flex;
   align-items: center;
-  background-image: url('/assets/website.jpg');
-  background-size: cover;
   justify-content: center;
+
+  .background-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 
   @media screen and (min-width: 1235px) {
     flex-direction: row-reverse;
@@ -93,22 +111,8 @@ const IntroduceBox = styled.div`
   @media screen and (min-width: 1235px) {
     display: unset;
   }
+  position: relative;
 `
-
-// const LayoutBorder = styled.div`
-//   width: 100%;
-//   min-width: 400px;
-//   max-width: 470px;
-//   padding: 20px;
-//   background-color: #383737;
-//   border: 1px solid #626262;
-//   border-radius: 50px;
-//   /* display: block; */
-
-//   /* @media screen and (max-width: 1235px) {
-//     display: none;
-//   } */
-// `
 
 const LayoutStyles = styled.div<{ $screenHeight: number }>`
   width: 100%;

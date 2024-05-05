@@ -11,7 +11,7 @@ export const ModalBtn = styled.button<{ $isShow: boolean }>`
   ${({ theme }) => `
   background: ${theme.color.white};
   font-size: ${theme.fontSize.small};
-  color: ${theme.color.black50};
+  color: ${theme.color.black70};
     `}
 
   img {

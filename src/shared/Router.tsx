@@ -1,16 +1,23 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import Home from '@/pages/Home/Home'
-import Login from '@/pages/Login/Login'
+import { lazy, useEffect, useState } from 'react'
 import Layout from './Layout'
-import Search from '@/pages/Search/Search'
-import RegisterMeeting from '@/pages/Meeting/RegisterMeeting'
-import MeetingDetail from '@/pages/MeetingDetail/MeetingDetail'
-import Chat from '@/pages/Chat/Chat'
-import Mypage from '@/pages/Mypage/Mypage'
-import MeetingModify from '@/pages/MeetingModify/MeetingModify'
 import { getLocalStorageItem } from '@/util/localStorage'
-import ErrorPage from './ErrorPage'
+
+const Login = lazy(async () => await import('@/pages/Login/Login'))
+const Home = lazy(async () => await import('@/pages/Home/Home'))
+const Search = lazy(async () => await import('@/pages/Search/Search'))
+const RegisterMeeting = lazy(
+  async () => await import('@/pages/Meeting/RegisterMeeting')
+)
+const MeetingDetail = lazy(
+  async () => await import('@/pages/MeetingDetail/MeetingDetail')
+)
+const Chat = lazy(async () => await import('@/pages/Chat/Chat'))
+const Mypage = lazy(async () => await import('@/pages/Mypage/Mypage'))
+const MeetingModify = lazy(
+  async () => await import('@/pages/MeetingModify/MeetingModify')
+)
+const ErrorPage = lazy(async () => await import('./ErrorPage'))
 
 function Router(): JSX.Element {
   const [isLogin, setIsLogin] = useState(
