@@ -25,7 +25,6 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
   const [onLoginModal, setOnLoginModal] = useState(false)
 
   const { data } = useQuery({
-    // queryKey: ['chatroom'],
     queryKey: meetingKeys.detail(meetingId),
     queryFn: async () => await getMeetingDetail(Number(meetingId)),
   })

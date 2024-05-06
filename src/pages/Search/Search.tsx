@@ -49,7 +49,6 @@ export default function Search(): JSX.Element {
   const { data: popularMeetings } = useQuery({
     queryKey: meetingKeys.popular,
     queryFn: async () => await getPopularMeetings(),
-    staleTime: 30 * 60 * 1000,
   })
 
   const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({

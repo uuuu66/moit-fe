@@ -26,8 +26,7 @@ export default memo(function TechStack({
   const { data } = useQuery({
     queryKey: filterKeys.stackList,
     queryFn: async () => await getTechStackList(),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   if (data == null) return null
