@@ -16,7 +16,6 @@ import {
 import FindLocation from '@/components/meeting/FindLocation/FindLocation'
 import CommonButton from '@/components/common/Button/CommonButton'
 import { editMeeting, getMeetingDetail } from '@/apis/meeting'
-import useMap from '@/hooks/useMap'
 import { type EditMeetingReq } from '@/type/request'
 import { type Career, careerData } from '@/constants/careerData'
 import { DetailButtonContainer } from '../MeetingDetail/styles'
@@ -35,7 +34,6 @@ import { filterKeys, meetingKeys } from '@/constants/queryKeys'
 import { type FiltersKey } from '@/type/filter'
 
 function MeetingModify(): JSX.Element {
-  useMap()
   const navi = useNavigate()
   const { meetingId } = useParams()
   const token: string = getLocalStorageItem('accessToken')

@@ -4,19 +4,32 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
     <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1"
+      name="description"
+      content="개발자를 위한 위치 기반 커뮤니티 서비스, 모잇"
     />
+    <meta name="viewport" content="width=device-width" />
+    <meta property="og:title" content="MOIT" />
+    <meta
+      property="og:description"
+      content="개발자를 위한 위치 기반 커뮤니티 서비스, 모잇"
+    />
+    <meta property="og:image" content="/assets/thumbnailx2.jpg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ko_KR" />
     <title>MOIT</title>
   </head>
   <body>
     <div id="root"></div>
     <!-- <div id="modal"></div> -->
-    <script type="module" src="/src/main.tsx"></script>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
     <script
       type="text/javascript"
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%VITE_KAKAO_MAP_API_ID%&libraries=services,clusterer"
+    ></script>
+    <script defer type="module" src="/src/main.tsx"></script>
+    <script
+      defer
+      src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
     ></script>
   </body>
 </html>

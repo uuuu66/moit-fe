@@ -143,7 +143,7 @@ export const NameInfoContainer = styled.div`
   padding: 0 2rem;
 `
 
-export const InfoTitle = styled.h3`
+export const InfoTitle = styled.h1`
   /* margin: 1rem 0; */
   font-size: ${theme.fontSize.larger};
   font-weight: ${theme.fontWeight.bold};

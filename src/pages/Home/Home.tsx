@@ -190,7 +190,6 @@ export default function Home(): JSX.Element {
     handleSelectedMeeting(Number(storageMeetingId))
     sessionStorage.removeItem('selectedMeetingId')
   }
-
   if (isError) return <ErrorPage />
   return (
     <HomeLayout>

@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { memo } from 'react'
-import useMap from '@/hooks/useMap'
 import { type Info } from '@/pages/Meeting/RegisterMeeting'
 import { type EditMeetingReq } from '@/type/request'
 import { theme } from '@/constants/theme'
@@ -18,17 +17,13 @@ interface Props {
 }
 
 function FindLocation({ info, setInfo, locationAddress }: Props): JSX.Element {
-  const { map } = useMap()
-  const services = map?.services
-
   const handleButtonClick = (): void => {
     const { daum } = window
 
     new daum.Postcode({
       // eslint-disable-next-line func-names
       oncomplete: function (data: { address: string }) {
-        if (services == null) return
-        const geocoder = new services.Geocoder()
+        const geocoder = new kakao.maps.services.Geocoder()
 
         const getXYFromAddress = (result: any, status: string): void => {
           if (status === 'OK') {

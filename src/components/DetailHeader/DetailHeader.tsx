@@ -67,7 +67,7 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
         </button>
         <ChatUsers $isActive={location.pathname.includes('chats')}>
           <h4>그룹 채팅</h4>
-          <Icon src="/assets/users.svg" className="users" />
+          <Icon src="/assets/users.svg" alt="user" className="users" />
           <span>{data?.registeredCount}</span>
         </ChatUsers>
       </div>

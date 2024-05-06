@@ -44,6 +44,7 @@ export const OnboardingContainer = styled.div`
   align-items: center;
   gap: 4rem;
   background-color: white;
+  position: relative;
 
   div {
     display: flex;

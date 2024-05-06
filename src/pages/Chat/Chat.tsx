@@ -105,7 +105,7 @@ export default function Chat(): JSX.Element {
           maxLength={10000}
         />
         <SendButton onClick={sendChatMessage}>
-          <img src="/assets/send.svg" alt="" />
+          <img src="/assets/send.svg" alt="sendChat" />
         </SendButton>
       </MsgInputBox>
     </ChatContainer>
