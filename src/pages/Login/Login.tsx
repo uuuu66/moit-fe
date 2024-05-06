@@ -18,7 +18,6 @@ export default function Login(): JSX.Element {
         const accessToken = data.accessToken.split(' ')[1]
         setRequestTokenSchedule(accessToken)
         setLocalStorageItem('accessToken', accessToken)
-        setLocalStorageItem('refreshToken', data.refreshToken)
         const lastPath = sessionStorage.getItem('loginPage')
 
         lastPath !== null && lastPath !== '/'
