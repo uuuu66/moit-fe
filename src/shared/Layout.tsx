@@ -59,7 +59,7 @@ export default function Layout(): JSX.Element {
         </LayoutStyles>
       )}
       <IntroduceBox>
-        <img src="/assets/introduce.svg" alt="" />
+        <img src="/assets/introduce.svg" alt="introduce" />
         <div>
           <span>HANGHAE99</span>
           <span>hanghae99_1903@gmail.com</span>
