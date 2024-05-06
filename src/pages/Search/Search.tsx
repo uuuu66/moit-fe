@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetingsBySearch, getPopularMeetings } from '@/apis/meeting'
@@ -39,7 +39,6 @@ export default function Search(): JSX.Element {
 
   const keyword = queries.get('keyword') ?? ''
   const [inputText, setInputText] = useState(keyword ?? '')
-
   useEffect(() => {
     setInputText(keyword)
   }, [keyword])
@@ -133,11 +132,17 @@ export default function Search(): JSX.Element {
     navigate(`?keyword=${targetValue}`)
   }
 
-  const handleCardClick = (meetingId: number): void => {
-    const scrollBox = scrollBoxRef?.current
-    sessionStorage.setItem('searchScrollPosition', String(scrollBox?.scrollTop))
-    navigate(`/meetings/${meetingId}`)
-  }
+  const handleCardClick = useCallback(
+    (meetingId: number): void => {
+      const scrollBox = scrollBoxRef?.current
+      sessionStorage.setItem(
+        'searchScrollPosition',
+        String(scrollBox?.scrollTop)
+      )
+      navigate(`/meetings/${meetingId}`)
+    },
+    [navigate]
+  )
 
   if (isLoading) return <LoadingPage name="페이지를" />
   if (isError) return <ErrorPage />
