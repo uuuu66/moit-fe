@@ -1,9 +1,10 @@
 import { type MyMeetingsStatus } from '@/type/meeting'
 
 const filterKeys = {
-  firstRegion: ['firstRegion'],
-  secondRegion: (regionId: string) => ['secondRegion', regionId],
-  stackList: ['stackList'],
+  all: ['filters'],
+  firstRegion: ['filters', 'firstRegion'],
+  secondRegion: (regionId: string) => ['filters', 'secondRegion', regionId],
+  stackList: ['filters', 'stackList'],
 }
 
 const meetingKeys = {

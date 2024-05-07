@@ -11,8 +11,7 @@ function App(): JSX.Element {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
+        staleTime: 30 * 1000,
         retry: 0,
       },
     },

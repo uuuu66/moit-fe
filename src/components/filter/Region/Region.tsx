@@ -33,8 +33,6 @@ export default memo(function Region({
   const { data: firstRegions } = useQuery({
     queryKey: filterKeys.firstRegion,
     queryFn: async () => await getFirstRegions(),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
     staleTime: Infinity,
   })
 
@@ -46,8 +44,7 @@ export default memo(function Region({
     queryKey: filterKeys.secondRegion(selectedFirstRegion),
     queryFn: async () => await getSecondRegions(selectedFirstRegion),
     enabled: !(selectedFirstRegion.length === 0),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   useEffect(() => {

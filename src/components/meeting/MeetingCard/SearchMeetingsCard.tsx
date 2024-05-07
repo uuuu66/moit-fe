@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { memo, useRef } from 'react'
 import { type GetMeeting } from '@/type/meeting'
 import {
   LeftShadowBox,
@@ -17,7 +17,7 @@ interface SearchMeetingsCardProps {
   handleCardClick: (meeting: number) => void
 }
 
-export default function SearchMeetingsCard({
+export default memo(function SearchMeetingsCard({
   meeting,
   handleCardClick,
 }: SearchMeetingsCardProps): JSX.Element {
@@ -79,4 +79,4 @@ export default function SearchMeetingsCard({
       </div>
     </SearchMeetingCardLayout>
   )
-}
+})
