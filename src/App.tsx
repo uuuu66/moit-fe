@@ -6,6 +6,7 @@ import Router from './shared/Router'
 import useResetToken from './hooks/useResetToken'
 import { theme } from './constants/theme'
 import Toast from './components/Toast'
+import AuthProvider from './shared/AuthProvider'
 
 function App(): JSX.Element {
   const queryClient = new QueryClient({
@@ -22,7 +23,9 @@ function App(): JSX.Element {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <Router />
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
           <Toast />
         </BrowserRouter>
       </ThemeProvider>

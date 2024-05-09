@@ -1,5 +1,10 @@
 type Service = 'naver' | 'kakao'
 
+interface UserInfo {
+  email: string
+  exp: number
+}
+
 interface Profile {
   enterMeeting: number
   studyTime: string
@@ -27,4 +32,12 @@ interface User {
   accessToken: string
   refreshToken: string
 }
-export type { Service, Profile, MyMeeting, MyBookmarks, BookmarkIds, User }
+export type {
+  Service,
+  UserInfo,
+  Profile,
+  MyMeeting,
+  MyBookmarks,
+  BookmarkIds,
+  User,
+}
