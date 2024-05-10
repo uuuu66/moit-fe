@@ -3,8 +3,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { jwtDecode } from 'jwt-decode'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
 import {
   BasicInfoBox,
@@ -26,16 +25,17 @@ import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetin
 import CommonButton from '@/components/common/Button/CommonButton'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
-import { getLocalStorageItem } from '@/util/localStorage'
 import BookMark from '@/components/meeting/Bookmark/BookMark'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
 import { meetingKeys, userKeys } from '@/constants/queryKeys'
+import { UserContext } from '@/shared/AuthProvider'
 
 function MeetingDetail(): JSX.Element {
   const queryClient = useQueryClient()
   const navi = useNavigate()
   const { meetingId } = useParams()
+  const userInfo = useContext(UserContext)
 
   const [onWithdrawModal, setOnWithdrawModal] = useState(false)
   const [onDeleteModal, setOnDeleteModal] = useState(false)
@@ -115,9 +115,6 @@ function MeetingDetail(): JSX.Element {
   }
 
   const isFull = data?.totalCount === data?.registeredCount
-
-  const token: string = getLocalStorageItem('accessToken')
-  const decodedToken = token != null ? jwtDecode(token) : ''
 
   if (isLoading) return <LoadingPage name="페이지를" />
   if (isError) return <ErrorPage />
@@ -224,7 +221,7 @@ function MeetingDetail(): JSX.Element {
         </Box1>
         {/* 5 */}
       </DetailInfoContainer>
-      {decodedToken.sub !== data?.creatorEmail ? (
+      {userInfo?.email !== data?.creatorEmail ? (
         // 일반 유저
         <DetailButtonContainer>
           {data != null && <BookMark meetingId={data.meetingId} />}

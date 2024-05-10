@@ -7,7 +7,7 @@ import {
 } from '@/type/user'
 import { authInstance, instance } from './axios'
 import { type CommonResponse } from '@/type/response'
-import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
+import { setLocalStorageItem } from '@/util/localStorage'
 import setRequestTokenSchedule from '@/util/setRequestTokenSchedule'
 import { type MyMeetingsStatus } from '@/type/meeting'
 import { notify } from '@/components/Toast'
@@ -15,7 +15,8 @@ import { notify } from '@/components/Toast'
 const login = async (code: string, service: Service): Promise<User> => {
   try {
     const { data } = await instance.get<CommonResponse<User>>(
-      `/api/member/signin/${service}?code=${code}&env=${import.meta.env.PROD ? 'prod' : 'local'}`
+      `/api/member/signin/${service}?code=${code}&env=${import.meta.env.PROD ? 'prod' : 'local'}`,
+      { withCredentials: true }
     )
     return data.data
   } catch (error) {
@@ -26,44 +27,33 @@ const login = async (code: string, service: Service): Promise<User> => {
 
 const resetAccessToken = async (): Promise<void> => {
   try {
-    const refreshToken = getLocalStorageItem('refreshToken')
-    const { data } = await instance.post<{ data: string }>(
-      `/api/auth/refresh`,
-      {
-        refreshToken,
-      }
-    )
+    const { data } = await instance.get<{ data: string }>(`/api/auth/refresh`, {
+      withCredentials: true,
+    })
     const accessToken = data.data.split(' ')[1]
     setRequestTokenSchedule(accessToken)
     setLocalStorageItem('accessToken', accessToken)
   } catch (error) {
-    notify({
-      type: 'warning',
-      text: '로그인 갱신이 필요합니다. 다시 로그인 해주세요',
-    })
-    // logout()
-    //   .catch(() => {})
-    //   .finally(() => {
-    //     notify({
-    //       type: 'default',
-    //       text: '로그아웃 되었습니다.',
-    //     })
-    //   })
     console.log(error)
-    throw error
+    logout()
+      .catch(() => {})
+      .finally(() => {
+        notify({
+          type: 'default',
+          text: '로그인 갱신이 필요합니다. 다시 로그인 해주세요',
+        })
+      })
   }
 }
 
 const logout = async (): Promise<void> => {
-  const refreshToken = getLocalStorageItem('refreshToken')
   try {
-    await authInstance.post('/api/auth/logout', { refreshToken })
+    await authInstance.get('/api/auth/logout', { withCredentials: true })
   } catch (error) {
     console.log(error)
     throw error
   } finally {
     localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
   }
 }
 
