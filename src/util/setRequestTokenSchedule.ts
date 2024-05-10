@@ -6,14 +6,14 @@ function getRequestTokenTime(token: string): number {
   if (tokenExpiredAt == null) return 0
 
   const currentTime = Date.now() / 1000
-  const LEAD_SECONDS = 0
+  const LEAD_SECONDS = 600
 
   return (tokenExpiredAt - currentTime - LEAD_SECONDS) * 1000
 }
 
 export default function setRequestTokenSchedule(token: string): void {
   const delayInMilliSeconds = getRequestTokenTime(token)
-
+  console.log(delayInMilliSeconds, '=== delaySeconds ===')
   if (delayInMilliSeconds > 0) {
     setTimeout(() => {
       resetAccessToken().catch(() => {})
