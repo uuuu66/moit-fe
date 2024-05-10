@@ -1,4 +1,4 @@
-import { jwtDecode } from 'jwt-decode'
+import { useContext } from 'react'
 import {
   BubbleBox,
   ChatBubble,
@@ -7,15 +7,14 @@ import {
   Username,
 } from '@/pages/Chat/styles'
 import { type ChatMessage } from '@/type/chat'
-import { getLocalStorageItem } from '@/util/localStorage'
+import { UserContext } from '@/shared/AuthProvider'
 
 interface ChatsListProps {
   chats: ChatMessage[]
 }
 
 export default function ChatsList({ chats }: ChatsListProps): JSX.Element {
-  const token: string = getLocalStorageItem('accessToken')
-  const decodedToken = jwtDecode(token)
+  const userInfo = useContext(UserContext)
 
   return (
     <>
@@ -35,12 +34,12 @@ export default function ChatsList({ chats }: ChatsListProps): JSX.Element {
               </div>
             ) : null}
           </ChatDate>
-          <BubbleBox $isMe={e.sender.memberEmail === decodedToken.sub}>
-            <Username $isMe={e.sender.memberEmail === decodedToken.sub}>
+          <BubbleBox $isMe={e.sender.memberEmail === userInfo?.email}>
+            <Username $isMe={e.sender.memberEmail === userInfo?.email}>
               {e.sender.memberName}
             </Username>
             <div className="msg">
-              <ChatBubble $isMe={e.sender.memberEmail === decodedToken.sub}>
+              <ChatBubble $isMe={e.sender.memberEmail === userInfo?.email}>
                 {e.content}
               </ChatBubble>
               <SendTime>{e.createdAt.slice(11, 16)}</SendTime>

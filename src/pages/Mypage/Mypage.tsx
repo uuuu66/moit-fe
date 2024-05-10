@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import {
   ImageBox,
   InfoCard,
@@ -15,8 +14,6 @@ import {
 } from './styles'
 import { userKeys } from '@/constants/queryKeys'
 import { deleteUnregister, getProfile, logout } from '@/apis/user'
-import { getLocalStorageItem } from '@/util/localStorage'
-
 import LoadingPage from '../../shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
 import MyMeetings from '@/components/meeting/MyMeetings/MyMeetings'
@@ -24,11 +21,13 @@ import BookmarkedMeetings from '@/components/meeting/MyMeetings/BookmarkedMeetin
 
 import { notify } from '@/components/Toast'
 import AuthAlertModal from '@/components/modals/AuthAlertModal'
+import { UserContext } from '@/shared/AuthProvider'
 
 export default function Mypage(): JSX.Element {
   const [onLogoutModal, setOnLogoutModal] = useState(false)
   const [onUnregisterModal, setOnUnregisterModal] = useState(false)
   const navigate = useNavigate()
+  const userInfo = useContext(UserContext)
 
   const { data: profileInfo, isError } = useQuery({
     queryKey: userKeys.profile,
@@ -37,7 +36,6 @@ export default function Mypage(): JSX.Element {
 
   if (profileInfo == null) return <LoadingPage name="페이지를" />
 
-  const token: string = getLocalStorageItem('accessToken')
   const { enterMeeting, studyTime, heldMeeting } = profileInfo
 
   if (isError) return <ErrorPage />
@@ -60,7 +58,7 @@ export default function Mypage(): JSX.Element {
           <ImageBox>
             <img src="/assets/logo.svg" alt="profile" />
           </ImageBox>
-          <p>{jwtDecode(token).sub}</p>
+          <p>{userInfo?.email}</p>
         </div>
         <InfoCardBox>
           <InfoCard>

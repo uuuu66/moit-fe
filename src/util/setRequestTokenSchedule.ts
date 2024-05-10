@@ -13,7 +13,6 @@ function getRequestTokenTime(token: string): number {
 
 export default function setRequestTokenSchedule(token: string): void {
   const delayInMilliSeconds = getRequestTokenTime(token)
-  console.log(delayInMilliSeconds, '=== delaySeconds ===')
   if (delayInMilliSeconds > 0) {
     setTimeout(() => {
       resetAccessToken().catch(() => {})

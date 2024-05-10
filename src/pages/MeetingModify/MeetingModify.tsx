@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { jwtDecode } from 'jwt-decode'
+import { useContext, useEffect, useState } from 'react'
 import {
   CareerContainer,
   InfoContainer,
@@ -28,16 +27,15 @@ import {
 } from './styles'
 import LoadingPage from '@/shared/LoadingPage'
 import ErrorPage from '@/shared/ErrorPage'
-import { getLocalStorageItem } from '@/util/localStorage'
 import { notify } from '@/components/Toast'
 import { filterKeys, meetingKeys } from '@/constants/queryKeys'
 import { type FiltersKey } from '@/type/filter'
+import { UserContext } from '@/shared/AuthProvider'
 
 function MeetingModify(): JSX.Element {
   const navi = useNavigate()
+  const userInfo = useContext(UserContext)
   const { meetingId } = useParams()
-  const token: string = getLocalStorageItem('accessToken')
-  const { sub: userEmail } = jwtDecode(token)
   const queryClient = useQueryClient()
 
   const { data, isLoading, isError } = useQuery({
@@ -225,7 +223,7 @@ function MeetingModify(): JSX.Element {
 
   if (isLoading) return <LoadingPage name="페이지를" />
   if (isError) return <ErrorPage />
-  if (token === null || data?.creatorEmail !== userEmail) return <ErrorPage />
+  if (data?.creatorEmail !== userInfo?.email) return <ErrorPage />
 
   return (
     <WholeContainer>
