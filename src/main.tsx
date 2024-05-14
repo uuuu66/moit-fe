@@ -3,7 +3,7 @@ import App from './App'
 import './reset.css'
 
 const rootElement = document.getElementById('root')
-if (import.meta.env.PROD) console.log = () => {}
+// if (import.meta.env.PROD) console.log = () => {}
 if (rootElement != null) {
   ReactDOM.createRoot(rootElement).render(<App />)
 }
