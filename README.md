@@ -1,4 +1,5 @@
-![모잇_브로셔이미지](https://github.com/moit03/moit-fe/assets/124010808/165a641e-0a0e-44d8-87d9-e21b31232c3f)
+<img src="https://github.com/moit03/moit-fe/assets/124010808/165a641e-0a0e-44d8-87d9-e21b31232c3f" width="66%"/>
+<img src="https://sable-archer-b55.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F7f569f52-5779-4051-b82c-bcd90fcfb7a1%2Fc125a262-3e06-415d-b7ff-97899a404a4b%2F%25E1%2584%258E%25E1%2585%25AC%25E1%2584%2580%25E1%2585%25A9_%25E1%2584%258B%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2580%25E1%2585%25B5%25E1%2584%2589%25E1%2585%25A1%25E1%2586%25BC_MOIT.png?table=block&id=c2d7a166-4da0-4f48-adc5-735f37a4e708&spaceId=7f569f52-5779-4051-b82c-bcd90fcfb7a1&width=1080&userId=&cache=v2" width="66%"/>
 
 # MOIT 설명
 
@@ -8,7 +9,9 @@
 
 📆 개발 기간: 2024.03.26 ~ 2024.05.07 (총 6주)
 
-🔗 MOIT 브로셔 링크: https://sumptuous-aragon-de9.notion.site/MOIT-b20d01a1bc67427bbd8a9f6c74cb98d4
+🔀 트러블 슈팅: [링크](https://sable-archer-b55.notion.site/MOIT-FE-1898feaf67e340d98b5e619b7c8ae954?pvs=4)
+
+🔗 MOIT 브로셔: [링크](https://sumptuous-aragon-de9.notion.site/MOIT-b20d01a1bc67427bbd8a9f6c74cb98d4)
 
 ## 👥 팀원 역할
 
