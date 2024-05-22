@@ -8,6 +8,8 @@
 
 📆 개발 기간: 2024.03.26 ~ 2024.05.07 (총 6주)
 
+🔀 트러블 슈팅: [링크](https://sable-archer-b55.notion.site/MOIT-FE-1898feaf67e340d98b5e619b7c8ae954?pvs=4)
+
 🔗 MOIT 브로셔 링크: https://sumptuous-aragon-de9.notion.site/MOIT-b20d01a1bc67427bbd8a9f6c74cb98d4
 
 ## 👥 팀원 역할
