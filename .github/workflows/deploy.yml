@@ -16,6 +16,23 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+    
+    # 환경변수 등록
+    - name: Generate Environment Variables File for Production
+      run: |
+        echo "VITE_SERVER_URL=$VITE_SERVER_URL" >> .env.production
+        echo "VITE_SOCKET_URL=$VITE_SOCKET_URL" >> .env.production
+        echo "VITE_REDIRECT_URL=$VITE_REDIRECT_URL" >> .env.production
+        echo "VITE_KAKAO_CLIENT_ID=$VITE_KAKAO_CLIENT_ID" >> .env.production
+        echo "VITE_NAVER_CLIENT_ID=$VITE_NAVER_CLIENT_ID" >> .env.production
+        echo "VITE_KAKAO_MAP_API_ID=$VITE_KAKAO_MAP_API_ID" >> .env.production
+      env:
+        VITE_SERVER_URL : ${{secrets.VITE_SERVER_URL}}
+        VITE_SOCKET_URL : ${{secrets.VITE_SOCKET_URL}}
+        VITE_REDIRECT_URL : ${{secrets.VITE_REDIRECT_URL}}
+        VITE_KAKAO_CLIENT_ID : ${{secrets.VITE_KAKAO_CLIENT_ID}}
+        VITE_NAVER_CLIENT_ID : ${{secrets.VITE_NAVER_CLIENT_ID}}
+        VITE_KAKAO_MAP_API_ID : ${{secrets.VITE_KAKAO_MAP_API_ID}}
 
     - name: Install dependencies
       run: yarn install
@@ -28,13 +45,12 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: 'ap-northeast-2'
 
     - name: Deploy to S3
-      run: aws s3 sync dist/ s3://www.moit.app --delete --profile deploy-s3-2
+      run: aws s3 sync dist/ s3://www.moit.app --delete
 
-    - name: Invalidate CloudFront cache
-      run: |
-        aws cloudfront create-invalidation \
+    - name: Invalidate CloudFront Cache
+      run: aws cloudfront create-invalidation \
           --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
           --paths "/*"
