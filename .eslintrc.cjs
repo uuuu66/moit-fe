@@ -39,5 +39,6 @@ module.exports = {
         labelAttributes: ['htmlFor'], // label 태그 관련
       },
     ],
+    '@typescript-eslint/no-unused-vars': ['warn'],
   },
 }
