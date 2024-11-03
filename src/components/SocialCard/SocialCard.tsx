@@ -1,8 +1,9 @@
 import { type AllHTMLAttributes } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import FlexDiv from '../common/FlexDiv/FlexDiv'
 import { type GetMeeting } from '@/type/meeting'
-import Dummy from '../../../public/assets/mypage.svg'
+import Dummy from '../../../public/assets/dummy.jpeg'
 import { theme } from '@/constants/theme'
 import Tag from '../common/Tag/Tag'
 
@@ -12,9 +13,12 @@ interface Props extends AllHTMLAttributes<HTMLDivElement> {
 
 export default function SocialCard(props: Props): JSX.Element {
   const { meetingData } = props
-
+  const navigate = useNavigate()
+  const handleClickCard = (): void => {
+    navigate(`/meetings/${meetingData.meetingId}`)
+  }
   return (
-    <CardContainer>
+    <CardContainer onClick={handleClickCard}>
       <img src={Dummy} alt="dummy" />
       <FlexDiv flexDirection="column" gap={2} alignItem="flex-start">
         <span className="title">{meetingData.meetingName}</span>
@@ -53,7 +57,7 @@ const CardContainer = styled.div`
   padding: 36px 24px;
   background-color: ${theme.color.white};
   border-radius: 0px;
-  justify-content: flex-start;
+  justify-content: space-around;
   align-items: center;
   gap: 12px;
 
@@ -61,7 +65,6 @@ const CardContainer = styled.div`
   cursor: pointer;
   img {
     border-radius: 8px;
-    box-shadow: ${theme.boxShadow.card};
     object-fit: contain;
 
     height: 120px;
