@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/triple-slash-reference */
+/// <reference types="vite-plugin-svgr/client" />
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
