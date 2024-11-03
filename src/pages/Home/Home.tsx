@@ -3,11 +3,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { throttle } from 'lodash'
 import {
-  FilterBox,
+  CardContainer,
+  ViewMapButton,
   HomeLayout,
-  ResetSearchBox,
-  ResetSearchButton,
-  UserLocationButtonBox,
+  InfiniteScrollTrigger,
 } from './styles'
 import useScreenSize from '@/hooks/useScreenSize'
 import { type GetMeeting, type Center } from '@/type/meeting'
@@ -21,15 +20,15 @@ import { getMeetings } from '@/apis/meeting'
 import ErrorPage from '@/shared/ErrorPage'
 import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
 import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
-import Region from '@/components/filter/Region/Region'
-import Career from '@/components/filter/Career/Career'
-import TechStack from '@/components/filter/TechStack/TechStack'
+import MapIcon from '@/svgs/map.svg?react'
+import { theme } from '@/constants/theme'
+import SocialCard from '@/components/SocialCard/SocialCard'
 
 const DEFAULT_CENTER = {
   lat: 37.5667,
   lng: 126.9784,
 }
-
+type PageType = 'CARD' | 'MAP' | 'SEARCH'
 export default function Home(): JSX.Element {
   const mapRef = useRef<kakao.maps.Map | null>(null)
   const { screenHeight } = useScreenSize()
@@ -39,9 +38,11 @@ export default function Home(): JSX.Element {
     careers: getLocalStorageItem('careers') ?? [],
     region: getLocalStorageItem('region') ?? [],
   })
+  const [isMapBtnOn, setIsMapBtnOn] = useState(false)
+  const [pageType, setPageType] = useState<PageType>('CARD')
   const userCenter = sessionStorage.getItem('userCenter')
   const userLocation = userCenter !== null ? JSON.parse(userCenter) : null
-
+  const cardListRef = useRef<HTMLDivElement>(null)
   const region = useMemo(() => filters.region, [filters.region])
   const careers = useMemo(() => filters.careers, [filters.careers])
   const techStacks = useMemo(() => filters.techStacks, [filters.techStacks])
@@ -97,6 +98,20 @@ export default function Home(): JSX.Element {
       notify({ type: 'warning', text: '조회된 모임이 없습니다.' })
     }
   }, [data, meetings])
+
+  useEffect(() => {
+    if (pageType !== 'CARD') {
+      setIsMapBtnOn(false)
+      if (cardListRef.current !== null) {
+        cardListRef.current.scrollTo(0, 0)
+        cardListRef.current.style.overflowY = 'hidden'
+        cardListRef.current.style.transform = `translateY(${cardListRef.current.offsetHeight - 40}px)`
+      }
+    } else if (cardListRef.current !== null) {
+      cardListRef.current.style.transform = `translateY(${0}px)`
+      cardListRef.current.style.overflowY = 'auto'
+    }
+  }, [pageType])
 
   const handleFetchPages = throttle(() => {
     void fetchNextPage()
@@ -190,50 +205,52 @@ export default function Home(): JSX.Element {
     handleSelectedMeeting(Number(storageMeetingId))
     sessionStorage.removeItem('selectedMeetingId')
   }
+
   if (isError) return <ErrorPage />
+  const isCardPage = pageType === 'CARD'
+  const isMapPage = pageType === 'MAP'
+  const isSearchPage = pageType === 'SEARCH'
+
   return (
     <HomeLayout>
       {isLoading && <LoadingPage name="페이지를" isFade />}
       {isLocateLoading && <LoadingPage name="내 위치를" isFade />}
-      <FilterBox>
-        <div className="scroll-box">
-          <Region
-            selectedFilters={region}
-            handleSelectedFilters={handleSelectedFilters}
-            handleSetCenter={handleSelectedRegion}
-          />
-          <Career
-            selectedFilters={careers}
-            handleSelectedFilters={handleSelectedFilters}
-          />
-          <TechStack
-            selectedFilters={techStacks}
-            handleSelectedFilters={handleSelectedFilters}
-          />
+      <CardContainer
+        $isOpen={isCardPage}
+        ref={cardListRef}
+        onScroll={() => {
+          if (isCardPage) setIsMapBtnOn(true)
+        }}
+      >
+        {!isCardPage && (
+          <button
+            className="toggle-button"
+            onClick={() => {
+              setPageType('CARD')
+            }}
+            type="button"
+          >
+            <hr />
+          </button>
+        )}
+        <div className="list">
+          {meetings.map((meeting) => (
+            <SocialCard key={meeting.meetingId} meetingData={meeting} />
+          ))}
+          <InfiniteScrollTrigger />
         </div>
-      </FilterBox>
-      <UserLocationButtonBox>
-        <button
-          type="button"
+      </CardContainer>
+
+      {isMapBtnOn && (
+        <ViewMapButton
           onClick={() => {
-            setUserLocation(resetMaptoUserLocation)
+            setPageType('MAP')
           }}
         >
-          <div>
-            <img src="/assets/location.svg" alt="location" />
-          </div>
-        </button>
-      </UserLocationButtonBox>
-      <ResetSearchBox>
-        <ResetSearchButton
-          type="button"
-          onClick={setCurrentCenter}
-          $isShow={false}
-        >
-          <img src="/assets/reset.svg" alt="reset" />
-          <p>현 지도에서 검색</p>
-        </ResetSearchButton>
-      </ResetSearchBox>
+          <MapIcon width={24} height={24} fill={theme.color.white} />
+        </ViewMapButton>
+      )}
+
       <Map
         ref={mapRef}
         center={{
@@ -242,7 +259,7 @@ export default function Home(): JSX.Element {
         }}
         style={{
           width: '100%',
-          height: screenHeight < 932 ? `${screenHeight - 114}px` : '820px',
+          height: `${screenHeight - 65}px`,
         }}
         level={8}
         maxLevel={3}
@@ -288,20 +305,6 @@ export default function Home(): JSX.Element {
           />
         )}
       </Map>
-      {meetings != null && (
-        <HomeMeetingsPanel
-          meetings={meetings}
-          handleScrollEnd={handleFetchPages}
-        />
-      )}
-      {selectedMeeting != null && (
-        <HomeSelectedMeetingPanel
-          meeting={selectedMeeting}
-          handleClosePanel={() => {
-            setSelectedMeeting(null)
-          }}
-        />
-      )}
     </HomeLayout>
   )
 }
