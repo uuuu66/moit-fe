@@ -31,6 +31,7 @@ export const Container = styled.div<{ $isFade: boolean }>`
   position: absolute;
   z-index: 99;
   height: 100%;
+  opacity: 0;
   background: linear-gradient(
     rgba(102, 122, 228, 0.15) 5%,
     ${({ $isFade }) => ($isFade ? 'rgba(255, 255, 255, 0.6)' : '#fff')} 30%
