@@ -40,5 +40,8 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-unused-vars': ['warn'],
+    'react/require-default-props': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'jsx-a11y/control-has-associated-label': 'off',
   },
 }
