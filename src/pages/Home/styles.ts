@@ -63,7 +63,7 @@ export const CardContainer = styled.section<{ $isOpen: boolean }>`
   .list {
     display: flex;
     flex-direction: column;
-
+    padding-top: 48px;
     justify-content: flex-start;
     align-items: center;
   }

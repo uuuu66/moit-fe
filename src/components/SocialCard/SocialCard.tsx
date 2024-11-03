@@ -54,7 +54,7 @@ const CardContainer = styled.div`
   display: flex;
 
   width: 100%;
-  padding: 36px 24px;
+  padding: 12px 24px;
   background-color: ${theme.color.white};
   border-radius: 0px;
   justify-content: space-around;
