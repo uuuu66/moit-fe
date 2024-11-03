@@ -1,14 +1,17 @@
 import styled from 'styled-components'
+import { theme } from '@/constants/theme'
 
 export const HeaderContainer = styled.header<{ $isShow: boolean }>`
-  height: 56px;
   width: 100%;
-  background: ${({ theme }) => theme.color.white};
+
+  background: ${theme.color.white};
   display: ${({ $isShow }) => ($isShow ? 'flex' : 'none')};
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
+  padding: 16px;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid ${theme.color.bg1};
 `
+
 export const ButtonBox = styled.div`
   display: flex;
   align-items: center;
