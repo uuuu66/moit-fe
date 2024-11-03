@@ -9,7 +9,7 @@ export const HeaderContainer = styled.header<{ $isShow: boolean }>`
   padding: 16px;
   flex-direction: column;
   gap: 10px;
-  border-bottom: 1px solid ${theme.color.bg1};
+  border-bottom: 2px solid ${theme.color.bg2};
 `
 
 export const ButtonBox = styled.div`
