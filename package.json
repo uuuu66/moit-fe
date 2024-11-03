@@ -33,6 +33,7 @@
     "styled-components": "^6.1.8"
   },
   "devDependencies": {
+    "vite-plugin-svgr": "^4.3.0",
     "@types/lodash": "^4.17.0",
     "@types/node": "^20.12.2",
     "@types/react": "^18.2.66",
