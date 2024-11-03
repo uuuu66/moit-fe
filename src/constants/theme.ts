@@ -10,6 +10,13 @@ export const theme = {
     primary30: '#CBD1F0',
     primary20: '#D8DCF2',
     primary10: '#E9EAF4',
+    purple1: '#6E4CC2',
+    purple2: '#9677D9',
+
+    purple3: '#C0A3E3',
+    purple4: '#DFB3F2',
+    purple5: '#FFDAFF',
+    purple6: '#FFE3FF',
     black100: '#000000',
     black90: '#191919',
     black80: '#313131',
@@ -37,6 +44,22 @@ export const theme = {
     hoverGray: '#CBCBCB',
     hoverYellow: '#E1D201',
     hoverGreen: '#52A147',
+    green1: '#3FB59C',
+    green2: '#44C28D',
+    green3: '#50E2A6',
+    green4: '#B9FFBA',
+    green5: '#C8FFBA',
+    green6: '#DBFFC7',
+    red1: '#B00404',
+    red2: '#D60404',
+    red3: '#F20F22',
+    red4: '#F26363',
+    red5: '#F2A7A7',
+    red6: '#FFE4FF',
+    pink1: '#faf1f2',
+    pink2: '#f1d1d2',
+    pink3: '#c1a3a3',
+    pink4: '#7d5959',
   },
   fontSize: {
     large: '2.4rem',
@@ -51,6 +74,9 @@ export const theme = {
     normal: 600,
     light: 500,
   },
-}
+  boxShadow: {
+    card: '0px 1px 2px 0px rgba(5, 29, 57, 0.10), 0px 0px 0px 0.5px rgba(160, 164, 171, 0.20)',
+  },
+} as const
 
 export type ThemeType = typeof theme
