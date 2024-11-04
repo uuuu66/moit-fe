@@ -10,6 +10,7 @@ const groupTypes = {
 const pageTransitionTypes = {
   'fade-right-navigate': 'fade-right-navigate',
   'slide-left-navigate': 'slide-left-navigate',
+  'fade-in': 'fade-in',
 } as const
 const strings = { placeholders, groupTypes, pageTransitionTypes }
 
