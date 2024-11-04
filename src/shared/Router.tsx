@@ -1,56 +1,86 @@
-import { Route, Routes, useLocation } from 'react-router-dom'
+import {
+  PathRouteProps,
+  Route,
+  RouteProps,
+  Routes,
+  useLocation,
+} from 'react-router-dom'
 import { lazy, useEffect, useState } from 'react'
-import Layout from './Layout'
 import { getLocalStorageItem } from '@/util/localStorage'
-
+import MeetingDetail from '@/pages/MeetingDetail/MeetingDetail'
+import Home from '@/pages/Home/Home'
+import strings from '@/constants/strings'
+interface RouteInfo extends PathRouteProps {
+  transitionType?: keyof typeof strings.pageTransitionTypes
+}
 const Login = lazy(async () => await import('@/pages/Login/Login'))
-const Home = lazy(async () => await import('@/pages/Home/Home'))
 const Search = lazy(async () => await import('@/pages/Search/Search'))
 const RegisterMeeting = lazy(
   async () => await import('@/pages/Meeting/RegisterMeeting')
 )
-const MeetingDetail = lazy(
-  async () => await import('@/pages/MeetingDetail/MeetingDetail')
-)
+
 const Chat = lazy(async () => await import('@/pages/Chat/Chat'))
 const Mypage = lazy(async () => await import('@/pages/Mypage/Mypage'))
 const MeetingModify = lazy(
   async () => await import('@/pages/MeetingModify/MeetingModify')
 )
 const ErrorPage = lazy(async () => await import('./ErrorPage'))
+export const routeInfos: RouteInfo[] = [
+  {
+    path: '/login/:service',
+    element: <Login />,
+  },
+  {
+    path: '/',
+    element: <Home />,
+    transitionType: 'fade-right-navigate',
+  },
+  {
+    path: '/search',
+    element: <Search />,
+  },
+  {
+    path: '/meetings',
+    element: <RegisterMeeting />,
+    transitionType: 'slide-left-navigate',
+  },
+  {
+    path: '/meetings/:meetingId',
+    element: <MeetingDetail />,
+  },
+  {
+    path: '/meetings/:meetingId/modify',
+    element: <MeetingModify />,
+  },
+  {
+    path: '/meetings/:meetingId/chats',
+    element: <Chat />,
+  },
+  {
+    path: '/mypage',
+    element: <Mypage />,
+  },
+  {
+    path: '*',
+    element: <Home />,
+  },
+]
 
-function Router(): JSX.Element {
+function Router({ pathname }: { pathname: string }): JSX.Element {
   const [isLogin, setIsLogin] = useState(
     Boolean(getLocalStorageItem('accessToken') as string)
   )
-  const { pathname } = useLocation()
+  const location = useLocation()
 
   useEffect(() => {
     const token: string = getLocalStorageItem('accessToken')
     setIsLogin(Boolean(token))
-  }, [pathname])
+  }, [location.pathname])
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/login/:service" element={<Login />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route
-          path="/meetings"
-          element={!isLogin ? <ErrorPage /> : <RegisterMeeting />}
-        />
-        <Route path="/meetings/:meetingId" element={<MeetingDetail />} />
-        <Route
-          path="/meetings/:meetingId/modify"
-          element={!isLogin ? <ErrorPage /> : <MeetingModify />}
-        />
-        <Route
-          path="/meetings/:meetingId/chats"
-          element={!isLogin ? <ErrorPage /> : <Chat />}
-        />
-        <Route path="/mypage" element={!isLogin ? <ErrorPage /> : <Mypage />} />
-        <Route path="*" element={<ErrorPage isNotFoundPage />} />
-      </Route>
+    <Routes location={pathname}>
+      {routeInfos.map((routeInfo) => (
+        <Route key={routeInfo.path} {...routeInfo} />
+      ))}
     </Routes>
   )
 }
