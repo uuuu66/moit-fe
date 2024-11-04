@@ -1,5 +1,5 @@
 import {
-  PathRouteProps,
+  type PathRouteProps,
   Route,
   RouteProps,
   Routes,
@@ -9,7 +9,8 @@ import { lazy, useEffect, useState } from 'react'
 import { getLocalStorageItem } from '@/util/localStorage'
 import MeetingDetail from '@/pages/MeetingDetail/MeetingDetail'
 import Home from '@/pages/Home/Home'
-import strings from '@/constants/strings'
+import type strings from '@/constants/strings'
+
 interface RouteInfo extends PathRouteProps {
   transitionType?: keyof typeof strings.pageTransitionTypes
 }
@@ -24,7 +25,7 @@ const Mypage = lazy(async () => await import('@/pages/Mypage/Mypage'))
 const MeetingModify = lazy(
   async () => await import('@/pages/MeetingModify/MeetingModify')
 )
-const ErrorPage = lazy(async () => await import('./ErrorPage'))
+
 export const routeInfos: RouteInfo[] = [
   {
     path: '/login/:service',
@@ -59,13 +60,13 @@ export const routeInfos: RouteInfo[] = [
   {
     path: '/mypage',
     element: <Mypage />,
+    transitionType: 'fade-in',
   },
   {
     path: '*',
     element: <Home />,
   },
 ]
-
 function Router({ pathname }: { pathname: string }): JSX.Element {
   const [isLogin, setIsLogin] = useState(
     Boolean(getLocalStorageItem('accessToken') as string)
