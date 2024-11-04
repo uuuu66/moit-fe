@@ -4,7 +4,6 @@ import { type Service } from '@/type/user'
 import { login } from '@/apis/user'
 import { setLocalStorageItem } from '@/util/localStorage'
 import setRequestTokenSchedule from '@/util/setRequestTokenSchedule'
-import LoadingPage from '@/shared/LoadingPage'
 
 export default function Login(): JSX.Element {
   const { service } = useParams()
@@ -33,5 +32,5 @@ export default function Login(): JSX.Element {
       })
   }, [authCode, service, navigate])
 
-  return <LoadingPage name="회원정보를" />
+  return <div>d</div>
 }

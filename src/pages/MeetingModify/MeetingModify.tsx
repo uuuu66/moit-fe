@@ -25,8 +25,7 @@ import {
   DisabledTimeBox,
   DisabledTimeBoxContainer,
 } from './styles'
-import LoadingPage from '@/shared/LoadingPage'
-import ErrorPage from '@/shared/ErrorPage'
+
 import { notify } from '@/components/Toast'
 import { filterKeys, meetingKeys } from '@/constants/queryKeys'
 import { type FiltersKey } from '@/type/filter'
@@ -220,10 +219,6 @@ function MeetingModify(): JSX.Element {
     }
     editMutation.mutate()
   }
-
-  if (isLoading) return <LoadingPage name="페이지를" />
-  if (isError) return <ErrorPage />
-  if (data?.creatorEmail !== userInfo?.email) return <ErrorPage />
 
   return (
     <WholeContainer>

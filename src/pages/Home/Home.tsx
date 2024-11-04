@@ -12,14 +12,10 @@ import useScreenSize from '@/hooks/useScreenSize'
 import { type GetMeeting, type Center } from '@/type/meeting'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import useUserLocation from '@/hooks/useUserLocation'
-import LoadingPage from '@/shared/LoadingPage'
 import { notify } from '@/components/Toast'
 import { type FiltersKey, type Filters } from '@/type/filter'
 import { meetingKeys } from '@/constants/queryKeys'
 import { getMeetings } from '@/apis/meeting'
-import ErrorPage from '@/shared/ErrorPage'
-import HomeMeetingsPanel from '@/components/meeting/HomeMeetingsPanel/HomeMeetingsPanel'
-import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/HomeSelectedMeetingPanel'
 import MapIcon from '@/svgs/map.svg?react'
 import { theme } from '@/constants/theme'
 import SocialCard from '@/components/SocialCard/SocialCard'
@@ -208,7 +204,6 @@ export default function Home(): JSX.Element {
     sessionStorage.removeItem('selectedMeetingId')
   }
 
-  if (isError) return <ErrorPage />
   const isCardPage = pageType === 'CARD'
   const isMapPage = pageType === 'MAP'
   const isSearchPage = pageType === 'SEARCH'
@@ -216,8 +211,7 @@ export default function Home(): JSX.Element {
   return (
     <HomeLayout>
       <Header />
-      {isLoading && <LoadingPage name="페이지를" isFade />}
-      {isLocateLoading && <LoadingPage name="내 위치를" isFade />}
+
       <CardContainer
         $isOpen={isCardPage}
         ref={cardListRef}
@@ -293,18 +287,6 @@ export default function Home(): JSX.Element {
               size: { width: 24, height: 24 },
             }}
             position={userLocation}
-          />
-        )}
-        {!isLoading && (
-          <Circle
-            center={{ lat: center.lat, lng: center.lng }}
-            radius={5000}
-            strokeWeight={1}
-            strokeColor="#FF3257"
-            strokeOpacity={0.5}
-            strokeStyle="dash"
-            fillColor={meetings.length !== 0 ? '#667AE4' : '#FF3257'}
-            fillOpacity={meetings.length !== 0 ? 0.2 : 0.2}
           />
         )}
       </Map>

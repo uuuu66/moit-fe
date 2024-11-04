@@ -5,8 +5,7 @@ import { throttle } from 'lodash'
 import { format } from 'date-fns/format'
 import { getChatMsg } from '@/apis/meeting'
 import { type ChatMessage } from '@/type/chat'
-import LoadingPage from '@/shared/LoadingPage'
-import ErrorPage from '@/shared/ErrorPage'
+
 import ChatsList from '../ChatsList/ChatsList'
 
 interface PrevChatsProps {
@@ -78,9 +77,6 @@ export default function PrevChats({ scrollBox }: PrevChatsProps): JSX.Element {
       setPrevScrollHeight(scrollBox.scrollHeight)
     }
   }, [chatDatas, prevScrollHeight, scrollBox])
-
-  if (isLoading) return <LoadingPage name="페이지를" />
-  if (isError) return <ErrorPage />
 
   return <ChatsList chats={chatDatas} />
 }

@@ -7,7 +7,6 @@ import Header from '@/components/Header/Header'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import Onboarding from './Onboarding'
 import { theme } from '@/constants/theme'
-import LoadingPage from './LoadingPage'
 import Router from './Router'
 import PageTransitionProvider from './PageTransitionProvider'
 
@@ -50,7 +49,7 @@ export default function Layout(): JSX.Element {
         />
       ) : (
         <LayoutStyles $screenHeight={screenHeight}>
-          <Suspense fallback={<LoadingPage name="페이지를" />}>
+          <Suspense>
             <PageTransitionProvider
               transitionKey={location.pathname.split('/')[1]}
             >

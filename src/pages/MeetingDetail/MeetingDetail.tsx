@@ -23,8 +23,6 @@ import {
 } from '@/apis/meeting'
 import JoinMeetingButton from '@/components/meeting/JoinMeetingButton/JoinMeetingButton'
 import CommonButton from '@/components/common/Button/CommonButton'
-import LoadingPage from '@/shared/LoadingPage'
-import ErrorPage from '@/shared/ErrorPage'
 import BookMark from '@/components/meeting/Bookmark/BookMark'
 import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
