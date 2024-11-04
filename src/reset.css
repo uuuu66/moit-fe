@@ -229,6 +229,28 @@ body {
     z-index: 45;
     width: 100%;
   }
+  .fade-in-enter {
+    position: absolute;
+    z-index: 45;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  .fade-in-enter-active {
+    position: absolute;
+    z-index: 45;
+    opacity: 1;
+    transition: opacity 0.5s cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  .fade-in-exit {
+    position: absolute;
+    opacity: 0;
+    z-index: 30;
+  }
+  .fade-in-exit-active {
+    position: absolute;
+    z-index: 30;
+    opacity: 0;
+  }
 }
 ol,
 ul {
