@@ -39,7 +39,7 @@ module.exports = {
         labelAttributes: ['htmlFor'], // label 태그 관련
       },
     ],
-    '@typescript-eslint/no-unused-vars': ['warn'],
+    '@typescript-eslint/no-unused-vars': ['off'],
     'react/require-default-props': 'off',
     'react/jsx-props-no-spreading': 'off',
     'jsx-a11y/control-has-associated-label': 'off',
