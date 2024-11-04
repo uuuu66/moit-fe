@@ -1,5 +1,6 @@
 import React from 'react'
 import { type PropsWithChildren } from 'react'
+import { useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import styled from 'styled-components'
 import { routeInfos } from './Router'
@@ -10,10 +11,17 @@ interface Props extends PropsWithChildren {
 
 export default function PageTransitionProvider(props: Props): JSX.Element {
   const { transitionKey, children } = props
+  const { state } = useLocation()
 
   return (
     <ContentsStyles
       childFactory={(child) => {
+        if (state !== null && state.transitionType !== null) {
+          return React.cloneElement(child, {
+            classNames: state?.transitionType,
+          })
+        }
+
         const transitionType = routeInfos.find(
           (value) => value.path === `/${transitionKey}`
         )?.transitionType
@@ -23,13 +31,7 @@ export default function PageTransitionProvider(props: Props): JSX.Element {
         })
       }}
     >
-      <CSSTransition
-        key={transitionKey}
-        timeout={500}
-        classNames={
-          transitionKey === '' ? 'fade-right-navigate' : 'slide-left-navigate'
-        }
-      >
+      <CSSTransition key={transitionKey} timeout={500}>
         {children}
       </CSSTransition>
     </ContentsStyles>

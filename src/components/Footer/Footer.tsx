@@ -7,7 +7,7 @@ import MypageButton from '../user/MypageButton/MypageButton'
 export default memo(function Footer(): JSX.Element {
   return (
     <FooterLayout>
-      <Link to="/">
+      <Link to="/" state={{}}>
         <img src="/assets/home.svg" alt="home" />
       </Link>
       <AddMeetingButton />
