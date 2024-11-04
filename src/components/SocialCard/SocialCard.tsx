@@ -52,7 +52,6 @@ export default function SocialCard(props: Props): JSX.Element {
 }
 const CardContainer = styled.div`
   display: flex;
-
   width: 100%;
   padding: 12px 24px;
   background-color: ${theme.color.white};
@@ -60,7 +59,6 @@ const CardContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   gap: 12px;
-
   overflow-x: hidden;
   cursor: pointer;
   img {
