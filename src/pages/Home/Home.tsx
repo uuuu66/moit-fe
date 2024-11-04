@@ -108,10 +108,11 @@ export default function Home(): JSX.Element {
         cardListRef.current.style.transform = `translateY(${cardListRef.current.offsetHeight - 40}px)`
       }
     } else if (cardListRef.current !== null) {
+      if (meetings.length < 4) setIsMapBtnOn(true)
       cardListRef.current.style.transform = `translateY(${0}px)`
       cardListRef.current.style.overflowY = 'auto'
     }
-  }, [pageType])
+  }, [pageType, meetings])
 
   const handleFetchPages = throttle(() => {
     void fetchNextPage()
@@ -237,7 +238,7 @@ export default function Home(): JSX.Element {
           {meetings.map((meeting) => (
             <SocialCard key={meeting.meetingId} meetingData={meeting} />
           ))}
-          <InfiniteScrollTrigger />
+          {meetings.length > 4 && <InfiniteScrollTrigger />}
         </div>
       </CardContainer>
 
