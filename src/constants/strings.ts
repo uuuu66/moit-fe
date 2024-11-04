@@ -7,6 +7,10 @@ const groupTypes = {
   bungae: '번개',
   mogakjak: '모각작',
 } as const
-const strings = { placeholders, groupTypes }
+const pageTransitionTypes = {
+  'fade-right-navigate': 'fade-right-navigate',
+  'slide-left-navigate': 'slide-left-navigate',
+} as const
+const strings = { placeholders, groupTypes, pageTransitionTypes }
 
 export default strings
