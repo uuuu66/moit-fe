@@ -23,6 +23,7 @@ import HomeSelectedMeetingPanel from '@/components/meeting/HomeMeetingsPanel/Hom
 import MapIcon from '@/svgs/map.svg?react'
 import { theme } from '@/constants/theme'
 import SocialCard from '@/components/SocialCard/SocialCard'
+import Header from '@/components/Header/Header'
 
 const DEFAULT_CENTER = {
   lat: 37.5667,
@@ -108,7 +109,7 @@ export default function Home(): JSX.Element {
         cardListRef.current.style.transform = `translateY(${cardListRef.current.offsetHeight - 40}px)`
       }
     } else if (cardListRef.current !== null) {
-      if (meetings.length < 4) setIsMapBtnOn(true)
+      if (meetings.length <= 4) setIsMapBtnOn(true)
       cardListRef.current.style.transform = `translateY(${0}px)`
       cardListRef.current.style.overflowY = 'auto'
     }
@@ -214,6 +215,7 @@ export default function Home(): JSX.Element {
 
   return (
     <HomeLayout>
+      <Header />
       {isLoading && <LoadingPage name="페이지를" isFade />}
       {isLocateLoading && <LoadingPage name="내 위치를" isFade />}
       <CardContainer

@@ -3,7 +3,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useContext, useState } from 'react'
+import { Suspense, useContext, useState } from 'react'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
 import {
   BasicInfoBox,
@@ -30,6 +30,7 @@ import { notify } from '@/components/Toast'
 import AlertModal from '@/components/modals/AlertModal'
 import { meetingKeys, userKeys } from '@/constants/queryKeys'
 import { UserContext } from '@/shared/AuthProvider'
+import { getLocalStorageItem } from '@/util/localStorage'
 
 function MeetingDetail(): JSX.Element {
   const queryClient = useQueryClient()
@@ -116,13 +117,14 @@ function MeetingDetail(): JSX.Element {
 
   const isFull = data?.totalCount === data?.registeredCount
 
-  if (isLoading) return <LoadingPage name="페이지를" />
-  if (isError) return <ErrorPage />
+  // if (isLoading) return <LoadingPage name="페이지를" />
+  // if (isError) return <ErrorPage />
 
   return (
     <DetailWholeContainer>
       {/* <Toast /> */}
       {/* 헤더 */}
+
       <DetailHeader meetingId={Number(meetingId)} />
       <DetailInfoContainer>
         {/* 1 */}
@@ -221,6 +223,7 @@ function MeetingDetail(): JSX.Element {
         </Box1>
         {/* 5 */}
       </DetailInfoContainer>
+
       {userInfo?.email !== data?.creatorEmail ? (
         // 일반 유저
         <DetailButtonContainer>

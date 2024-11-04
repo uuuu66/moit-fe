@@ -9,6 +9,7 @@ import { theme } from './constants/theme'
 import Toast from './components/Toast'
 import AuthProvider from './shared/AuthProvider'
 import 'aos/dist/aos.css'
+import Layout from './shared/Layout'
 
 function App(): JSX.Element {
   const queryClient = new QueryClient({
@@ -31,7 +32,7 @@ function App(): JSX.Element {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <AuthProvider>
-            <Router />
+            <Layout />
           </AuthProvider>
           <Toast />
         </BrowserRouter>

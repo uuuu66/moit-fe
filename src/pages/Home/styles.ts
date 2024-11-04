@@ -3,11 +3,12 @@ import { theme } from '@/constants/theme'
 
 export const HomeLayout = styled.div`
   width: 100%;
-  height: calc(100% - 105px);
+  height: 100%;
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
-  justify-content: flex-end;
+  justify-content: flex-start;
   overflow-y: hidden;
 `
 
@@ -37,8 +38,9 @@ export const CardContainer = styled.section<{ $isOpen: boolean }>`
   width: 100%;
   height: 100%;
   position: absolute;
-  top: 0;
+  top: 106px;
   left: 0;
+  height: calc(100% - 106px);
   background-color: ${theme.color.white};
   overflow-y: auto;
   &::-webkit-scrollbar {
@@ -63,6 +65,7 @@ export const CardContainer = styled.section<{ $isOpen: boolean }>`
   .list {
     display: flex;
     flex-direction: column;
+    overflow: auto;
     padding-top: 48px;
     justify-content: flex-start;
     align-items: center;
@@ -92,9 +95,9 @@ to{
 }
 `
 export const ViewMapButton = styled.button`
-  position: fixed;
+  position: absolute;
 
-  bottom: 90px;
+  bottom: 20px;
   z-index: 4;
   border-radius: 16px;
   background-color: ${theme.color.bg4};

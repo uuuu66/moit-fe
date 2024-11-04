@@ -5,6 +5,7 @@ import { ChatContainer } from '../Chat/styles'
 
 export const DetailWholeContainer = styled(ChatContainer)`
   font-size: ${theme.fontSize.medium};
+  min-height: 100%;
 `
 
 export const DetailInfoContainer = styled(DetailWholeContainer)`

@@ -1,16 +1,20 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { Suspense, useEffect, useState } from 'react'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import Footer from '@/components/Footer/Footer'
 import Header from '@/components/Header/Header'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
 import Onboarding from './Onboarding'
 import { theme } from '@/constants/theme'
 import LoadingPage from './LoadingPage'
+import Router from './Router'
+import PageTransitionProvider from './PageTransitionProvider'
 
 export default function Layout(): JSX.Element {
   const [screenHeight, setScreenHeight] = useState(window.innerHeight)
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+  const location = useLocation()
 
   const isFirstStatus: boolean = getLocalStorageItem('isFirst')
   const [isFirstState, setIsFirstState] = useState<boolean>(
@@ -47,12 +51,11 @@ export default function Layout(): JSX.Element {
       ) : (
         <LayoutStyles $screenHeight={screenHeight}>
           <Suspense fallback={<LoadingPage name="페이지를" />}>
-            <ContentsStyles>
-              <Header />
-              <ScrollBox>
-                <Outlet />
-              </ScrollBox>
-            </ContentsStyles>
+            <PageTransitionProvider
+              transitionKey={location.pathname.split('/')[1]}
+            >
+              <Router pathname={location.pathname} />
+            </PageTransitionProvider>
             <Footer />
             <div id="modal" />
           </Suspense>
@@ -130,10 +133,6 @@ const LayoutStyles = styled.div<{ $screenHeight: number }>`
   @media screen and (max-width: 430px) {
     border-radius: 0;
   }
-`
-
-const ContentsStyles = styled.div`
-  height: calc(100% - 66px);
 `
 
 const ScrollBox = styled.div`
