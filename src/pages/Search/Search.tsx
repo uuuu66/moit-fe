@@ -19,8 +19,7 @@ import {
 } from './styles'
 import { type GetMeeting } from '@/type/meeting'
 import { getLocalStorageItem, setLocalStorageItem } from '@/util/localStorage'
-import LoadingPage from '@/shared/LoadingPage'
-import ErrorPage from '@/shared/ErrorPage'
+
 import useScrollEnd from '@/hooks/useScrollEnd'
 import SearchMeetingsCard from '@/components/meeting/MeetingCard/SearchMeetingsCard'
 import { notify } from '@/components/Toast'
@@ -144,8 +143,6 @@ export default function Search(): JSX.Element {
     [navigate]
   )
 
-  if (isLoading) return <LoadingPage name="페이지를" />
-  if (isError) return <ErrorPage />
   return (
     <SearchLayout>
       <SearchBox>
