@@ -205,8 +205,6 @@ export default function Home(): JSX.Element {
   }
 
   const isCardPage = pageType === 'CARD'
-  const isMapPage = pageType === 'MAP'
-  const isSearchPage = pageType === 'SEARCH'
 
   return (
     <HomeLayout>

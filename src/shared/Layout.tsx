@@ -53,7 +53,7 @@ export default function Layout(): JSX.Element {
             <PageTransitionProvider
               transitionKey={location.pathname.split('/')[1]}
             >
-              <Router pathname={location.pathname} />
+              <Router location={location} />
             </PageTransitionProvider>
             <Footer />
             <div id="modal" />

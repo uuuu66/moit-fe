@@ -13,6 +13,7 @@ import { getLocalStorageItem } from '@/util/localStorage'
 import LoginModal from '../modals/LoginModal'
 import { notify } from '../Toast'
 import { meetingKeys } from '@/constants/queryKeys'
+import strings from '@/constants/strings'
 
 interface DetailHeaderProps {
   meetingId: number
@@ -52,7 +53,11 @@ function DetailHeader({ meetingId }: DetailHeaderProps): JSX.Element {
     if (location.pathname.includes('chats')) {
       navi(`/meetings/${meetingId}`, { replace: true })
     } else if (location.pathname === `/meetings/${meetingId}`) {
-      navi(-1)
+      navi((location.state?.from as string) ?? '/', {
+        state: {
+          transitionType: strings.pageTransitionTypes['fade-right-navigate'],
+        },
+      })
     }
   }
 

@@ -1,7 +1,7 @@
 import {
+  type Location,
   type PathRouteProps,
   Route,
-  RouteProps,
   Routes,
   useLocation,
 } from 'react-router-dom'
@@ -11,8 +11,11 @@ import MeetingDetail from '@/pages/MeetingDetail/MeetingDetail'
 import Home from '@/pages/Home/Home'
 import type strings from '@/constants/strings'
 
+interface Props {
+  location: Location
+}
 interface RouteInfo extends PathRouteProps {
-  transitionType?: keyof typeof strings.pageTransitionTypes
+  transitionType: keyof typeof strings.pageTransitionTypes | null
 }
 const Login = lazy(async () => await import('@/pages/Login/Login'))
 const Search = lazy(async () => await import('@/pages/Search/Search'))
@@ -30,15 +33,17 @@ export const routeInfos: RouteInfo[] = [
   {
     path: '/login/:service',
     element: <Login />,
+    transitionType: null,
   },
   {
     path: '/',
     element: <Home />,
-    transitionType: 'fade-right-navigate',
+    transitionType: null,
   },
   {
     path: '/search',
     element: <Search />,
+    transitionType: null,
   },
   {
     path: '/meetings',
@@ -48,37 +53,40 @@ export const routeInfos: RouteInfo[] = [
   {
     path: '/meetings/:meetingId',
     element: <MeetingDetail />,
+    transitionType: null,
   },
   {
     path: '/meetings/:meetingId/modify',
     element: <MeetingModify />,
+    transitionType: null,
   },
   {
     path: '/meetings/:meetingId/chats',
     element: <Chat />,
+    transitionType: null,
   },
   {
     path: '/mypage',
     element: <Mypage />,
-    transitionType: 'fade-in',
+    transitionType: null,
   },
   {
     path: '*',
     element: <Home />,
+    transitionType: null,
   },
 ]
-function Router({ pathname }: { pathname: string }): JSX.Element {
+function Router({ location }: Props): JSX.Element {
   const [isLogin, setIsLogin] = useState(
     Boolean(getLocalStorageItem('accessToken') as string)
   )
-  const location = useLocation()
 
   useEffect(() => {
     const token: string = getLocalStorageItem('accessToken')
     setIsLogin(Boolean(token))
   }, [location.pathname])
   return (
-    <Routes location={pathname}>
+    <Routes location={location}>
       {routeInfos.map((routeInfo) => (
         <Route key={routeInfo.path} {...routeInfo} />
       ))}

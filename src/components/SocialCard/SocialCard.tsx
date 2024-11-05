@@ -1,11 +1,12 @@
 import { type AllHTMLAttributes } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import FlexDiv from '../common/FlexDiv/FlexDiv'
 import { type GetMeeting } from '@/type/meeting'
 import Dummy from '../../../public/assets/dummy.jpeg'
 import { theme } from '@/constants/theme'
 import Tag from '../common/Tag/Tag'
+import strings from '@/constants/strings'
 
 interface Props extends AllHTMLAttributes<HTMLDivElement> {
   meetingData: Partial<GetMeeting>
@@ -13,9 +14,12 @@ interface Props extends AllHTMLAttributes<HTMLDivElement> {
 
 export default function SocialCard(props: Props): JSX.Element {
   const { meetingData } = props
+  const location = useLocation()
   const navigate = useNavigate()
   const handleClickCard = (): void => {
-    navigate(`/meetings/${meetingData.meetingId}`)
+    navigate(`/meetings/${meetingData.meetingId}`, {
+      state: { from: location.pathname },
+    })
   }
   return (
     <CardContainer onClick={handleClickCard}>

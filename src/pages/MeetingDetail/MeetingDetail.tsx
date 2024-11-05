@@ -2,7 +2,7 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Suspense, useContext, useState } from 'react'
 import DetailHeader from '@/components/DetailHeader/DetailHeader'
 import {
@@ -29,13 +29,14 @@ import AlertModal from '@/components/modals/AlertModal'
 import { meetingKeys, userKeys } from '@/constants/queryKeys'
 import { UserContext } from '@/shared/AuthProvider'
 import { getLocalStorageItem } from '@/util/localStorage'
+import strings from '@/constants/strings'
 
 function MeetingDetail(): JSX.Element {
   const queryClient = useQueryClient()
   const navi = useNavigate()
   const { meetingId } = useParams()
   const userInfo = useContext(UserContext)
-
+  const location = useLocation()
   const [onWithdrawModal, setOnWithdrawModal] = useState(false)
   const [onDeleteModal, setOnDeleteModal] = useState(false)
 
@@ -53,7 +54,9 @@ function MeetingDetail(): JSX.Element {
         type: 'success',
         text: '모임 참여가 완료되었습니다.',
       })
-      navi(`/meetings/${meetingId}/chats`, { replace: true })
+      navi(`/meetings/${meetingId}/chats`, {
+        replace: true,
+      })
       // TODO 참여 : (미팅리스트, 미팅상세), 프로필
       void queryClient.refetchQueries({ queryKey: meetingKeys.all })
       void queryClient.invalidateQueries({ queryKey: userKeys.profile })
@@ -114,7 +117,6 @@ function MeetingDetail(): JSX.Element {
   }
 
   const isFull = data?.totalCount === data?.registeredCount
-
   // if (isLoading) return <LoadingPage name="페이지를" />
   // if (isError) return <ErrorPage />
 
